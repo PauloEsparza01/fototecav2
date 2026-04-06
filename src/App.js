@@ -2,7 +2,7 @@
 
 import { createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
-
+/* eslint-disable react-hooks/exhaustive-deps */
 // ──  CONFIGURACIÓN SUPABASE
 const SUPABASE_URL = "https://iqyytvzlsquwkeimtein.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXl0dnpsc3F1d2tlaW10ZWluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYyODEsImV4cCI6MjA5MDEyMjI4MX0.l-VPzdyKsYKVHrGxYG8_JwE97-ieAdIBLyh4jcBWj30"; // Settings → API → anon public
@@ -452,27 +452,58 @@ function AdminPanel({ onClose, onRefresh }) {
 
   // ── Eliminar colección 
   const delCol = async (id) => {
-    if (!window.confirm("¿Eliminar esta colección y todas sus fotos?")) return;
-    const { error } = await supabase.from("colecciones").delete().eq("id", id);
-    error ? err(error.message) : (ok("Colección eliminada"), load(), onRefresh());
-  };
+  if (!window.confirm("¿Eliminar esta colección y todas sus fotos?")) return;
+
+  const { error } = await supabase.from("colecciones").delete().eq("id", id);
+
+  if (error) {
+    err(error.message);
+  } else {
+    ok("Colección eliminada");
+    load();
+    onRefresh();
+  }
+};
 
   // ── Toggle descargable
   const toggleDl = async (foto) => {
-    const { error } = await supabase.from("fotografias").update({ descargable: !foto.descargable }).eq("id", foto.id);
-    error ? err(error.message) : (ok("Permiso actualizado ✓"), load(), onRefresh());
-  };
+  const { error } = await supabase
+    .from("fotografias")
+    .update({ descargable: !foto.descargable })
+    .eq("id", foto.id);
+
+  if (error) {
+    err(error.message);
+  } else {
+    ok("Permiso actualizado ✓");
+    load();
+    onRefresh();
+  }
+};
 
   // ── Eliminar foto 
   const delFoto = async (foto) => {
-    if (!window.confirm("¿Eliminar esta fotografía?")) return;
-    if (foto.url_original) {
-      await supabase.storage.from("imagenes").remove([foto.url_original]).catch(()=>{});
-    }
-    const { error } = await supabase.from("fotografias").delete().eq("id", foto.id);
-    error ? err(error.message) : (ok("Fotografía eliminada"), load(), onRefresh());
-  };
+  if (!window.confirm("¿Eliminar esta fotografía?")) return;
 
+  if (foto.url_original) {
+    await supabase.storage.from("imagenes")
+      .remove([foto.url_original])
+      .catch(() => {});
+  }
+
+  const { error } = await supabase
+    .from("fotografias")
+    .delete()
+    .eq("id", foto.id);
+
+  if (error) {
+    err(error.message);
+  } else {
+    ok("Fotografía eliminada");
+    load();
+    onRefresh();
+  }
+};
   const TABS = [
     { id:"stats", label:"Estadísticas",        icon:"stats" },
     { id:"upload",label:"Subir Imagen",         icon:"upload" },
@@ -843,10 +874,10 @@ export default function Fototeca() {
           <div style={{ position:"absolute", bottom:-60, left:-60, width:300, height:300, borderRadius:"50%", background:"rgba(145,108,63,.07)", pointerEvents:"none" }}/>
           <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:13, letterSpacing:".25em", color:C.steel, textTransform:"uppercase", marginBottom:14 }}>Repositorio fotográfico</div>
           <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,5vw,58px)", color:"white", lineHeight:1.1, marginBottom:16 }}>
-            Fototeca Digital<br/><em style={{ color:C.lavender, fontWeight:400 }}>del Patrimonio</em>
+            Fototeca Digital<br/><em style={{ color:C.lavender, fontWeight:400 }}>del ITZ</em>
           </h1>
           <p style={{ color:"rgba(255,255,255,.6)", fontSize:15, maxWidth:520, margin:"0 auto 32px", lineHeight:1.6 }}>
-            Archivo visual institucional con {loading ? "…" : totalFotos} fotografías de patrimonio histórico, arquitectónico y cultural.
+            Archivo visual institucional con {loading ? "…" : totalFotos} fotografías de ITZ histórico, arquitectónico y cultural.
           </p>
 
           {/* Buscador */}
