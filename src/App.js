@@ -6,8 +6,8 @@ const SUPABASE_URL = "https://iqyytvzlsquwkeimtein.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXl0dnpsc3F1d2tlaW10ZWluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYyODEsImV4cCI6MjA5MDEyMjI4MX0.l-VPzdyKsYKVHrGxYG8_JwE97-ieAdIBLyh4jcBWj30";
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-//LGO
-const LOGO_ITZ = "data:image/png;base64,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";
+// Logo ITZ embebido (no requiere archivo externo)
+const LOGO_ITZ = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABdCAIAAADVHvQcAAAoGUlEQVR42u2dd3Cd13Xgz61fe72iEwBBAiAIVlFdsmXHVuL0XSeZ1Fknm82WbJnN7CSzs39kNzO7s5vs2LubOMUldZzItixbLmJULYmkGilWkCCJXh6A1+v3vnLL/gFSlmLLlE1JZjy+A2CAmTcDvN93zrmnA2mt4QfnzQ/+AYIfALqpQ9/x36A1wLYWI0DozV+lADQC/G1e8z056N21QQoAAXwTAq0A4W8AvZUYvaOANABqVhcLV76qcdzO7Mv2TpkmQaAQIH1NrAAhAgDlwtnNK1908vflR+43GBBCv+8BaQAQQlz6+192q2eAJkLJdeLB/j2/2D8wzPk3pCiUav3sH1eu/rnbLjXFzv47Prpz50gkEkEIfz/bIK01QrhdOukLVEC/4G88bfO24/7NfPHpjaFfyvf0YrGlRAjEcitnOutfNOxkLDnQKGxevfB0IvkzlmVR+n0NCEArgPbG17caTq991h6qNl3SaFOmt1DhDxYXqC9NCm1QXUIY4Git4wnlN9u4HS6VKp2eXEAJvRWMEX2HxEdrUFK1qktYlixcfvbKbY5l7O2bV/6WL1gkQgzJLB7HOIoRINAYccDgeWK1eGzhtJmM/+uhwT7GyPdc0fA7A0hhTMJQB24R63azLdZrya5x95L+Ne0cTMUgYqNcQjiWsgxkMMQYQgQQIMfmU6NskD567snfmrlwxnV9peT3FyCtARTGpF5eWHrpt4mua9FFKHQsObGr78gd94rULwbSJFiHApQCpbRQWmswqbaN0GQhwSqXS40kLl09/l/Onjvb6bhKqe8XFdMKEJYKbV79fH35y0Vv0tA7GDlrc2TBeihILBrtoc92oal0BCEFAEqDxXUg9JV1e60WDQJtcbEj74/0pIbl5qWX/jfnv71nco9lWeh7ZI/o20vH63a2Zv5frbZRCu7RnVO56BqNxixLDcfnlpeujA5QUX4SMwu02nYubEPNrrBnZobaQXQ4tZ6PVU0SXpzTjZZ5YJfd17w4++InnOjvjA7lufG9YfQ2+UFaAcLt+kZx9o/KTbPRoRnyQjrqh5JKEWqttGgfn3FSvXsnk8dCxUBrjIER/eSrzkvLe3b2s3tHT43kWxiTmhttuuz8Sm7fcC1lbc4udGXml+56/2/05qKUUnjXbfbbAEhrhRBuVpcqVz5RqEV1WO6PzTFmBoHSOlAyUFJipALPLVW6uYwppKIEEMAjx2LzzYN3TPEjvU8lHG+5nDy5MFD1etKRhmNxJ5o9lDsaBu7iuoD8rxy+/yP9PRlCtv0HeNdI3TQgrQDhVnWhNPcXGxXm0I3eRCeUVIaeVkJrqaTQKpRSACishecFnMkg0J99PlWWR+7eZ06nHnMM/+Ri/6nF0VR+bN/AUjJ4xPPDCv85MzowRL6IVX2z7HfZkYGpnx3aeWcimWDkH40EKQDcrq+W5/+iWAnTTiMeCT1fIyWUCrUKtRRKSa2EVKEQAmlps6BQkg+/0BMYB+/YIydiT3HceHm+7/zWbdOTIwcP7s+k47Xlx4qlDd+4XWtAm3/Wl6xwhpGsletUGBPx3rvjuenc0B22bVNKb2VAGgC5nWpt/i8qlWo67ttc+4HSECgZglJKhlqFWkkpBcGKk7Dd8V65RJ650JdI99wxVt6ZOBNzVKUBR8/tzgw98N7779oxPEIIK1ebW6V62F5g5b/y+L75TcfrFHL25nByUXjlYiXElCYmfnvXvp9KxAxC2a15i2kA5Pt+Y+WzndZWT8YyGApESIhQimmsNQgMVAForRmlm6XmyxflSnVQ4Oxd45fGey5kY54Ec6kUe/HqAInu3T890d/fb9s2aNWTjUYjxsarf+JmPyxhZGfMBXS42lBV9/NZ+liI01rTjfUVJ7sRsQduWUAQCtXZehyHa+lMnBItQ0QwKNAYIQBQCGkADEgDIBAG561mQYbRg0fumZ64R/nF+a3NwmanULVj+ezB/RPjk1PxRFJKCYAE0OrM73kw0MWjKUf09o5FYmmp8dpSvDqzubv30motebHk7PBbSt+iNkgrQM3iKeo+g7ChZShVoKQAJbUKlQq1UkqESgulQqS1EAFB0mRyfaO8uqkDfgCsPQFEELFSiWgun8ukUoyG3dql6upzJHYAal9rdlDN+pVk3No1vicRM8qLj7mtYq3hdreejNKtJ2YPR7KHPvC+e4dHRhljtxogDYDc1pauP0qIkkooIZAWUodKCCWEUgKBwCCFEEIGWgrQSoRBtdZKRLljqkajWqm6bmhJbVFmMcoR6mJRZ1CSmmOk/UAWOrsJeE40mcxNOvH+dulkUHwiHQ+qYuL0+m2S5o8c2ju1dzqZTN6CEqSDUIraEwzWlcJKhVoJEYZaSYJDihUG1e4EtXrTMgAjUCrclqNmy11dryClclk75hBOPSUDzw1E6ANIhEFqBlpTgjRopFwhiRAyCMJQM0wigGPr7ZGlxngmm5scHxkdHUsmk4SQWw2QVhr5rVkentSAlQykEFpLzhQFVal3ry7WLi+0m43m3QfMyV2ZMBBCCClDrQTFgQyDzWKtWGy0O91WkCRYTwy0Uwmj46qOq2wzIAQ128H8urHSGKFW3nbilu0YhkkoC5UpwclnIiMjw719/RHHwfjd8BW/I0AaAPleh/rPYPCEkFoJbmiQ4vJc9cnjy0sLJYW4E829/4gwDbKyVm42OghCioTQyNd5xkzLpITgZpd3RXwg3YqaYWGruVCAvYPFI6OFV6+gC0sRl+ztHZwcGR5MJOKGwSlllBDGsGOb0Vg8Eolwzt+1uOw7AyQVCponDXVZE5swBCDPnll/9PHLq6ulPWP2fbdlVgq+ZeBYREkROhbmTNdbaqPMq920JAOxeNw0TcN0nEjCNqTXnC8WLvqhRezhQ6m/nS/AsUu5eGZ83/TeXbtGM+mMaVoIo20WCGFCCMb4XQ5Z6XckPqFX1e6M5IRF0PJS42/+7vTcXOHu29If+ae3DwxlfdcbHKg5FrctgpCanW+emgnL7Xg8NbBrtG+wP5fO9hJqNsoLrc1nw/pFjp3k+D4e20d0Xayiufrh/pHeQwf27BrbFU8kGGPoH1fKVWkIWucMaCId+9znzn/psUsHJqO/95/fMzDcC4Hw3I5SJJXJESTOX9r6++dLmxWzf2DH5MTY8I7+fE+f5SRblfnq+tdE+4xQWc96D7bGjEgkFk8wQHNXk9me3UND/ePjE8lk8t2xL28jIA2APLeBvPNNX37yszPLy2u/+c9233nPXkCm7HpaKYyZafNmrf3Qo5dfvdgdGBx9//unRkeHc9lcJJ7pNItrF//c8F7Wwlx17+mowUQ8ko/wTCYajUZlSOIDPzEqB/p6e2Kx2K1D563bIK0Btbe+3tw69pmjBIWrH/nZnelcjx8AIYxQqpXGNjl7cvGvPntRotRddx7au3eqp6cnFosjzLaWjvulryYj3csbufPLeceJjw73DgwOJpMp0zQJIVLKdrvreZ1IJGLbNvrHWFkN/VZl6aETFyzZnvmR+2OYx6TEjHOEOTdMZPIvPHz2y08uTYxP3nPP7aOjY6lU0jAtz+tuXf2Cgy6YVuToCTRXsMd2DkxO7O7vH4xEIpRShAA0aAAphdZAML4mPgi+RYX6VlUxDYCEX6qFe/Oxk5N7IBRYS5cxQwRg2tgPvD/5xIvnZzvvuf++w4cPDQ4ORSIOpazdrFZXvpCJFAHl/+pLlWLdPnxodGpqqre337LM1z0jQAD0O4g5r7dC3FIq5gdQWHiGt7/EjDgQQpmhgTi27froY588V26YH/yh+6f37e/r6zMMjjFpt2qtwhfSsW4oyJ98ZrHaitx372179+7L53NaKbdTl0qBfiOk7U+ENACj1HbihNBv0jb9LkvWW5QgCIMqajymkBTCI5qFStu2Xa21P/rpK6HO/MSPv2fv3n25XI5SijHqdl2/+kQmqTGO/ulnLhTK7Ifed3j//oOZTIYytnn5oeLCE0C4kkJrpbXSWoAGraXWEjRo5Wpjsnf63/fkktww3tgWg4JQKikZYxhphPE1gdL6HUrCvsVbDDXXHwu762CmQHhaacNEzVb7o3+xokjPjz34wNTe/ZlMmlKKkA5DFTReijs+teOfffj8xfngwQ/eNT29P5PJMMY8r2OzzZGd/VprpQIlpNZCXU8GKBkqJZAiz83ipjEfj+4xTOt6jCMQJuuXPrd68e+EhMTYbwztutexGSFcKiD4nRIr/FYMUKdVaq0/pQGk8GQYKhVIEfzp3y0HKvvgB96zd3p/NpthjAFopbDfnrP5Jo0mLpwvHX128/YjB6an9+dyOcaoBpDeplZtCVxILBVViEhFlTIUMAlMaINzY37DfOlCoMIWInazXjj/7P+4cuEZL6S+QK21L9rqUhxfevX4383MrgaCF658+eVHfu7si58vl8thGL7tzSo3kiCtAaHmxrHALXArI8HXGCyTfO7oVqES+/EfvXvv3n2ZTIZSqrVGCPlem4bnqEFCL/zMIzPDQzsOHjzQ29vHGAfQSoPyCxQjiQijCDSWQkuitdBaEaUUwUAQHD+HY/FU/8AOr3GhdP5/Mbm2cPWJhYWlbCwwu1uEJxhBtpyZOfZR1DwUcT/rqI3GzOnNzd/ce/vP53MJ+rbmGG8ECCEpdXPrRS0DKXyQJBJFZy55r1zkDzxwaHp6fzabpZRorQG0VFh2zqOgjCLZpx+fLVX0P3nPwcHBIcsyt8MpGUoQBQ3csdhXn7ry0rluTy5BKAGNABhoBkgrBdJI3HFgOtczAJWHHd5AbGiENdvtP4u2BBAzELgbiMlhrcLnZPnryEwwM21pcfLyVqJ3KZ3cQwl5G+0RvXH43q25tctIgRJdTM1OG756DEbH9h3Yv78nn2OMAlzz7MJuXXTOcYo6tfqTzy+Mj0+N7dwZi8XQtrcDSIZ1DC1gptLq5IV2R47kR2+PxxIAgJDWWioRIASpZHRoaDibjZfD+yR5imPPto1SMz+zFG96MdfHUiLLxLl4mItspslKwvGuFuXCau1woBSyAGHQ+u3ypOiN+IDX2Qy9IiUsDIKYoZ87x0Lds6dnkXETiIMQEkKK0KPc8ZuXhFe2E5mTZ1bqLfLA+8ezudxrlRmtQYdlgiQ1rEJhq7DRuu2w6o+tGnwdgBAWt+ODyexkNBonGDqN5dlTz2kpEgZqttkXn+ertezQ0NjgYP/OZNw0TYRJEMpmq1VqzPYFXx/tXTzQeHltcTKBTkm/1r/vX8VjztuSFbmxBIVuWfgdMByKcLMlX5mNTU+mJvpnFk/+fmlhZzx30CZbzcpcfvLfGd4MVqGW/rlLxXQmPzg4YNvOa3+iVIBUCWOCMMOE/vJP940MSs4WtQxDEXqu11r0C5eiVvqu0b0/RVov6K2/icSyjcD8zDNJgbI/9L6pifHdmWzOtm1KKCBQSvq+X6pMLiwcqLUeunvPiVLj02pDum33xJbcd/evDfRlODfe8Ws+DNoydBE2DKZnV5gPvcN516RyvL8m9QudzRdJItHx+8+fe/nQjjVCdKfdXFnvDAz3p5Kp12XUkRQ+gQamXAidy2b6+7K+H0gRIq00hFpJkKHXra+tfvnFrzwb6X9wV+8DJFx45Km4Feu9966D4xN7UqnUP8iB2HYkHovns8m5hXxzRfWkTwUq2ttjFOafP3/hznTiCGM3K0Q3BqS10kpKEagQz6+Z+XxvKtG8XD1SachkpJlPBKbhnp9tx7NzZLAN2C6X6+0uzeeztvOa+GgApESTIw8Rk3INIEEEpkEk1YEfyBCkklppwmJj43vzPYVnjn9mZeneRGzSSRr7pyf2TE2nUqlvmYHGhMZi0cnx0Tn86+35RZvW1svm+dUdU7lWKMS74ygiAIRBdtyg3BnaNZZxBn8EdUMoV7qeWO0UDXrcU8khWwjRZYQ1Gh2NjGQywTl/fS4JyyIxpAzIylq1VG61OwFGEIuQTJKk44Rrw/MDjYTvh3ak58EHjC8dfbZKP3z3nbt2DA2/GZ3rNy22LTY4sn+5/sNQ+9Tjp1KeOTTQlzEM8522QQAAmBoIEYKh1dYhxHrymXw+YxjW+O5hrfVmYWlpHg+PRXqTK6HvUWZ6noeJ49j2694SUgqkaM5ckU+fmC9sNhi1nUjUMAxCgBGRjYcHxvVAjnoBEAYiDLmZeuCu9tdOvEjogWgscuPqBcKxCIn3P+A3H96RbVTNbDo3ZJr2zbel3xgQNZKADYRUu4spjyeTiVii1+QAAF57o7v4MbOxjpK/bphchK4UjpQhJZRS+vq8F0aqq3dWPTS0I7r/QCyTSTuOwzlXSnVcr1SqnVle6waFsf6uHwJhEPiip7e/J3Fpdvbc8I5ey7pxkohgiKdGt8zhif4L8+VHll95lahfH9ix3zTZzXSC0m/vJQIAs7KERwlUXd9iRjRi85Vzn04OfpByy213aPxwwp87u7HmEOmYQoQ+qBDjf+iDYIwj0cT03nGtdxuGyTm/nn7XWuuR4aF6feTq3Hy59Wo60gkEYKqVJruG40dPzhRLR+Lx2I38YwSgLSeGaDYZgzvTzVbr66dPpEPI7hzpMQzrHZQgZiaZ3YO6xVAR04pg6BYvfnzl7Ke5YQAElBKDkOLWaiYS682FoQg4DSkWQRjqNzZfGpxzxuA1t/K1h4AAY5LNpii3K+ttBWcI5kBBgc6k4tKvbG4Vh3f0v4UAQhOCKbcDpRHQeDxWWFh1FpcG+1I3Awjf6LEobkZ4bBdoAUA4Zwjb3IgytSH9WhAoT1iAdOjV212tVBj6vmMhCm3X9eU3dfAihN5cU3A8aseSIxJMwBhjphG2ow5GQa1aEyJ8S5eJBtCCENbs4KvrTtNPIgj1O22kGQU7fai19XmDKyw0YSYZ+TcLV4rFckcCJ96Fe4efd4xcV9hKSCk9i0GEN+v1ehgGAM5rEe+NnxUGw3SINJBWSiMECFOhNHQ9T8obdgLrbVeL6upKPfLwK+PReG5ycnJ4R/9N+oo3BIQwQCR7uM16bNYkSgLgnpEPYGfD67oYKXflcs2/w8lOWU7KCzDGXcStTLRdKhe7rheLaYReGxP79slArQEwFoQgAK5BgMZB1+t6mGAENxYDDQB+Zx3CtbVaMpHZdd9dUxMTezLZnGHcFCB8Y7kFHUkOk8TtEaPFcTcIZcTG47t37T9wYM+eybG7/5tOfdhGpUxuIERJGXakkAPZsFleqjWaUggAtTTzqOt2pdRaq2/DRwPCqkawxogjTDlnjbZquiQasQm9cVpGA3KLz4IUEV61YCmb78v35B3nZmskb+n+s0zq9P+kY1GHbHY6PiAaesV2dQFRJxpNpOXXeuRfu/U5H40o0fE8P5/GJLyyurbl+12tkVt+/uRT/7tc7YSh0FoCvDaDuP3OFIAChDuNMg4vY2oCIggoM/nlxbYm8Xw+Tyn59iVxQKRZvupuHg0hengqcfvQ6ZWFi+1O99s9krcPEKJYR3MH7Nx9CTLTajW9QK+e/tjZr3z41NHfuvTSJzznQzRxe3vtS4V6TgEJfJdTMpjcWJyfaTRboUDZofsN/9kTj/3elStXvQC9cegQIYQ14OLG5aDxlGkoQBwRQigVIRx7tZmOUxUUMbW1VqAVvF7Z9DZcDYg0qqvl2Y85Rmhb1OBE0oHF1UqjXlU33YNGfvd3f/dGwisRwrWVr9XahAezHd2fzE9i2ehuHcXdWVF7ur15TIuuAVuL9R0p2zNQSWoet8X8cjOSmc5lEt3QNmAxSpbnLz23uVmSYAJiGlAYCrddr2xd2Vx43NQz6UwEYY4QklLzuPnk03MvnnY/8uERUXv26nzJjAw6kQh+vb4ghBASCm0uHWsu/LHNOscvpkp1RbD++1PpdG5kfHwsHo/fZJ2WvoXLEwGAwUh78zhE7jXbL7SaPxxL3MmcwZkFLdlQX3TFoE2bBLS1selNRqyrge46ljEYu3rp/EvDQ312pKdC73Oijx6eNoul5zbPH9uiKWpEGKWcCidCerJZy0mJQGACCFOeilw9v/rQl5eP3LZ/984kQYdnzr968olXk313DowcTKR6GTMAab/baFWudCsvGupqPIIefxG/eDU92LdrS9i7puzJid3JZOrmq9hvIVjd9qcT+6NkebmWs6K7tb/JM/us3PucxU/Plvvb7OejEIDYstIDTnbIa73KRKHr49F+/PKVr1yanT5yeCree9/65UoqPNHfm9HY0Aow1pghZiQotSVQr+sSyk1qYcc8/+raxz91ateu8cmpw663ETG6U/tvm5yobayfLl05XgYDU44RRAw/FvETcR6IJCbC61xJxYbuv++ufL6XMRqNRp1vpBPetLimtQZQ23OzNxPNAzF7nPR0pvPkcv0XM8I2mYz0fWhw5GXe7WW5nb29vVJhRkQ0nqsu/6w3/98JMqhpjPcWLp/+fG9v39BAxh/+0PIVu9Z5OZdoWbaJCcWApAgQAOMG4wahqlhqPPGFi8dfLu0en7r33nuH+uMxa1mGnCJ9dU1J1Td9wFSiK4SPQFVr1tlFHbXF5FDAKDs0nS+eQrF4sq+vh1L2bZ3S7XKpRgAIYQAipURIY0y/Gxu0na7AhDWqG7T7Cgnmt+o8kZtKpHJd4x5l7B7oyw7vGOzvzWUy2UTMxvZofWsG3CtSG7GoKdpzy0W7d2Ayl4lY0YFCPbtU0NWa1/V8PxC+r5quKFeCy4udp08Uv/LUVqVp3333HXfddefOnWPcMNvNkmMHq4X2//rjMxfmkFD26ADVmoWh/3/+cn52LRWi/kxcVere114wYumR8d07k8kUIeRb0dEAIAJ3a/m4ERmglGqE6pXVwoVPt5pFK70HafXNUeRb7u7QaH357NbL/5KTbrEaduyf3n3kn2czSS27hmnbtnM9I6H8QM3Nvlp59d9SaCAWNQ00u6zN4f9wz/0fikcNzw8KG5Xl5dViseC2q77XCYUMQtDAYrHY4GDvyPBQPt+TSCQNg4ehWFhY3iqcvTS72PX5/n3TEYeO95yNmKpUavz+p1YP3f7e/fv2u257bm7e9cTU5K6JiYl4PIYQfAut0QoQri4dXbz8bHrqd5B3qbn6ZVF5qqH2ouzPxHmhb+d9qewoJW+Y7H/rLXi60QqWX/iPovoMYU6r1WzoAz17/sXw7rviMZsSfa1LAyGtVKMdzL76cDD/e5RSxGxG9ZVVlhj/rTvu/mA8ZgDgIPA7HbfVdr1uV0pJCDYMblmmbTuWZVNKt3FrrbvdbqFQbDRq0YidzeUwxoWVs/NXz6+uVQRK3nPPPRPj4xpQs9nQSjiRaCQSfZPkkQaArtddP/6RhdIAZSwaHDWZv1TbVQ8GhmOnlbk/PflvB4cGopHo6037W1QxANCEso6Hw8ozGohpGhasNtefLm3OeyHHLM0Mi2C0ffdyqom9o9LU0HwRAdaYZeNiY/mlcjuRzo1ZJjEM07adRDyeSqWy2Uw6nU4mk/F4wjSt64kkDRoQAGUsmYzlsplkKmXbNmMMSDxQsUi8Z8/kxNDQUCTicE4dx4nFE6ZpYozb1YXV2a/y6AghFF8LdDSAFgpvnvuYV31xpRwZiZ+P2KTWNoLA3d9/tegOzXsPppLRdCplvnG68a0DQgQrSfLt0lkcLivNMOG2qbB3sbH2eGnlhVp5xe2GQlGNLUS4bVk4MlmptbH7qgYMmGfisrL2wlpRxrKTtsUwAoy3+4EwxhghvTzzxU67Qa2877UZN7eDuO1DCN02Kxhjy+T5fGpoaDCTyTiOTQhFCCOE6+W5jZXT3MpsXX1oc+1C03OcWA+lZNtYS40LM38uS19yw/jcuto1EIYCc6r70nKxGD96fmqgv2f37rFMJvsPJojeOiAAAMbMlm+HlWcwxlorrRGmpmkgIteD2kuNtaPlpb8vLjxZXn2hXDgJGkjmg82Wy7pnQGuNjHSC+tWXFxaWsDMWS6QxUq+lh6RU9dVHGl6sVT63cv4vXd+SIqiXlzC1KbPCMECYbKsJxpgQGoYeZSbCZGPx2Y3V89xKlhcerq19vdrwULDkC9oqHPPQjlg8ZRhGKPT6hU+HxUecSHR2Wba6aHJI+KHmDDU78NDzfbn+8bvuuG14ZPSbh2O/I0CIYAW8t1FZJd5FhC0ABXp7xwKnzOQMM9RCwZpoXwprr1RWnml1FMn+ZDd0qHcOgy+BxWM2l3NLV07U24aTGDZNE4FECAV+q1pabAVxWX9ZG6Od6mwY1OtrX6s32lKbG5c/W68VncROSjFCqFGeWTz7qa3CMmNGY+tEp3qmsLZJU+9NJFIrJStpNecWl7O5bMNLJtIjoVfbnPk46RwjLMaZevaMHu4hfSkVCjCY/vzzsS4ef/8Dd07u2Xu9CAzfvQQBAsaIqwfd8osM6hpxAI0Q2o6JtAaNKCKcEAMzyzJA1F+ql5dU/EGXTOPuJQMqQlFuOSnHbRaeX1q86IuYHevlBite/vT62npH9nm1i1HeaImBhprqHxj0dRp7p0vFJTewEMvLoIEQSNl1Yj1dt+p3m5tbzVj+cL14OUAZv3mxXt7w8Wg2idt6TJIB2TotS39rkzXCohTrSl2dOId+6IhWCjkWOnEBn1wYet977zh08HAmk/mWbvd3CAgQQZqbiaqXkfUXOA41UAD1jewp6GsLg7TSGlmWacNyp/SiR3a2zQfDoGvrJQyhQmY85tiwWlp5em1ptuOb2OgXbJRDI+xc5ZGhjeZQJtbCuuWGURMW2x5vN2uYWH7xkU5XEWev31la2cSIcNU+3Wh0jGge6yBtbVGrT5oT2N7rdapx/XyvPRuNUMCmkDJiocde8A0DH9mDQetCGR56NnHw4KG77rqzf2DgzaaGvptxKKVEuepePfcls/yHBguFZFoLvb2P4tpeite+AYQwqKDe9CryUMd8P4N6njyTMgqYcUTjjPPQc+st3MW7tT2VyO+NR62mizBx+hKbncCR2myufs4PuRkbDcnIyI6c1JZtdBrrj25setK6vSfteZ2ttpoyzCilvFgqWHotYaymo8141JCayDCQIsRYNlreR/+6889/yuhNi8APPv4w0Ojkj//oB6b2TkcikTdzu7/LkUwpg81ie+78UbP+iQitCG1Ipa/nH+CbYGGEQPjtWtsoySNtNGmRyoBzMeMUKaWIRSg1pQw7btjqOh4aIs5IIrs7ndtFuIMxQ7JUryzV3EQ2k8vlctzgGLxOq7BZ7ATCsOyo77Y6rQLHDSILUV7NJLATMTVQEYRa+UoLEcqoJT/+UAUT+qs/SoQMH3o8uLje82MfeuC2225/M+W6KUAAIEWwVW7NXnhJlz+XZRcJ9gJBlUZwzR69QY603s7eysB3q65V9HbV/UGTi774Vl+qFbU0ZSZmFkJYitD1ZdcjgYookiRGD9CMLw2CSTyRisUThJDA96qVcrOxZRvCMX1GPNtS8QiPRC1KmFIgAk+qQCsJUgoR2JZ+5Vz9rx5t/c6vJntSwdET/hOnnPfed+c9997b19f37UfybmqoV0lVqZbPHPtUubiRsTdy9hLDfiixVESp7UBZX/8KoEFpDQghLZXwW13YaqbKbjqQNOmIvozIJEnUMQ3TpszAlGKMldZSKCFBaKw1A6CACSGcc25YpuVELDtqGBYmGABEECoZYiRdt4NAIS2VDkUoOVbNlvtf/t/aTz6Q/NH72NOv+F96jhzcP33vffeOjIzcMGN9k2PhWiooLnzt8on/OV/Z4clEzinmIpsxs8lwqLVWGkmFtEbqej5aXZMoIBgIEkpD2+fVNmt3KUYqFuPpZCyZjHJuIMIpMyk3GDMpNTBlhHJCOKKcEE6IgSjDmAHCSgilQmaS0PWXllZtm6aSESWEkiEgQUD+1z+cS8aM//SR+LEz6ivH8NjO0bvvvnN055j9FlaC3OxiAa2V6+HNuUebs/+tWMOLtdGml6AUR812wmw6vGXzLiMBBrW9zUQrJJSWCvm+DkKBQcajxHYMTBhgQ2kCiBmGRSgnjGPCMeGYMko43maEOSEcMU4JI8RAlFPGacwBoWfOzq+uru8ayw33ZUPhSylASZPJ3//kla1y8Lu/2X9hgT35Mh4c6LvttkOjozvfPFv0tgLaNka1plibPwHrf8DVQs2NlRtOpZNo+k43NAKFQWmkQwQBKKFVgJHLkevwbjoapGPa5IAxQZRjyhgzCDUIYXhbTJiBMcOUE8Yp4ZhyTDghDGEDUWZybkUdrfmp81uvnL4y0Bt54L6piGP6blfLEGHNsPzYpy7OLzd+5zdGl4rpU7O0vy89NbVnaGj4rVc73p7lJkIE1bq7cPVCsP7JDDmNMZZKh6EIQuQLFIQ0lKA0IK0okYwqgwEjAICEBCm11hphTBhHhBPKKeGE8muMqIEpw+T6j4RTzm3L4NyqdtCpc+VTZ1fTMfwjP3xgZHIndEMReFKGnOEw8P7vp84srzX/xS/sqXSH10u0Jx8fGRnp7e0zze+gLeZt24InRdhoda7OrdSWHk6rx23uSc2V0gjk9dqOBg1q+0OBUteut+vXnEYYY8YxYXRbiIiBKcfEoIwTyjlnhskZM9yALxTkmZnmymoln0EfeM+u/ft3AzbCQGHKQWtik+J65Y8+earaNj78Y3uZMxZKnkra2Wz+m3vU3j1AAKCU6nbdpZXy4tXjRuvLOeMyJRAIqpR67boHff1K03CND2itXseIckQYpQbjjFPGDEapIcFodM31EptfU2ubLqjOxIhxz5GBnaMDGhtBoAnlmBimY4FhnDg+/5nPzcRT/e99z52DQ2OWZZgGte2I/YaWpe8FoG2vR4RBudq8cnWhuvr1hHwmbW1gjAJJtAJ9Lbj9hn90ndhrjBRjlBlMAQ2k3Q2dYiuyVbdKddzuCIa9wZyYGjPHx9KJRFJoJiVGmGPGTcO0HGtt03v4q1cvXulMT0/dfvttw8OjsVgUY4QxeZMk7LsO6LooyW7XXStU5+cuu8VjSfRy0txkWElNhELXHUf9DUbX5UgqPbscLpazAg9oxKQETsOE4/WmxVAO9+ataCyCqS0U1UAJNShjlmmaplluyudeKh8/WY8le+68/dDE5ERPT+93JzLvBqBrFWUpWu322nplcfFqu3Qqqk6njRXb6CKEhMJSYa30dU37BqOOK9fKoMBKxXEsAjGH2LZNuQnY1ogDopgwygzTNEyTA+KbVfXKeffc5RDz5P59e6amJgcGBuPx+Os7JG9FQK9hkiJsdzobm9XllbXKxgzyLsTwQsIo27yLsQbAUiGpkFZo24dEAJRoraUGAsQEzBHhlDDGKOWGaXBKuQTWcOnyJrq8jDYqph3NTE6MTewe6+3rTyaThmG8jVOv78Y2YK21UqLrdiu11vpGaaOw1qjMI2/RgtUIK0d426Q+xopiBaCVgu3ONK01vn73KzA0MruhUe+Ypaa1VbcaXQfzVG9Pz87RoR1DA9lcLhqNvb1o3j1Ar7dNIgxd163V21ulWrFUrle33NaW9IpY1ZBqY+hS8K8nT5DSIBTzlRVI2xMRiRzCYpFoPJtJ9/Zke3qy6VQqEo1ZlvXODdmj78VOe62UkkL4ge+63VbbbTQ6zVan3Xa73W4Q+KEIlZTX2rcwZoxalunYZjRqx2ORaDRi245pWpzzf9BL+30D6I0dLFpt85JSCCmlEEpppa/tnN6ueRBCCKGUUkLodnvsrbm7492jduuMzt+KS/9vqcUCP/ivCD8A9ANAPwD0A0C38Pn/MsbKx/9jyowAAAAASUVORK5CYII=";
 
 const C = {
   navy:"#1c146d", cream:"#f2ebe3", bronze:"#916c3f",
@@ -15,7 +15,7 @@ const C = {
   mid:"#2e2580", text:"#1a1630", muted:"#7a7590",
 };
 
-// Fotos del carrusel
+// Fotos del carrusel — pon tus imágenes en public/carrusel/
 const CARRUSEL = [
   { src:"/carrusel/foto1.jpg", titulo:"50 Aniversario ITZ", sub:"Instituto Tecnológico de Zacatecas 1976–2026" },
   { src:"/carrusel/foto2.jpg", titulo:"Campus ITZ",         sub:"Patrimonio educativo de Zacatecas" },
@@ -24,18 +24,25 @@ const CARRUSEL = [
 ];
 
 const GS = `
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-  .btn { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
-  .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-  .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(28,20,109,0.12); }
-  .img-zoom img { transition: transform 0.3s ease; }
-  .img-zoom:hover img { transform: scale(1.02); }
-  .drag-over { border-color: #1c146d !important; background: rgba(28,20,109,0.05) !important; }
-  .poster-badge { background: #916c3f; color: white; font-size: 11px; padding: 3px 10px; border-radius: 30px; font-weight: 500; letter-spacing: 0.3px; backdrop-filter: blur(2px); }
-  .tag { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 10px; font-weight: 500; }
-  .cb { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
-  .cb label { font-size: 12px; color: #1a1630; cursor: pointer; }
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:#f2ebe3;color:#1a1630;overflow-x:hidden}
+  ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#ebeeff}::-webkit-scrollbar-thumb{background:#1c146d;border-radius:3px}
+  .fade-in{animation:fadeIn .5s ease forwards}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .card-hover{transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s ease}
+  .card-hover:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(28,20,109,.18)}
+  .img-zoom{overflow:hidden}.img-zoom img{transition:transform .5s cubic-bezier(.4,0,.2,1)}.img-zoom:hover img{transform:scale(1.07)}
+  .btn{cursor:pointer;border:none;outline:none;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .25s ease}.btn:active{transform:scale(.97)}
+  .tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+  .cb input{display:none}
+  .cb label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:#1a1630;padding:4px 0}
+  .cb label::before{content:'';width:16px;height:16px;flex-shrink:0;border:2px solid #7a7590;border-radius:4px;transition:all .2s}
+  .cb input:checked+label::before{background:#1c146d;border-color:#1c146d;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.5 3.5l-7 7-3-3' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:12px;background-position:center}
+  .poster-badge{background:linear-gradient(135deg,#1c146d,#2e2580);color:white;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px}
+  .drag-over{border-color:#1c146d!important;background:rgba(28,20,109,.06)!important}
+  input,select,textarea{font-family:'DM Sans',sans-serif}
 `;
 
 const INP = {
@@ -236,7 +243,7 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
           ))}
           {foto.descargable&&(
             <button className="btn" onClick={descargarConMarca} disabled={descargando}
-              style={{background:"rgba(145,108,63,.4)",color:"white",padding:"7px 14px",borderRadius:8,fontSize:12,display:"flex",alignItems:"center",gap:6,fontWeight:500,opacity:descargando ? 0.6 : 1}}>
+              style={{background:"rgba(145,108,63,.4)",color:"white",padding:"7px 14px",borderRadius:8,fontSize:12,display:"flex",alignItems:"center",gap:6,fontWeight:500,opacity:descargando?.6:1}}>
               {descargando?<Spinner small/>:<Icon name="dl" size={14}/>} {descargando?"Generando…":"Descargar"}
             </button>
           )}
@@ -353,7 +360,7 @@ function ColView({ col, fotos, loading, onFotoClick, onBack }) {
   );
 }
 
-// ── PANEL ADMIN (completo) ───────────────────────────────────────────────
+// ── PANEL ADMIN ───────────────────────────────────────────────
 function AdminPanel({ onClose, onRefresh }) {
   const [tab,setTab]=useState("stats");
   const [saving,setSaving]=useState(false);
@@ -543,7 +550,7 @@ function AdminPanel({ onClose, onRefresh }) {
       <div style={{background:"white",borderRadius:16,width:"100%",maxWidth:920,maxHeight:"93vh",display:"flex",flexDirection:"column",overflow:"hidden",boxShadow:"0 30px 100px rgba(28,20,109,.35)"}}>
         <div style={{background:"linear-gradient(135deg,#1c146d,#2e2580)",padding:"16px 26px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0}}>
           <div style={{display:"flex",alignItems:"center",gap:14}}>
-            <LogoImg height={42} style={{filter:"brightness(0) invert(1)",opacity:.9}}/>
+            <LogoImg height={44} style={{filter:"brightness(0) invert(1)",opacity:1}}/>
             <div>
               <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:21,color:"white",fontWeight:600}}>Panel Administrativo</div>
               <div style={{fontSize:11,color:"rgba(235,238,255,.55)"}}>Supabase · PostgreSQL · ITZ Fototeca</div>
@@ -600,7 +607,7 @@ function AdminPanel({ onClose, onRefresh }) {
                   <label htmlFor="dl-up" style={{fontSize:13,color:"#1a1630",cursor:"pointer"}}>Permitir descarga pública (con marca de agua)</label>
                 </div>
               </div>
-              <button className="btn" onClick={doUpload} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7,opacity:saving ? 0.6 : 1}}>
+              <button className="btn" onClick={doUpload} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7,opacity:saving?.6:1}}>
                 {saving?<Spinner small/>:<Icon name="upload" size={14} color="white"/>} {saving?"Guardando…":"Guardar en Supabase"}
               </button>
             </div>
@@ -619,7 +626,7 @@ function AdminPanel({ onClose, onRefresh }) {
                 <Field label="Derechos"><input value={newCol.derechos} onChange={e=>setNewCol(f=>({...f,derechos:e.target.value}))} style={INP}/></Field>
                 <div style={{gridColumn:"1/-1"}}><Field label="Descripción"><textarea value={newCol.descripcion} onChange={e=>setNewCol(f=>({...f,descripcion:e.target.value}))} rows={3} style={{...INP,resize:"vertical"}}/></Field></div>
               </div>
-              <button className="btn" onClick={doNewCol} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7,opacity:saving ? 0.6 : 1}}>
+              <button className="btn" onClick={doNewCol} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7,opacity:saving?.6:1}}>
                 {saving?<Spinner small/>:<Icon name="plus" size={14} color="white"/>} Crear colección
               </button>
             </div>
@@ -633,7 +640,7 @@ function AdminPanel({ onClose, onRefresh }) {
   );
 }
 
-// ── APP PRINCIPAL (con búsqueda mejorada) ─────────────────────────────
+// ── APP PRINCIPAL ─────────────────────────────────────────────
 export default function Fototeca() {
   const [view,setView]=useState("home");
   const [activeCol,setActiveCol]=useState(null);
@@ -654,9 +661,6 @@ export default function Fototeca() {
   const [passErr,setPassErr]=useState("");
   const [sugerencias,setSugerencias]=useState([]);
   const [kwColIds,setKwColIds]=useState(null);
-  // Nuevos estados para búsqueda de fotos individuales
-  const [searchPhotoResults, setSearchPhotoResults] = useState([]);
-  const [searchPhotoLoading, setSearchPhotoLoading] = useState(false);
 
   const fetchAll=useCallback(async()=>{
     setLoading(true);
@@ -680,42 +684,16 @@ export default function Fototeca() {
     setLoading(false);
   },[]);
 
-  // Búsqueda mejorada: colecciones por keywords + fotos individuales
   useEffect(()=>{
-    if(!search.trim()){
-      setKwColIds(null);
-      setSearchPhotoResults([]);
-      return;
-    }
-    const q = search.trim().toLowerCase();
-    const timer = setTimeout(async () => {
-      // 1. Keywords para colecciones
-      const { data: kwData } = await supabase
-        .from("keywords")
-        .select("keyword, fotografias(coleccion_id)")
-        .ilike("keyword", `%${q}%`);
-      if(kwData && kwData.length>0){
-        const ids = [...new Set(kwData.flatMap(r=>r.fotografias?[r.fotografias.coleccion_id]:[]).filter(Boolean))];
+    if(!search.trim()){setKwColIds(null);return;}
+    const q=search.trim();
+    const timer=setTimeout(async()=>{
+      const{data}=await supabase.from("keywords").select("keyword, fotografias(coleccion_id)").ilike("keyword","%"+q+"%");
+      if(data&&data.length>0){
+        const ids=[...new Set(data.flatMap(r=>r.fotografias?[r.fotografias.coleccion_id]:[]).filter(Boolean))];
         setKwColIds(ids);
-      } else {
-        setKwColIds([]);
-      }
-
-      // 2. Búsqueda directa en fotografías
-      setSearchPhotoLoading(true);
-      const { data: fotosEncontradas, error } = await supabase
-        .from("v_fotografias")
-        .select("*")
-        .or(`titulo.ilike.%${q}%,autor.ilike.%${q}%,lugar.ilike.%${q}%,edificio.ilike.%${q}%,descripcion.ilike.%${q}%`)
-        .order("creado_en", { ascending: false })
-        .limit(50);
-      if (!error && fotosEncontradas) {
-        setSearchPhotoResults(fotosEncontradas);
-      } else {
-        setSearchPhotoResults([]);
-      }
-      setSearchPhotoLoading(false);
-    }, 400);
+      }else{setKwColIds([]);}
+    },400);
     return()=>clearTimeout(timer);
   },[search]);
 
@@ -730,8 +708,7 @@ export default function Fototeca() {
 
   const toggleFilter=(cat,val)=>setFilters(f=>({...f,[cat]:f[cat].includes(val)?f[cat].filter(x=>x!==val):[...f[cat],val]}));
 
-  // Filtrado de colecciones
-  const filteredCollections = cols.filter(col=>{
+  const filtered=cols.filter(col=>{
     const q=search.toLowerCase();
     const matchText=!q||col.titulo?.toLowerCase().includes(q)||col.lugar?.toLowerCase().includes(q)||col.autor?.toLowerCase().includes(q)||col.descripcion?.toLowerCase().includes(q)||col.edificio?.toLowerCase().includes(q);
     const matchKw=!q||kwColIds===null||kwColIds.includes(col.id);
@@ -770,7 +747,7 @@ export default function Fototeca() {
       <nav style={{position:"sticky",top:0,zIndex:100,background:"rgba(28,20,109,.97)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
         <div style={{maxWidth:1380,margin:"0 auto",padding:"0 20px",display:"flex",alignItems:"center",gap:14,height:64}}>
           <div style={{display:"flex",alignItems:"center",gap:11,flexShrink:0}}>
-            <LogoImg height={44} style={{filter:"brightness(0) invert(1)",opacity:.92}}/>
+            <LogoImg height={46} style={{filter:"drop-shadow(0 2px 4px rgba(0,0,0,.4))",flexShrink:0}}/>
             <div>
               <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:600,color:"white",lineHeight:1}}>Fototeca ITZ</div>
               <div style={{fontSize:9,letterSpacing:".12em",color:"rgba(235,238,255,.45)",textTransform:"uppercase"}}>50 Aniversario · 1976–2026</div>
@@ -794,9 +771,7 @@ export default function Fototeca() {
           <div style={{background:"linear-gradient(160deg,#1c146d 0%,#2e2580 60%,#679cbc 100%)",padding:"44px 24px 48px",textAlign:"center",position:"relative",overflow:"hidden"}}>
             <div style={{position:"absolute",top:-80,right:-80,width:360,height:360,borderRadius:"50%",background:"rgba(103,156,188,.07)",pointerEvents:"none"}}/>
             <div style={{position:"absolute",bottom:-60,left:-60,width:280,height:280,borderRadius:"50%",background:"rgba(145,108,63,.07)",pointerEvents:"none"}}/>
-            <div style={{display:"flex",justifyContent:"center",marginBottom:16}}>
-              <LogoImg height={68} style={{filter:"brightness(0) invert(1)",opacity:.85}}/>
-            </div>
+            
             <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:12,letterSpacing:".25em",color:"#679cbc",textTransform:"uppercase",marginBottom:10}}>Repositorio fotográfico</div>
             <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(28px,4.5vw,52px)",color:"white",lineHeight:1.1,marginBottom:14}}>Fototeca Digital<br/><em style={{color:"#ebeeff",fontWeight:400}}>del ITZ</em></h1>
             <p style={{color:"rgba(255,255,255,.6)",fontSize:14,maxWidth:480,margin:"0 auto 28px",lineHeight:1.6}}>Archivo visual institucional con {loading?"…":totalFotos} fotografías del patrimonio del ITZ.</p>
@@ -807,7 +782,7 @@ export default function Fototeca() {
                   onFocus={()=>setShowSug(true)} onBlur={()=>setTimeout(()=>setShowSug(false),200)}
                   placeholder="Buscar por título, autor, edificio, keywords…"
                   style={{flex:1,padding:"13px 11px",border:"none",outline:"none",fontSize:14,color:"#1a1630",background:"transparent"}}/>
-                {search&&<button className="btn" onClick={()=>{setSearch("");setKwColIds(null);setSearchPhotoResults([]);}} style={{background:"transparent",padding:4,color:"#7a7590"}}><Icon name="x" size={14}/></button>}
+                {search&&<button className="btn" onClick={()=>{setSearch("");setKwColIds(null);}} style={{background:"transparent",padding:4,color:"#7a7590"}}><Icon name="x" size={14}/></button>}
               </div>
               {showSug&&sugerenciasFiltradas.length>0&&(
                 <div style={{position:"absolute",top:"calc(100% + 5px)",left:0,right:0,background:"white",borderRadius:10,boxShadow:"0 12px 40px rgba(0,0,0,.2)",zIndex:200,overflow:"hidden"}}>
@@ -835,17 +810,23 @@ export default function Fototeca() {
         </>
       )}
 
-      {page==="about" && (
-        <div style={{ maxWidth:780, margin:"60px auto", padding:"0 24px" }} className="fade-in">
-          <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:38, color:C.navy, marginBottom:20 }}>Acerca de la Fototeca</h2>
-          <div style={{ width:60, height:3, background:C.bronze, marginBottom:28 }}/>
-          <p style={{ fontSize:15, lineHeight:1.8, color:C.text, marginBottom:20 }}>La <strong>Fototeca Digital del Instituto Tecnológico De Zacatecas</strong> es un repositorio institucional de acceso público que preserva, organiza y difunde el acervo fotográfico histórico y contemporáneo del patrimonio arquitectónico, arqueológico y cultural de México.</p>
-          <p style={{ fontSize:15, lineHeight:1.8, color:C.text, marginBottom:20 }}>Las imágenes se almacenan en <strong>formato TIFF de alta resolución</strong> y se distribuyen en versiones optimizadas (JPG/WEBP). Los datos viven en <strong>Supabase (PostgreSQL)</strong> y las imágenes en <strong>Supabase Storage</strong>, garantizando disponibilidad global y copias de seguridad automáticas.</p>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:16, marginTop:32 }}>
-            {[["Preservación","TIFF sin pérdida de calidad"],["Base de datos","PostgreSQL via Supabase"],["Almacenamiento","Supabase Storage (CDN global)"],["Seguridad","Acceso por roles y permisos"]].map(([t,d]) => (
-              <div key={t} style={{ background:"white", borderRadius:12, padding:20, border:`1px solid rgba(28,20,109,.08)` }}>
-                <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:18, color:C.navy, marginBottom:6, fontWeight:600 }}>{t}</div>
-                <div style={{ fontSize:13, color:C.muted, lineHeight:1.5 }}>{d}</div>
+      {page==="about"&&(
+        <div style={{maxWidth:760,margin:"56px auto",padding:"0 22px"}} className="fade-in">
+          <div style={{display:"flex",alignItems:"center",gap:18,marginBottom:22}}>
+            <LogoImg height={72}/>
+            <div>
+              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:32,color:"#1c146d",lineHeight:1.1}}>Fototeca Digital ITZ</h2>
+              <div style={{color:"#916c3f",fontSize:13,marginTop:4}}>Instituto Tecnológico de Zacatecas · 50 Aniversario 1976–2026</div>
+            </div>
+          </div>
+          <div style={{width:56,height:3,background:"#916c3f",marginBottom:22}}/>
+          <p style={{fontSize:15,lineHeight:1.8,color:"#1a1630",marginBottom:16}}>La <strong>Fototeca Digital del Instituto Tecnológico de Zacatecas</strong> preserva, organiza y difunde el acervo fotográfico institucional.</p>
+          <p style={{fontSize:15,lineHeight:1.8,color:"#1a1630",marginBottom:20}}>Imágenes en <strong>TIFF de alta resolución</strong>, distribuidas en JPG/WEBP. Datos en <strong>Supabase (PostgreSQL)</strong> con Storage CDN global.</p>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(190px,1fr))",gap:14}}>
+            {[["Preservación","TIFF sin pérdida de calidad"],["Base de datos","PostgreSQL via Supabase"],["Almacenamiento","Storage CDN global"],["Seguridad","Acceso por roles y permisos"]].map(([t,d])=>(
+              <div key={t} style={{background:"white",borderRadius:12,padding:18,border:"1px solid rgba(28,20,109,.08)"}}>
+                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,color:"#1c146d",marginBottom:5,fontWeight:600}}>{t}</div>
+                <div style={{fontSize:12,color:"#7a7590",lineHeight:1.5}}>{d}</div>
               </div>
             ))}
           </div>
@@ -876,9 +857,8 @@ export default function Fototeca() {
               <>
                 <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18,flexWrap:"wrap",gap:8}}>
                   <span style={{fontSize:13,color:"#7a7590"}}>
-                    {loading?"Cargando…":`${filteredCollections.length} colecciones`}
+                    {loading?"Cargando…":`${filtered.length} colección${filtered.length!==1?"es":""} encontrada${filtered.length!==1?"s":""}`}
                     {activeFilters>0&&<span style={{marginLeft:8,color:"#916c3f",fontSize:12}}>({activeFilters} filtro{activeFilters!==1?"s":""} activo{activeFilters!==1?"s":""})</span>}
-                    {search && searchPhotoResults.length > 0 && <span style={{marginLeft:8,color:"#679cbc",fontSize:12}}> + {searchPhotoResults.length} fotos encontradas</span>}
                   </span>
                   <div style={{display:"flex",gap:5}}>
                     <button className="btn" onClick={fetchAll} style={{background:"#ebeeff",color:"#1c146d",padding:"7px",borderRadius:7}}><Icon name="refresh" size={14} color="#1c146d"/></button>
@@ -886,74 +866,38 @@ export default function Fototeca() {
                     <button className="btn" onClick={()=>setGridMode("list")} style={{background:gridMode==="list"?"#1c146d":"#ebeeff",color:gridMode==="list"?"white":"#1c146d",padding:"7px",borderRadius:7}}><Icon name="list" size={14} color={gridMode==="list"?"white":"#1c146d"}/></button>
                   </div>
                 </div>
-
-                {/* Colecciones encontradas */}
-                {loading?<Spinner/>:filteredCollections.length===0 && searchPhotoResults.length===0 ? (
+                {loading?<Spinner/>:filtered.length===0?(
                   <div style={{textAlign:"center",padding:"70px 20px",color:"#7a7590"}}>
                     <Icon name="photo" size={44} color="#ebeeff"/>
                     <div style={{fontSize:19,fontFamily:"'Cormorant Garamond',serif",color:"#1c146d",marginTop:14}}>Sin resultados</div>
                     <div style={{fontSize:13,marginTop:5}}>Modifica los filtros o el término de búsqueda</div>
                     <button className="btn" onClick={fetchAll} style={{marginTop:14,background:"#1c146d",color:"white",padding:"9px 22px",borderRadius:8,fontSize:13,display:"inline-flex",alignItems:"center",gap:7}}><Icon name="refresh" size={13} color="white"/> Recargar</button>
                   </div>
-                ) : (
-                  <>
-                    {filteredCollections.length > 0 && (
-                      <>
-                        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:18,color:"#1c146d",margin:"20px 0 12px"}}>📁 Colecciones</h3>
-                        {gridMode==="grid"?(
-                          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(270px,1fr))",gap:18}} className="fade-in">
-                            {filteredCollections.map(col=><ColCard key={col.id} col={col} onClick={handleColClick}/>)}
-                          </div>
-                        ):(
-                          <div style={{display:"flex",flexDirection:"column",gap:10}} className="fade-in">
-                            {filteredCollections.map(col=>(
-                              <div key={col.id} className="card-hover" onClick={()=>handleColClick(col)} style={{background:"white",borderRadius:12,overflow:"hidden",cursor:"pointer",display:"flex",border:"1px solid rgba(28,20,109,.08)"}}>
-                                <div className="img-zoom" style={{width:135,height:100,flexShrink:0,background:"#ebeeff",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                                  {storageUrl(col.portada_url)?<img src={storageUrl(col.portada_url)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<Icon name="photo" size={26} color="#7a7590"/>}
-                                </div>
-                                <div style={{padding:"13px 17px",flex:1}}>
-                                  <div style={{display:"flex",gap:7,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
-                                    <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,color:"#1c146d",fontWeight:600}}>{col.titulo}</h3>
-                                    {col.tipo&&<span className="poster-badge">{col.tipo}</span>}
-                                  </div>
-                                  <div style={{fontSize:11,color:"#7a7590",margin:"3px 0 7px",display:"flex",gap:8,flexWrap:"wrap"}}>
-                                    {col.lugar&&<span>{col.lugar}</span>}{col.anio&&<><span>·</span><span>{col.anio}</span></>}{col.autor&&<><span>·</span><span style={{color:"#916c3f"}}>{col.autor}</span></>}
-                                    <span>·</span><span>{col.fotos_reales||col.total_fotos||0} fotos</span>
-                                  </div>
-                                  <p style={{fontSize:12,color:"#7a7590",lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{col.descripcion}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    )}
-
-                    {/* Fotografías individuales encontradas */}
-                    {searchPhotoResults.length > 0 && (
-                      <>
-                        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:18,color:"#1c146d",margin:"30px 0 12px"}}>🖼️ Fotografías encontradas ({searchPhotoResults.length})</h3>
-                        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:14}}>
-                          {searchPhotoResults.map(foto=>{
-                            const s=storageUrl(foto.url_web||foto.url_original);
-                            return(
-                              <div key={foto.id} className="card-hover img-zoom" onClick={()=>setLightbox(foto)} style={{background:"white",borderRadius:10,overflow:"hidden",cursor:"pointer",border:"1px solid rgba(28,20,109,.06)"}}>
-                                <div style={{position:"relative",paddingTop:"70%"}}>
-                                  {s?<img src={s} alt={foto.titulo} loading="lazy" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}}/>
-                                    :<div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#ebeeff,#679cbc)",display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="photo" size={28} color="#1c146d"/></div>}
-                                  {!foto.descargable&&<div style={{position:"absolute",top:7,right:7,background:"rgba(193,23,32,.85)",borderRadius:4,padding:"2px 6px",fontSize:10,color:"white",fontWeight:600}}>🔒</div>}
-                                </div>
-                                <div style={{padding:"11px 13px 13px"}}>
-                                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:15,fontWeight:600,color:"#1c146d",marginBottom:2}}>{foto.titulo}</div>
-                                  <div style={{fontSize:11,color:"#7a7590"}}>{foto.autor} · {foto.anio}</div>
-                                </div>
-                              </div>
-                            );
-                          })}
+                ):gridMode==="grid"?(
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(270px,1fr))",gap:18}} className="fade-in">
+                    {filtered.map(col=><ColCard key={col.id} col={col} onClick={handleColClick}/>)}
+                  </div>
+                ):(
+                  <div style={{display:"flex",flexDirection:"column",gap:10}} className="fade-in">
+                    {filtered.map(col=>(
+                      <div key={col.id} className="card-hover" onClick={()=>handleColClick(col)} style={{background:"white",borderRadius:12,overflow:"hidden",cursor:"pointer",display:"flex",border:"1px solid rgba(28,20,109,.08)"}}>
+                        <div className="img-zoom" style={{width:135,height:100,flexShrink:0,background:"#ebeeff",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                          {storageUrl(col.portada_url)?<img src={storageUrl(col.portada_url)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<Icon name="photo" size={26} color="#7a7590"/>}
                         </div>
-                      </>
-                    )}
-                  </>
+                        <div style={{padding:"13px 17px",flex:1}}>
+                          <div style={{display:"flex",gap:7,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
+                            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,color:"#1c146d",fontWeight:600}}>{col.titulo}</h3>
+                            {col.tipo&&<span className="poster-badge">{col.tipo}</span>}
+                          </div>
+                          <div style={{fontSize:11,color:"#7a7590",margin:"3px 0 7px",display:"flex",gap:8,flexWrap:"wrap"}}>
+                            {col.lugar&&<span>{col.lugar}</span>}{col.anio&&<><span>·</span><span>{col.anio}</span></>}{col.autor&&<><span>·</span><span style={{color:"#916c3f"}}>{col.autor}</span></>}
+                            <span>·</span><span>{col.fotos_reales||col.total_fotos||0} fotos</span>
+                          </div>
+                          <p style={{fontSize:12,color:"#7a7590",lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{col.descripcion}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </>
             )}
@@ -966,38 +910,32 @@ export default function Fototeca() {
 
       <footer style={{background:"#1c146d",color:"rgba(255,255,255,.5)",padding:"26px 22px",marginTop:44,textAlign:"center"}}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:12,marginBottom:7}}>
-          <LogoImg height={30} style={{filter:"brightness(0) invert(1)",opacity:.6}}/>
+          <LogoImg height={34} style={{opacity:.75}}/>
           <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:15,color:"white"}}>Fototeca Digital · Instituto Tecnológico de Zacatecas</span>
         </div>
         <div style={{fontSize:11}}>© {new Date().getFullYear()} · 50 Aniversario 1976–2026 · Las imágenes están protegidas por derechos de autor</div>
         <div style={{marginTop:5,fontSize:10,color:"rgba(103,156,188,.35)"}}>Supabase · PostgreSQL · Storage CDN</div>
       </footer>
 
-      {lightbox&&<Lightbox foto={lightbox} fotos={[...fotos, ...searchPhotoResults]} onClose={()=>setLightbox(null)} onNav={handleNav}/>}
+      {lightbox&&<Lightbox foto={lightbox} fotos={fotos} onClose={()=>setLightbox(null)} onNav={handleNav}/>}
 
-      {showAdmin && !adminOk && (
-        <div style={{ position:"fixed", inset:0, zIndex:900, background:"rgba(10,8,35,.8)", backdropFilter:"blur(4px)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-          <div style={{ background:"white", borderRadius:16, padding:36, width:360, boxShadow:"0 30px 80px rgba(28,20,109,.3)", textAlign:"center" }}>
-            <div style={{ width:52, height:52, background:`linear-gradient(135deg,${C.navy},${C.mid})`, borderRadius:12, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px" }}><Icon name="shield" size={24} color="white"/></div>
-            <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, color:C.navy, marginBottom:4 }}>Acceso administrativo</h3>
-            <p style={{ fontSize:13, color:C.muted, marginBottom:20 }}>Conectado a Supabase · PostgreSQL</p>
-            {passErr && <div style={{ background:"rgba(193,23,32,.08)", color:C.crimson, border:`1px solid rgba(193,23,32,.2)`, borderRadius:8, padding:"8px 12px", fontSize:13, marginBottom:14 }}>{passErr}</div>}
-            <input type="password" value={adminPass} onChange={e=>setAdminPass(e.target.value)}
-              onKeyDown={e => e.key==="Enter" && tryLogin()}
-              placeholder="Contraseña de administrador"
-              style={{ ...INP, textAlign:"center", marginBottom:16 }}/>
-            <div style={{ display:"flex", gap:8 }}>
-              <button className="btn" onClick={() => { setShowAdmin(false); setAdminPass(""); setPassErr(""); }}
-                style={{ flex:1, padding:"10px", border:`1.5px solid ${C.lavender}`, borderRadius:8, fontSize:13, color:C.muted, background:"white" }}>Cancelar</button>
-              <button className="btn" onClick={tryLogin}
-                style={{ flex:1, padding:"10px", background:C.navy, color:"white", borderRadius:8, fontSize:13 }}>Entrar</button>
+      {showAdmin&&!adminOk&&(
+        <div style={{position:"fixed",inset:0,zIndex:900,background:"rgba(10,8,35,.8)",backdropFilter:"blur(4px)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <div style={{background:"white",borderRadius:16,padding:34,width:350,boxShadow:"0 30px 80px rgba(28,20,109,.3)",textAlign:"center"}}>
+            <LogoImg height={70} style={{margin:"0 auto 16px",display:"block",filter:"drop-shadow(0 2px 8px rgba(28,20,109,.2))"}}/>
+            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:21,color:"#1c146d",marginBottom:4}}>Acceso administrativo</h3>
+            <p style={{fontSize:12,color:"#7a7590",marginBottom:18}}>Fototeca ITZ · Supabase</p>
+            {passErr&&<div style={{background:"rgba(193,23,32,.08)",color:"#c11720",border:"1px solid rgba(193,23,32,.2)",borderRadius:8,padding:"7px 11px",fontSize:12,marginBottom:13}}>{passErr}</div>}
+            <input type="password" value={adminPass} onChange={e=>setAdminPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&tryLogin()} placeholder="Contraseña de administrador" style={{...INP,textAlign:"center",marginBottom:14}}/>
+            <div style={{display:"flex",gap:7}}>
+              <button className="btn" onClick={()=>{setShowAdmin(false);setAdminPass("");setPassErr("");}} style={{flex:1,padding:"9px",border:"1.5px solid #ebeeff",borderRadius:8,fontSize:13,color:"#7a7590",background:"white"}}>Cancelar</button>
+              <button className="btn" onClick={tryLogin} style={{flex:1,padding:"9px",background:"#1c146d",color:"white",borderRadius:8,fontSize:13}}>Entrar</button>
             </div>
           </div>
         </div>
       )}
-
-      {showAdmin && adminOk && (
-        <AdminPanel onClose={() => { setShowAdmin(false); setAdminOk(false); setAdminPass(""); }} onRefresh={fetchAll}/>
+      {showAdmin&&adminOk&&(
+        <AdminPanel onClose={()=>{setShowAdmin(false);setAdminOk(false);setAdminPass("");}} onRefresh={fetchAll}/>
       )}
     </>
   );

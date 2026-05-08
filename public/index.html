@@ -1,44 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!-- ✅ Favicon ITZ — reemplaza el logo de React -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,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" />
+    <link rel="apple-touch-icon" href="data:image/png;base64,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" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Sitio web del Instituto Tecnologico de Zacatecas"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <meta name="theme-color" content="#1c146d" />
+    <meta name="description" content="Fototeca Digital del Instituto Tecnológico de Zacatecas — 50 Aniversario 1976-2026" />
     <title>FOTOTECA ITZ</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Necesitas JavaScript para ejecutar esta aplicación.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
-
