@@ -57,8 +57,17 @@ const storageUrl = path => {
   return SUPABASE_URL + "/storage/v1/object/public/imagenes/" + path;
 };
 
-const LogoImg = ({ height=44, style={} }) => (
-  <img src={LOGO_ITZ} alt="ITZ" height={height} style={{objectFit:"contain",...style}}/>
+const LogoImg = ({ height, style }) => (
+  <img 
+    src={LOGO_ITZ} 
+    alt="Logo ITZ" 
+    style={{ 
+      height: height || 80, 
+      display: "block", 
+      mixBlendMode: "multiply", 
+      ...style 
+    }} 
+  />
 );
 
 // ── ÍCONOS ────────────────────────────────────────────────────
