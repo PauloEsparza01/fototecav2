@@ -235,7 +235,7 @@ export default function GobHeader() {
             </div>
           )}
         </div>
-
+        
         {NAV.map(item => (
           <a key={item} href="#"
             style={{
