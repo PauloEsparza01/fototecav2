@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
+import GobHeader from "./components/GobHeader";
+import GobFooter from "./components/GobFooter";
 
 const SUPABASE_URL = "https://iqyytvzlsquwkeimtein.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXl0dnpsc3F1d2tlaW10ZWluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYyODEsImV4cCI6MjA5MDEyMjI4MX0.l-VPzdyKsYKVHrGxYG8_JwE97-ieAdIBLyh4jcBWj30";
@@ -836,6 +838,7 @@ if (error) {
   return(
     <>
       <style>{GS}</style>
+      <GobHeader />
       <nav style={{position:"sticky",top:0,zIndex:100,background:"rgba(28,20,109,.97)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
         <div style={{maxWidth:1380,margin:"0 auto",padding:"0 20px",display:"flex",alignItems:"center",gap:14,height:64}}>
           <div style={{display:"flex",alignItems:"center",gap:11,flexShrink:0}}>
@@ -1016,6 +1019,7 @@ if (error) {
         <div style={{fontSize:11}}>© {new Date().getFullYear()} · 50 Aniversario 1976–2026 · Las imágenes están protegidas por derechos de autor</div>
         <div style={{marginTop:5,fontSize:10,color:"rgba(103,156,188,.35)"}}>Supabase · PostgreSQL · Storage CDN</div>
       </footer>
+      <GobFooter />
 
       {lightbox&&<Lightbox foto={lightbox} fotos={fotos} onClose={()=>setLightbox(null)} onNav={handleNav}/>}
 
@@ -1039,5 +1043,6 @@ if (error) {
         <AdminPanel onClose={()=>{setShowAdmin(false);setAdminOk(false);setAdminPass("");}} onRefresh={fetchAll}/>
       )}
     </>
+
   );
 }
