@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import GobFooter from "./components/GobFooter";
 import GobHeader from "./components/GobHeader";
+
 
 const SUPABASE_URL = "https://iqyytvzlsquwkeimtein.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXl0dnpsc3F1d2tlaW10ZWluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYyODEsImV4cCI6MjA5MDEyMjI4MX0.l-VPzdyKsYKVHrGxYG8_JwE97-ieAdIBLyh4jcBWj30";
@@ -13,16 +15,16 @@ const LOGO_NAV = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABdCAYAAABa
 const LOGO_BIG = "data:image/png;base64,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";
 
 const C = {
-  navy:"#1c146d", cream:"#f2ebe3", bronze:"#916c3f",
-  lavender:"#ebeeff", crimson:"#c11720", steel:"#679cbc",
-  mid:"#2e2580", text:"#1a1630", muted:"#7a7590",
+  navy: "#1c146d", cream: "#f2ebe3", bronze: "#916c3f",
+  lavender: "#ebeeff", crimson: "#c11720", steel: "#679cbc",
+  mid: "#2e2580", text: "#1a1630", muted: "#7a7590",
 };
 
 const CARRUSEL = [
-  { src:"/carrusel/foto1.jpg", titulo:"50 Aniversario ITZ", sub:"Instituto Tecnológico de Zacatecas 1976–2026" },
-  { src:"/carrusel/foto2.jpg", titulo:"Campus ITZ",         sub:"Patrimonio educativo de Zacatecas" },
-  { src:"/carrusel/foto3.jpg", titulo:"Comunidad ITZ",      sub:"Formando profesionistas desde 1976" },
-  { src:"/carrusel/foto4.jpg", titulo:"Historia y Futuro",  sub:"Tecnología · Innovación · Tradición" },
+  { src: "/carrusel/foto1.jpg", titulo: "50 Aniversario ITZ", sub: "Instituto Tecnológico de Zacatecas 1976–2026" },
+  { src: "/carrusel/foto2.jpg", titulo: "Campus ITZ", sub: "Patrimonio educativo de Zacatecas" },
+  { src: "/carrusel/foto3.jpg", titulo: "Comunidad ITZ", sub: "Formando profesionistas desde 1976" },
+  { src: "/carrusel/foto4.jpg", titulo: "Historia y Futuro", sub: "Tecnología · Innovación · Tradición" },
 ];
 const GS = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
@@ -43,327 +45,361 @@ const GS = `
   .cb input:checked+label::before{background:#1c146d;border-color:#1c146d;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.5 3.5l-7 7-3-3' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-size:12px;background-position:center}
   .poster-badge{background:linear-gradient(135deg,#1c146d,#2e2580);color:white;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px}
   input,select,textarea{font-family:'DM Sans',sans-serif}
+
+  .nav-links{display:flex;gap:3px;margin-left:10px}
+  .nav-burger{display:none}
+  .filters-drawer-overlay{display:none}
+  .filters-btn-mobile{display:none}
+
+  @media (max-width:860px){
+    .nav-links{position:fixed;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:rgba(28,20,109,.98);backdrop-filter:blur(16px);max-height:0;overflow:hidden;transition:max-height .3s ease;z-index:99}
+    .nav-links.open{max-height:300px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav-links .btn{width:100%;text-align:left;border-radius:0;padding:14px 20px !important}
+    .nav-burger{display:flex}
+
+    .gallery-layout{display:block !important}
+    .filters-aside{
+      display:none !important;
+    }
+    .filters-aside.drawer-open{
+      display:block !important;
+      position:fixed !important;
+      top:0 !important;
+      left:0 !important;
+      bottom:0 !important;
+      width:82% !important;
+      max-width:320px !important;
+      max-height:100vh !important;
+      z-index:901;
+      overflow-y:auto;
+      border-radius:0 !important;
+      animation:slideIn .28s ease forwards;
+    }
+    @keyframes slideIn{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+    .filters-drawer-overlay.open{display:block;position:fixed;inset:0;background:rgba(10,8,35,.6);z-index:900}
+    .filters-btn-mobile{display:flex}
+  }
 `;
 
-const INP = {width:"100%",padding:"9px 12px",border:"1.5px solid #ebeeff",borderRadius:8,fontSize:13,outline:"none",color:"#1a1630",background:"white"};
-const storageUrl = p => !p?null:p.startsWith("http")?p:`${SUPABASE_URL}/storage/v1/object/public/imagenes/${p}`;
-const fmtDate = d => d?new Date(d).toLocaleDateString("es-MX",{year:"numeric",month:"long",day:"numeric"}):"—";
+const INP = { width: "100%", padding: "9px 12px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, outline: "none", color: "#1a1630", background: "white" };
+const storageUrl = p => !p ? null : p.startsWith("http") ? p : `${SUPABASE_URL}/storage/v1/object/public/imagenes/${p}`;
+const fmtDate = d => d ? new Date(d).toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" }) : "—";
 
-const Icon = ({name,size=18,color="currentColor"}) => {
+const Icon = ({ name, size = 18, color = "currentColor" }) => {
   const I = {
-    search:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
-    x:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-    dl:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
-    chevL:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>,
-    chevR:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>,
-    grid:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>,
-    list:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-    filter:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>,
-    photo:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>,
-    info:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
-    shield:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-    upload:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>,
-    settings:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
-    plus:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-    zoomIn:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>,
-    zoomOut:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>,
-    close:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
-    save:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>,
-    trash:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>,
-    edit:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
-    lock:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
-    unlock:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>,
-    stats:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
-    cols:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 1 2-2m0 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M7 7h10"/></svg>,
-    refresh:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>,
-    expand:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>,
-    play:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill={color}/></svg>,
-    calendar:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
-    key:<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>,
+    search: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>,
+    x: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>,
+    dl: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>,
+    chevL: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round"><polyline points="15 18 9 12 15 6" /></svg>,
+    chevR: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6" /></svg>,
+    grid: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg>,
+    list: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg>,
+    filter: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>,
+    photo: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>,
+    info: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>,
+    shield: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>,
+    upload: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="16 16 12 12 8 16" /><line x1="12" y1="12" x2="12" y2="21" /><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" /></svg>,
+    settings: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>,
+    plus: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>,
+    zoomIn: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /><line x1="11" y1="8" x2="11" y2="14" /><line x1="8" y1="11" x2="14" y2="11" /></svg>,
+    zoomOut: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /><line x1="8" y1="11" x2="14" y2="11" /></svg>,
+    close: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>,
+    save: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>,
+    trash: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4h6v2" /></svg>,
+    edit: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>,
+    lock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>,
+    unlock: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></svg>,
+    stats: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>,
+    cols: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 1 2-2m0 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M7 7h10" /></svg>,
+    refresh: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="23 4 23 10 17 10" /><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" /></svg>,
+    expand: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" /><line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" /></svg>,
+    play: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10" /><polygon points="10 8 16 12 10 16 10 8" fill={color} /></svg>,
+    calendar: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>,
+    key: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>,
   };
-  return I[name]||null;
+  return I[name] || null;
 };
 
-const Spinner = ({small}) => (
-  <div style={{display:"flex",justifyContent:"center",alignItems:"center",padding:small?0:"60px"}}>
-    <div style={{width:small?18:34,height:small?18:34,border:"3px solid #ebeeff",borderTopColor:"#1c146d",borderRadius:"50%",animation:"spin .8s linear infinite"}}/>
+const Spinner = ({ small }) => (
+  <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: small ? 0 : "60px" }}>
+    <div style={{ width: small ? 18 : 34, height: small ? 18 : 34, border: "3px solid #ebeeff", borderTopColor: "#1c146d", borderRadius: "50%", animation: "spin .8s linear infinite" }} />
   </div>
 );
-const Toast = ({msg,type="ok",onClose}) => (
-  <div style={{position:"fixed",bottom:24,right:24,zIndex:3000,background:type==="err"?"#c11720":"#1c146d",color:"white",padding:"12px 20px",borderRadius:10,boxShadow:"0 8px 30px rgba(0,0,0,.3)",display:"flex",alignItems:"center",gap:10,fontSize:14,maxWidth:380,animation:"fadeIn .3s ease"}}>
-    {type==="err"?"❌":"✅"} {msg}
-    <button className="btn" onClick={onClose} style={{background:"transparent",color:"rgba(255,255,255,.7)",marginLeft:"auto",padding:2}}><Icon name="close" size={14}/></button>
+const Toast = ({ msg, type = "ok", onClose }) => (
+  <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 3000, background: type === "err" ? "#c11720" : "#1c146d", color: "white", padding: "12px 20px", borderRadius: 10, boxShadow: "0 8px 30px rgba(0,0,0,.3)", display: "flex", alignItems: "center", gap: 10, fontSize: 14, maxWidth: 380, animation: "fadeIn .3s ease" }}>
+    {type === "err" ? "❌" : "✅"} {msg}
+    <button className="btn" onClick={onClose} style={{ background: "transparent", color: "rgba(255,255,255,.7)", marginLeft: "auto", padding: 2 }}><Icon name="close" size={14} /></button>
   </div>
 );
-const Field = ({label,children}) => (
+const Field = ({ label, children }) => (
   <div>
-    <label style={{fontSize:12,color:"#7a7590",letterSpacing:".05em",textTransform:"uppercase",display:"block",marginBottom:4}}>{label}</label>
+    <label style={{ fontSize: 12, color: "#7a7590", letterSpacing: ".05em", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{label}</label>
     {children}
   </div>
 );
 
-function ZonaCarga({archivo,onChange,label="Arrastra imagen aquí",accept="image/*,.tif,.tiff,.heic,.heif",id="fz"}) {
-  const [over,setOver]=useState(false);
+function ZonaCarga({ archivo, onChange, label = "Arrastra imagen aquí", accept = "image/*,.tif,.tiff,.heic,.heif", id = "fz" }) {
+  const [over, setOver] = useState(false);
   return (
-    <label htmlFor={id} style={{display:"block",cursor:"pointer",marginBottom:18}}
-      onDragOver={e=>{e.preventDefault();setOver(true);}}
-      onDragLeave={()=>setOver(false)}
-      onDrop={e=>{e.preventDefault();setOver(false);const f=e.dataTransfer.files[0];if(f)onChange(f);}}>
-      <div style={{border:`2px dashed ${over||archivo?"#1c146d":"#679cbc"}`,borderRadius:12,padding:"22px 16px",textAlign:"center",background:archivo?"rgba(28,20,109,.06)":"#ebeeff",transition:"all .2s",transform:over?"scale(1.01)":"none"}}>
-        <Icon name="upload" size={26} color={over||archivo?"#1c146d":"#679cbc"}/>
-        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:15,color:"#1c146d",marginTop:7,marginBottom:2}}>{archivo?`✅ ${archivo.name}`:label}</div>
-        {!archivo&&<div style={{fontSize:11,color:"#7a7590"}}>o haz clic · TIFF JPG PNG WEBP HEIC BMP SVG</div>}
+    <label htmlFor={id} style={{ display: "block", cursor: "pointer", marginBottom: 18 }}
+      onDragOver={e => { e.preventDefault(); setOver(true); }}
+      onDragLeave={() => setOver(false)}
+      onDrop={e => { e.preventDefault(); setOver(false); const f = e.dataTransfer.files[0]; if (f) onChange(f); }}>
+      <div style={{ border: `2px dashed ${over || archivo ? "#1c146d" : "#679cbc"}`, borderRadius: 12, padding: "22px 16px", textAlign: "center", background: archivo ? "rgba(28,20,109,.06)" : "#ebeeff", transition: "all .2s", transform: over ? "scale(1.01)" : "none" }}>
+        <Icon name="upload" size={26} color={over || archivo ? "#1c146d" : "#679cbc"} />
+        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 15, color: "#1c146d", marginTop: 7, marginBottom: 2 }}>{archivo ? `✅ ${archivo.name}` : label}</div>
+        {!archivo && <div style={{ fontSize: 11, color: "#7a7590" }}>o haz clic · TIFF JPG PNG WEBP HEIC BMP SVG</div>}
       </div>
-      <input id={id} type="file" accept={accept} style={{display:"none"}} onChange={e=>onChange(e.target.files[0]||null)}/>
+      <input id={id} type="file" accept={accept} style={{ display: "none" }} onChange={e => onChange(e.target.files[0] || null)} />
     </label>
   );
 }
 
 function Carrusel() {
-  const [idx,setIdx]=useState(0);
-  const [startX,setStartX]=useState(0);
-  const timer=useRef(null);
-  const next=useCallback(()=>setIdx(i=>(i+1)%CARRUSEL.length),[]);
-  const prev=()=>setIdx(i=>(i-1+CARRUSEL.length)%CARRUSEL.length);
-  const reset=()=>{clearInterval(timer.current);timer.current=setInterval(next,5500);};
-  useEffect(()=>{timer.current=setInterval(next,5500);return()=>clearInterval(timer.current);},[next]);
-  const slide=CARRUSEL[idx];
+  const [idx, setIdx] = useState(0);
+  const [startX, setStartX] = useState(0);
+  const timer = useRef(null);
+  const next = useCallback(() => setIdx(i => (i + 1) % CARRUSEL.length), []);
+  const prev = () => setIdx(i => (i - 1 + CARRUSEL.length) % CARRUSEL.length);
+  const reset = () => { clearInterval(timer.current); timer.current = setInterval(next, 5500); };
+  useEffect(() => { timer.current = setInterval(next, 5500); return () => clearInterval(timer.current); }, [next]);
+  const slide = CARRUSEL[idx];
   return (
-    <div style={{position:"relative",height:"clamp(180px,28vw,400px)",overflow:"hidden",background:"#1c146d"}}
-      onTouchStart={e=>setStartX(e.touches[0].clientX)}
-      onTouchEnd={e=>{const d=startX-e.changedTouches[0].clientX;if(Math.abs(d)>50){d>0?next():prev();reset();}}}>
-      <div key={idx} style={{position:"absolute",inset:0,animation:"fadeIn .7s ease"}}>
-        <img src={slide.src} alt={slide.titulo} style={{width:"100%",height:"100%",objectFit:"cover"}} onError={e=>e.target.style.display="none"}/>
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,rgba(28,20,109,.8),rgba(46,37,128,.6),rgba(103,156,188,.4))",zIndex:0}}/>
+    <div style={{ position: "relative", height: "clamp(180px,28vw,400px)", overflow: "hidden", background: "#1c146d" }}
+      onTouchStart={e => setStartX(e.touches[0].clientX)}
+      onTouchEnd={e => { const d = startX - e.changedTouches[0].clientX; if (Math.abs(d) > 50) { d > 0 ? next() : prev(); reset(); } }}>
+      <div key={idx} style={{ position: "absolute", inset: 0, animation: "fadeIn .7s ease" }}>
+        <img src={slide.src} alt={slide.titulo} style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,rgba(28,20,109,.8),rgba(46,37,128,.6),rgba(103,156,188,.4))", zIndex: 0 }} />
       </div>
-      <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(10,8,35,.75) 0%,rgba(10,8,35,.2) 60%,transparent 100%)",zIndex:1}}/>
-      <div style={{position:"absolute",bottom:42,left:0,right:0,textAlign:"center",padding:"0 20px",zIndex:2}}>
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(16px,2.5vw,32px)",color:"white",fontWeight:700,textShadow:"0 2px 12px rgba(0,0,0,.6)"}}>{slide.titulo}</div>
-        <div style={{fontSize:"clamp(11px,1.1vw,14px)",color:"rgba(255,255,255,.75)",marginTop:6}}>{slide.sub}</div>
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(10,8,35,.75) 0%,rgba(10,8,35,.2) 60%,transparent 100%)", zIndex: 1 }} />
+      <div style={{ position: "absolute", bottom: 42, left: 0, right: 0, textAlign: "center", padding: "0 20px", zIndex: 2 }}>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(16px,2.5vw,32px)", color: "white", fontWeight: 700, textShadow: "0 2px 12px rgba(0,0,0,.6)" }}>{slide.titulo}</div>
+        <div style={{ fontSize: "clamp(11px,1.1vw,14px)", color: "rgba(255,255,255,.75)", marginTop: 6 }}>{slide.sub}</div>
       </div>
-      {[["chevL",prev,"left"],["chevR",next,"right"]].map(([icon,fn,side])=>(
-        <button key={icon} className="btn" onClick={()=>{fn();reset();}} style={{position:"absolute",[side]:14,top:"50%",transform:"translateY(-50%)",zIndex:3,background:"rgba(255,255,255,.18)",backdropFilter:"blur(8px)",color:"white",padding:"9px",borderRadius:"50%",display:"flex"}}>
-          <Icon name={icon} size={20}/>
+      {[["chevL", prev, "left"], ["chevR", next, "right"]].map(([icon, fn, side]) => (
+        <button key={icon} className="btn" onClick={() => { fn(); reset(); }} style={{ position: "absolute", [side]: 14, top: "50%", transform: "translateY(-50%)", zIndex: 3, background: "rgba(255,255,255,.18)", backdropFilter: "blur(8px)", color: "white", padding: "9px", borderRadius: "50%", display: "flex" }}>
+          <Icon name={icon} size={20} />
         </button>
       ))}
-      <div style={{position:"absolute",bottom:14,left:0,right:0,display:"flex",justifyContent:"center",gap:6,zIndex:3}}>
-        {CARRUSEL.map((_,i)=>(
-          <button key={i} className="btn" onClick={()=>{setIdx(i);reset();}} style={{width:i===idx?20:6,height:6,borderRadius:3,background:i===idx?"white":"rgba(255,255,255,.38)",padding:0,transition:"all .3s"}}/>
+      <div style={{ position: "absolute", bottom: 14, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 3 }}>
+        {CARRUSEL.map((_, i) => (
+          <button key={i} className="btn" onClick={() => { setIdx(i); reset(); }} style={{ width: i === idx ? 20 : 6, height: 6, borderRadius: 3, background: i === idx ? "white" : "rgba(255,255,255,.38)", padding: 0, transition: "all .3s" }} />
         ))}
       </div>
     </div>
   );
 }
 
-function Lightbox({foto,fotos,onClose,onNav}) {
-  const [zoom,setZoom]=useState(1);
-  const [meta,setMeta]=useState(true);
-  const [pos,setPos]=useState({x:0,y:0});
-  const [drag,setDrag]=useState(false);
-  const [ds,setDs]=useState({x:0,y:0});
-  const [descargando,setDescargando]=useState(false);
-  const colFotos=fotos.filter(f=>f.coleccion_id===foto.coleccion_id);
-  const idx=colFotos.findIndex(f=>f.id===foto.id);
-  const src=storageUrl(foto.url_web||foto.url_original);
-  useEffect(()=>{
-    const h=e=>{
-      if(e.key==="Escape")onClose();
-      if(e.key==="ArrowRight"){onNav(1);setZoom(1);setPos({x:0,y:0});}
-      if(e.key==="ArrowLeft"){onNav(-1);setZoom(1);setPos({x:0,y:0});}
+function Lightbox({ foto, fotos, onClose, onNav }) {
+  const [zoom, setZoom] = useState(1);
+  const [meta, setMeta] = useState(true);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [drag, setDrag] = useState(false);
+  const [ds, setDs] = useState({ x: 0, y: 0 });
+  const [descargando, setDescargando] = useState(false);
+  const colFotos = fotos.filter(f => f.coleccion_id === foto.coleccion_id);
+  const idx = colFotos.findIndex(f => f.id === foto.id);
+  const src = storageUrl(foto.url_web || foto.url_original);
+  useEffect(() => {
+    const h = e => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") { onNav(1); setZoom(1); setPos({ x: 0, y: 0 }); }
+      if (e.key === "ArrowLeft") { onNav(-1); setZoom(1); setPos({ x: 0, y: 0 }); }
     };
-    window.addEventListener("keydown",h);
-    return()=>window.removeEventListener("keydown",h);
-  },[foto]);
-  const descargarConMarca=async()=>{
-    if(!src)return;setDescargando(true);
-    try{
-      const res=await fetch(src);const blob=await res.blob();
-      const imgUrl=URL.createObjectURL(blob);const img=new Image();img.crossOrigin="anonymous";
-      img.onload=()=>{
-        const canvas=document.createElement("canvas");canvas.width=img.width;canvas.height=img.height;
-        const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0);
-        ctx.save();ctx.globalAlpha=0.28;ctx.fillStyle="white";
-        const fs=Math.max(img.width*.035,18);ctx.font="bold "+fs+"px Arial";ctx.textAlign="center";
-        for(let i=-3;i<=Math.ceil(img.width/260)+3;i++)
-          for(let j=-3;j<=Math.ceil(img.height/170)+3;j++){
-            ctx.save();ctx.translate(i*260,j*170);ctx.rotate(-Math.PI/6);ctx.fillText("© Fototeca ITZ",0,0);ctx.restore();
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [foto]);
+  const descargarConMarca = async () => {
+    if (!src) return; setDescargando(true);
+    try {
+      const res = await fetch(src); const blob = await res.blob();
+      const imgUrl = URL.createObjectURL(blob); const img = new Image(); img.crossOrigin = "anonymous";
+      img.onload = () => {
+        const canvas = document.createElement("canvas"); canvas.width = img.width; canvas.height = img.height;
+        const ctx = canvas.getContext("2d"); ctx.drawImage(img, 0, 0);
+        ctx.save(); ctx.globalAlpha = 0.28; ctx.fillStyle = "white";
+        const fs = Math.max(img.width * .035, 18); ctx.font = "bold " + fs + "px Arial"; ctx.textAlign = "center";
+        for (let i = -3; i <= Math.ceil(img.width / 260) + 3; i++)
+          for (let j = -3; j <= Math.ceil(img.height / 170) + 3; j++) {
+            ctx.save(); ctx.translate(i * 260, j * 170); ctx.rotate(-Math.PI / 6); ctx.fillText("© Fototeca ITZ", 0, 0); ctx.restore();
           }
-        const bh=Math.max(img.height*.055,30);
-        ctx.globalAlpha=0.85;ctx.fillStyle="#1c146d";ctx.fillRect(0,img.height-bh,img.width,bh);
-        ctx.globalAlpha=1;ctx.fillStyle="white";const fs2=Math.max(fs*.44,11);ctx.font=fs2+"px Arial";
-        ctx.textAlign="left";ctx.fillText("© Fototeca ITZ · "+(foto.derechos||"Todos los derechos reservados")+" · "+(foto.autor||"")+" "+(foto.anio||""),14,img.height-bh*.2);
-        ctx.textAlign="right";ctx.fillText("Instituto Tecnológico de Zacatecas",img.width-14,img.height-bh*.2);ctx.restore();
-        canvas.toBlob(b=>{
-          const url=URL.createObjectURL(b);const a=document.createElement("a");
-          a.href=url;a.download=(foto.titulo||"imagen")+"_ITZ.jpg";a.click();
-          URL.revokeObjectURL(url);URL.revokeObjectURL(imgUrl);setDescargando(false);
-        },"image/jpeg",0.82);
+        const bh = Math.max(img.height * .055, 30);
+        ctx.globalAlpha = 0.85; ctx.fillStyle = "#1c146d"; ctx.fillRect(0, img.height - bh, img.width, bh);
+        ctx.globalAlpha = 1; ctx.fillStyle = "white"; const fs2 = Math.max(fs * .44, 11); ctx.font = fs2 + "px Arial";
+        ctx.textAlign = "left"; ctx.fillText("© Fototeca ITZ · " + (foto.derechos || "Todos los derechos reservados") + " · " + (foto.autor || "") + " " + (foto.anio || ""), 14, img.height - bh * .2);
+        ctx.textAlign = "right"; ctx.fillText("Instituto Tecnológico de Zacatecas", img.width - 14, img.height - bh * .2); ctx.restore();
+        canvas.toBlob(b => {
+          const url = URL.createObjectURL(b); const a = document.createElement("a");
+          a.href = url; a.download = (foto.titulo || "imagen") + "_ITZ.jpg"; a.click();
+          URL.revokeObjectURL(url); URL.revokeObjectURL(imgUrl); setDescargando(false);
+        }, "image/jpeg", 0.82);
       };
-      img.onerror=()=>setDescargando(false);img.src=imgUrl;
-    }catch(e){alert("Error: "+e.message);setDescargando(false);}
+      img.onerror = () => setDescargando(false); img.src = imgUrl;
+    } catch (e) { alert("Error: " + e.message); setDescargando(false); }
   };
-  return(
-    <div style={{position:"fixed",inset:0,zIndex:1000,background:"rgba(10,8,35,.97)",display:"flex",flexDirection:"column"}} onContextMenu={e=>e.preventDefault()}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"13px 20px",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
-        <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <span style={{color:"#679cbc",fontSize:11,letterSpacing:".1em",textTransform:"uppercase"}}>{idx+1}/{colFotos.length}</span>
-          <span style={{color:"white",fontFamily:"'Cormorant Garamond',serif",fontSize:17}}>{foto.titulo}</span>
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(10,8,35,.97)", display: "flex", flexDirection: "column" }} onContextMenu={e => e.preventDefault()}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 20px", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ color: "#679cbc", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase" }}>{idx + 1}/{colFotos.length}</span>
+          <span style={{ color: "white", fontFamily: "'Cormorant Garamond',serif", fontSize: 17 }}>{foto.titulo}</span>
         </div>
-        <div style={{display:"flex",gap:7}}>
-          {[["zoomIn",()=>setZoom(z=>Math.min(4,z+.5))],["zoomOut",()=>setZoom(z=>Math.max(1,z-.5))],["info",()=>setMeta(v=>!v)]].map(([n,fn])=>(
-            <button key={n} className="btn" onClick={fn} style={{background:n==="info"&&meta?"rgba(103,156,188,.3)":"rgba(255,255,255,.08)",color:"white",padding:"7px",borderRadius:8}}><Icon name={n} size={15}/></button>
+        <div style={{ display: "flex", gap: 7 }}>
+          {[["zoomIn", () => setZoom(z => Math.min(4, z + .5))], ["zoomOut", () => setZoom(z => Math.max(1, z - .5))], ["info", () => setMeta(v => !v)]].map(([n, fn]) => (
+            <button key={n} className="btn" onClick={fn} style={{ background: n === "info" && meta ? "rgba(103,156,188,.3)" : "rgba(255,255,255,.08)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name={n} size={15} /></button>
           ))}
-          {foto.descargable&&(
-            <button className="btn" onClick={descargarConMarca} disabled={descargando} style={{background:"rgba(145,108,63,.4)",color:"white",padding:"7px 14px",borderRadius:8,fontSize:12,display:"flex",alignItems:"center",gap:6,fontWeight:500,opacity:descargando?.6:1}}>
-              {descargando?<Spinner small/>:<Icon name="dl" size={14}/>} {descargando?"Generando…":"Descargar"}
+          {foto.descargable && (
+            <button className="btn" onClick={descargarConMarca} disabled={descargando} style={{ background: "rgba(145,108,63,.4)", color: "white", padding: "7px 14px", borderRadius: 8, fontSize: 12, display: "flex", alignItems: "center", gap: 6, fontWeight: 500, opacity: descargando ? .6 : 1 }}>
+              {descargando ? <Spinner small /> : <Icon name="dl" size={14} />} {descargando ? "Generando…" : "Descargar"}
             </button>
           )}
-          <button className="btn" onClick={onClose} style={{background:"rgba(193,23,32,.3)",color:"white",padding:"7px",borderRadius:8}}><Icon name="close" size={18}/></button>
+          <button className="btn" onClick={onClose} style={{ background: "rgba(193,23,32,.3)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name="close" size={18} /></button>
         </div>
       </div>
-      <div style={{flex:1,display:"flex",alignItems:"center",justifyContent:"center",position:"relative",overflow:"hidden"}}
-        onWheel={e=>{e.preventDefault();setZoom(z=>Math.min(4,Math.max(1,z-e.deltaY*.002)));}}
-        onMouseDown={e=>{if(zoom>1){setDrag(true);setDs({x:e.clientX-pos.x,y:e.clientY-pos.y});}}}
-        onMouseMove={e=>{if(drag)setPos({x:e.clientX-ds.x,y:e.clientY-ds.y});}}
-        onMouseUp={()=>setDrag(false)}>
-        <button className="btn" onClick={()=>{onNav(-1);setZoom(1);setPos({x:0,y:0});}} style={{position:"absolute",left:14,zIndex:10,background:"rgba(255,255,255,.1)",color:"white",padding:"11px",borderRadius:"50%",display:"flex"}}><Icon name="chevL" size={22}/></button>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}
+        onWheel={e => { e.preventDefault(); setZoom(z => Math.min(4, Math.max(1, z - e.deltaY * .002))); }}
+        onMouseDown={e => { if (zoom > 1) { setDrag(true); setDs({ x: e.clientX - pos.x, y: e.clientY - pos.y }); } }}
+        onMouseMove={e => { if (drag) setPos({ x: e.clientX - ds.x, y: e.clientY - ds.y }); }}
+        onMouseUp={() => setDrag(false)}>
+        <button className="btn" onClick={() => { onNav(-1); setZoom(1); setPos({ x: 0, y: 0 }); }} style={{ position: "absolute", left: 14, zIndex: 10, background: "rgba(255,255,255,.1)", color: "white", padding: "11px", borderRadius: "50%", display: "flex" }}><Icon name="chevL" size={22} /></button>
         {src
-          ?<img src={src} alt={foto.titulo} draggable={false} style={{maxWidth:"90%",maxHeight:"80vh",objectFit:"contain",transform:`scale(${zoom}) translate(${pos.x/zoom}px,${pos.y/zoom}px)`,transition:drag?"none":".2s",cursor:zoom>1?"grab":"zoom-in",userSelect:"none"}} onContextMenu={e=>e.preventDefault()}/>
-          :<div style={{color:"rgba(255,255,255,.3)",textAlign:"center"}}><Icon name="photo" size={64} color="rgba(255,255,255,.1)"/><div style={{marginTop:12,fontSize:13}}>Sin imagen</div></div>
+          ? <img src={src} alt={foto.titulo} draggable={false} style={{ maxWidth: "90%", maxHeight: "80vh", objectFit: "contain", transform: `scale(${zoom}) translate(${pos.x / zoom}px,${pos.y / zoom}px)`, transition: drag ? "none" : ".2s", cursor: zoom > 1 ? "grab" : "zoom-in", userSelect: "none" }} onContextMenu={e => e.preventDefault()} />
+          : <div style={{ color: "rgba(255,255,255,.3)", textAlign: "center" }}><Icon name="photo" size={64} color="rgba(255,255,255,.1)" /><div style={{ marginTop: 12, fontSize: 13 }}>Sin imagen</div></div>
         }
-        <button className="btn" onClick={()=>{onNav(1);setZoom(1);setPos({x:0,y:0});}} style={{position:"absolute",right:14,zIndex:10,background:"rgba(255,255,255,.1)",color:"white",padding:"11px",borderRadius:"50%",display:"flex"}}><Icon name="chevR" size={22}/></button>
+        <button className="btn" onClick={() => { onNav(1); setZoom(1); setPos({ x: 0, y: 0 }); }} style={{ position: "absolute", right: 14, zIndex: 10, background: "rgba(255,255,255,.1)", color: "white", padding: "11px", borderRadius: "50%", display: "flex" }}><Icon name="chevR" size={22} /></button>
       </div>
-      {meta&&(
-        <div style={{background:"rgba(28,20,109,.55)",backdropFilter:"blur(20px)",padding:"14px 22px",borderTop:"1px solid rgba(255,255,255,.08)",display:"flex",gap:22,flexWrap:"wrap"}}>
-          {[["Título",foto.titulo],["Autor",foto.autor],["Año",foto.anio],["Lugar",foto.lugar],["Fecha origen",fmtDate(foto.fecha_origen)],["Edificio",foto.edificio],["Archivo",foto.tipo_archivo],["Derechos",foto.derechos]].map(([k,v])=>(
-            <div key={k}><div style={{fontSize:9,letterSpacing:".1em",textTransform:"uppercase",color:"#679cbc",marginBottom:2}}>{k}</div><div style={{fontSize:12,color:"white"}}>{v||"—"}</div></div>
+      {meta && (
+        <div style={{ background: "rgba(28,20,109,.55)", backdropFilter: "blur(20px)", padding: "14px 22px", borderTop: "1px solid rgba(255,255,255,.08)", display: "flex", gap: 22, flexWrap: "wrap" }}>
+          {[["Título", foto.titulo], ["Autor", foto.autor], ["Año", foto.anio], ["Lugar", foto.lugar], ["Fecha origen", fmtDate(foto.fecha_origen)], ["Edificio", foto.edificio], ["Archivo", foto.tipo_archivo], ["Derechos", foto.derechos]].map(([k, v]) => (
+            <div key={k}><div style={{ fontSize: 9, letterSpacing: ".1em", textTransform: "uppercase", color: "#679cbc", marginBottom: 2 }}>{k}</div><div style={{ fontSize: 12, color: "white" }}>{v || "—"}</div></div>
           ))}
-          {foto.descripcion&&<div style={{flex:"1 1 200px"}}><div style={{fontSize:9,letterSpacing:".1em",textTransform:"uppercase",color:"#679cbc",marginBottom:2}}>Descripción</div><div style={{fontSize:12,color:"rgba(255,255,255,.85)"}}>{foto.descripcion}</div></div>}
-          {foto.keywords&&<div style={{flex:"1 1 200px"}}><div style={{fontSize:9,letterSpacing:".1em",textTransform:"uppercase",color:"#679cbc",marginBottom:4}}>Palabras clave</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{String(foto.keywords).split(",").map(k=>(<span key={k} style={{background:"rgba(103,156,188,.25)",color:"#ebeeff",padding:"2px 8px",borderRadius:10,fontSize:11}}>{k.trim()}</span>))}</div></div>}
+          {foto.descripcion && <div style={{ flex: "1 1 200px" }}><div style={{ fontSize: 9, letterSpacing: ".1em", textTransform: "uppercase", color: "#679cbc", marginBottom: 2 }}>Descripción</div><div style={{ fontSize: 12, color: "rgba(255,255,255,.85)" }}>{foto.descripcion}</div></div>}
+          {foto.keywords && <div style={{ flex: "1 1 200px" }}><div style={{ fontSize: 9, letterSpacing: ".1em", textTransform: "uppercase", color: "#679cbc", marginBottom: 4 }}>Palabras clave</div><div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>{String(foto.keywords).split(",").map(k => (<span key={k} style={{ background: "rgba(103,156,188,.25)", color: "#ebeeff", padding: "2px 8px", borderRadius: 10, fontSize: 11 }}>{k.trim()}</span>))}</div></div>}
         </div>
       )}
     </div>
   );
 }
 
-function ColCard({col,onClick}) {
-  const cover=storageUrl(col.portada_url);
-  return(
-    <div className="card-hover img-zoom" onClick={()=>onClick(col)} style={{background:"white",borderRadius:12,overflow:"hidden",cursor:"pointer",border:"1px solid rgba(28,20,109,.08)"}}>
-      <div style={{position:"relative",paddingTop:"62%",overflow:"hidden"}}>
-        {cover?<img src={cover} alt={col.titulo} loading="lazy" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}} onContextMenu={e=>e.preventDefault()}/>
-              :<div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#1c146d,#679cbc)",display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="photo" size={40} color="rgba(255,255,255,.3)"/></div>}
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(10,8,35,.7) 0%,transparent 55%)"}}/>
-        {col.tipo&&<span className="poster-badge" style={{position:"absolute",top:12,left:12}}>{col.tipo}</span>}
-        <span style={{position:"absolute",bottom:12,right:12,background:"rgba(255,255,255,.15)",backdropFilter:"blur(8px)",color:"white",fontSize:11,padding:"4px 10px",borderRadius:20,fontWeight:500}}>
-          <Icon name="photo" size={11} color="white"/> {col.fotos_reales||col.total_fotos||0} fotos
+function ColCard({ col, onClick }) {
+  const cover = storageUrl(col.portada_url);
+  return (
+    <div className="card-hover img-zoom" onClick={() => onClick(col)} style={{ background: "white", borderRadius: 12, overflow: "hidden", cursor: "pointer", border: "1px solid rgba(28,20,109,.08)" }}>
+      <div style={{ position: "relative", paddingTop: "62%", overflow: "hidden" }}>
+        {cover ? <img src={cover} alt={col.titulo} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} onContextMenu={e => e.preventDefault()} />
+          : <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#1c146d,#679cbc)", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="photo" size={40} color="rgba(255,255,255,.3)" /></div>}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(10,8,35,.7) 0%,transparent 55%)" }} />
+        {col.tipo && <span className="poster-badge" style={{ position: "absolute", top: 12, left: 12 }}>{col.tipo}</span>}
+        <span style={{ position: "absolute", bottom: 12, right: 12, background: "rgba(255,255,255,.15)", backdropFilter: "blur(8px)", color: "white", fontSize: 11, padding: "4px 10px", borderRadius: 20, fontWeight: 500 }}>
+          <Icon name="photo" size={11} color="white" /> {col.fotos_reales || col.total_fotos || 0} fotos
         </span>
       </div>
-      <div style={{padding:"16px 18px 18px"}}>
-        <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:19,fontWeight:600,color:"#1c146d",marginBottom:4,lineHeight:1.25}}>{col.titulo}</h3>
-        <div style={{display:"flex",gap:10,marginBottom:8,flexWrap:"wrap"}}>
-          {col.lugar&&<span style={{fontSize:12,color:"#7a7590"}}>{col.lugar}</span>}
-          {col.anio&&<><span style={{fontSize:12,color:"#7a7590"}}>·</span><span style={{fontSize:12,color:"#7a7590"}}>{col.anio}</span></>}
-          {col.autor&&<><span style={{fontSize:12,color:"#7a7590"}}>·</span><span style={{fontSize:12,color:"#916c3f"}}>{col.autor}</span></>}
+      <div style={{ padding: "16px 18px 18px" }}>
+        <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 19, fontWeight: 600, color: "#1c146d", marginBottom: 4, lineHeight: 1.25 }}>{col.titulo}</h3>
+        <div style={{ display: "flex", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
+          {col.lugar && <span style={{ fontSize: 12, color: "#7a7590" }}>{col.lugar}</span>}
+          {col.anio && <><span style={{ fontSize: 12, color: "#7a7590" }}>·</span><span style={{ fontSize: 12, color: "#7a7590" }}>{col.anio}</span></>}
+          {col.autor && <><span style={{ fontSize: 12, color: "#7a7590" }}>·</span><span style={{ fontSize: 12, color: "#916c3f" }}>{col.autor}</span></>}
         </div>
-        <p style={{fontSize:13,color:"#7a7590",lineHeight:1.55,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{col.descripcion}</p>
-        <div style={{display:"flex",gap:8,marginTop:8,flexWrap:"wrap",fontSize:11,color:"#7a7590"}}>
-          {col.edificio&&<span>🏛 {col.edificio}</span>}
-          {col.creado_en&&<span>📅 {fmtDate(col.creado_en)}</span>}
+        <p style={{ fontSize: 13, color: "#7a7590", lineHeight: 1.55, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{col.descripcion}</p>
+        <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap", fontSize: 11, color: "#7a7590" }}>
+          {col.edificio && <span>🏛 {col.edificio}</span>}
+          {col.creado_en && <span>📅 {fmtDate(col.creado_en)}</span>}
         </div>
-        <div style={{display:"flex",gap:4,marginTop:8,flexWrap:"wrap"}}>
-          {col.tipo&&<span className="tag" style={{background:"#ebeeff",color:"#1c146d"}}>{col.tipo}</span>}
-          {col.derechos&&<span className="tag" style={{background:"rgba(145,108,63,.1)",color:"#916c3f"}}>{col.derechos}</span>}
+        <div style={{ display: "flex", gap: 4, marginTop: 8, flexWrap: "wrap" }}>
+          {col.tipo && <span className="tag" style={{ background: "#ebeeff", color: "#1c146d" }}>{col.tipo}</span>}
+          {col.derechos && <span className="tag" style={{ background: "rgba(145,108,63,.1)", color: "#916c3f" }}>{col.derechos}</span>}
         </div>
       </div>
     </div>
   );
 }
 
-function ColView({col,fotos,videos,loading,onFotoClick,onBack}) {
-  const colFotos=fotos.filter(f=>f.coleccion_id===col.id);
-  const colVideos=(videos||[]).filter(v=>v.coleccion_id===col.id);
-  const cover=storageUrl(col.portada_url);
-  const [posterFoto,setPosterFoto]=useState(null);
-  return(
+function ColView({ col, fotos, videos, loading, onFotoClick, onBack }) {
+  const colFotos = fotos.filter(f => f.coleccion_id === col.id);
+  const colVideos = (videos || []).filter(v => v.coleccion_id === col.id);
+  const cover = storageUrl(col.portada_url);
+  const [posterFoto, setPosterFoto] = useState(null);
+  return (
     <div className="fade-in">
-      {posterFoto&&(
-        <div style={{position:"fixed",inset:0,zIndex:800,background:"rgba(0,0,0,.92)",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setPosterFoto(null)}>
-          <div style={{maxWidth:"90vw",maxHeight:"90vh",position:"relative"}} onClick={e=>e.stopPropagation()}>
-            <img src={storageUrl(posterFoto.url_web||posterFoto.url_original)} alt={posterFoto.titulo} style={{maxWidth:"100%",maxHeight:"85vh",objectFit:"contain",borderRadius:8,boxShadow:"0 30px 80px rgba(0,0,0,.7)"}} onContextMenu={e=>e.preventDefault()}/>
-            <div style={{position:"absolute",bottom:0,left:0,right:0,background:"linear-gradient(to top,rgba(0,0,0,.8),transparent)",padding:"20px",borderRadius:"0 0 8px 8px"}}>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:20,color:"white"}}>{posterFoto.titulo}</div>
-              <div style={{fontSize:12,color:"rgba(255,255,255,.6)",marginTop:4}}>{posterFoto.autor} · {posterFoto.anio} · {posterFoto.lugar}</div>
+      {posterFoto && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 800, background: "rgba(0,0,0,.92)", display: "flex", alignItems: "center", justifyContent: "center" }} onClick={() => setPosterFoto(null)}>
+          <div style={{ maxWidth: "90vw", maxHeight: "90vh", position: "relative" }} onClick={e => e.stopPropagation()}>
+            <img src={storageUrl(posterFoto.url_web || posterFoto.url_original)} alt={posterFoto.titulo} style={{ maxWidth: "100%", maxHeight: "85vh", objectFit: "contain", borderRadius: 8, boxShadow: "0 30px 80px rgba(0,0,0,.7)" }} onContextMenu={e => e.preventDefault()} />
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "linear-gradient(to top,rgba(0,0,0,.8),transparent)", padding: "20px", borderRadius: "0 0 8px 8px" }}>
+              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 20, color: "white" }}>{posterFoto.titulo}</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,.6)", marginTop: 4 }}>{posterFoto.autor} · {posterFoto.anio} · {posterFoto.lugar}</div>
             </div>
-            <button className="btn" onClick={()=>setPosterFoto(null)} style={{position:"absolute",top:-16,right:-16,background:"#c11720",color:"white",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="close" size={18}/></button>
+            <button className="btn" onClick={() => setPosterFoto(null)} style={{ position: "absolute", top: -16, right: -16, background: "#c11720", color: "white", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="close" size={18} /></button>
           </div>
         </div>
       )}
-      <div style={{position:"relative",height:300,borderRadius:16,overflow:"hidden",marginBottom:28}}>
-        {cover?<img src={cover} alt={col.titulo} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#1c146d,#679cbc)"}}/>}
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,rgba(28,20,109,.85),rgba(28,20,109,.4))"}}/>
-        <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",justifyContent:"flex-end",padding:"28px 32px"}}>
-          <button className="btn" onClick={onBack} style={{color:"#679cbc",background:"transparent",fontSize:11,letterSpacing:".1em",textTransform:"uppercase",display:"flex",alignItems:"center",gap:6,marginBottom:14,width:"fit-content"}}>
-            <Icon name="chevL" size={13} color="#679cbc"/> Volver
+      <div style={{ position: "relative", height: 300, borderRadius: 16, overflow: "hidden", marginBottom: 28 }}>
+        {cover ? <img src={cover} alt={col.titulo} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#1c146d,#679cbc)" }} />}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,rgba(28,20,109,.85),rgba(28,20,109,.4))" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "28px 32px" }}>
+          <button className="btn" onClick={onBack} style={{ color: "#679cbc", background: "transparent", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6, marginBottom: 14, width: "fit-content" }}>
+            <Icon name="chevL" size={13} color="#679cbc" /> Volver
           </button>
-          {col.tipo&&<span className="poster-badge" style={{marginBottom:10,width:"fit-content"}}>{col.tipo}</span>}
-          <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(22px,4vw,36px)",color:"white",lineHeight:1.1,marginBottom:8}}>{col.titulo}</h2>
-          <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
-            {[["Lugar",col.lugar],["Año",col.anio],["Autor",col.autor],["Edificio",col.edificio],["Fotos",col.fotos_reales||colFotos.length]].map(([k,v])=>v&&(
-              <span key={k} style={{fontSize:12,color:"rgba(255,255,255,.75)"}}><span style={{color:"#679cbc"}}>{k}:</span> {v}</span>
+          {col.tipo && <span className="poster-badge" style={{ marginBottom: 10, width: "fit-content" }}>{col.tipo}</span>}
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(22px,4vw,36px)", color: "white", lineHeight: 1.1, marginBottom: 8 }}>{col.titulo}</h2>
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+            {[["Lugar", col.lugar], ["Año", col.anio], ["Autor", col.autor], ["Edificio", col.edificio], ["Fotos", col.fotos_reales || colFotos.length]].map(([k, v]) => v && (
+              <span key={k} style={{ fontSize: 12, color: "rgba(255,255,255,.75)" }}><span style={{ color: "#679cbc" }}>{k}:</span> {v}</span>
             ))}
           </div>
         </div>
       </div>
-      <div style={{background:"white",borderRadius:12,padding:"20px 24px",marginBottom:24,border:"1px solid rgba(28,20,109,.08)",display:"flex",flexWrap:"wrap",gap:18}}>
-        <div style={{flex:"2 1 240px"}}>
-          <h4 style={{fontSize:11,letterSpacing:".1em",textTransform:"uppercase",color:"#7a7590",marginBottom:5}}>Descripción</h4>
-          <p style={{fontSize:14,color:"#1a1630",lineHeight:1.6}}>{col.descripcion||"Sin descripción."}</p>
-          {col.creado_en&&<div style={{fontSize:11,color:"#7a7590",marginTop:8}}>📅 Creada: {fmtDate(col.creado_en)}</div>}
+      <div style={{ background: "white", borderRadius: 12, padding: "20px 24px", marginBottom: 24, border: "1px solid rgba(28,20,109,.08)", display: "flex", flexWrap: "wrap", gap: 18 }}>
+        <div style={{ flex: "2 1 240px" }}>
+          <h4 style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "#7a7590", marginBottom: 5 }}>Descripción</h4>
+          <p style={{ fontSize: 14, color: "#1a1630", lineHeight: 1.6 }}>{col.descripcion || "Sin descripción."}</p>
+          {col.creado_en && <div style={{ fontSize: 11, color: "#7a7590", marginTop: 8 }}>📅 Creada: {fmtDate(col.creado_en)}</div>}
         </div>
-        {col.derechos&&(
-          <div style={{flex:"1 1 150px"}}>
-            <h4 style={{fontSize:11,letterSpacing:".1em",textTransform:"uppercase",color:"#7a7590",marginBottom:7}}>Derechos</h4>
-            <div style={{display:"flex",alignItems:"center",gap:7}}><Icon name="shield" size={15} color="#916c3f"/><span style={{fontSize:13,color:"#1a1630"}}>{col.derechos}</span></div>
+        {col.derechos && (
+          <div style={{ flex: "1 1 150px" }}>
+            <h4 style={{ fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", color: "#7a7590", marginBottom: 7 }}>Derechos</h4>
+            <div style={{ display: "flex", alignItems: "center", gap: 7 }}><Icon name="shield" size={15} color="#916c3f" /><span style={{ fontSize: 13, color: "#1a1630" }}>{col.derechos}</span></div>
           </div>
         )}
       </div>
-      {colVideos.length>0&&(
-        <div style={{marginBottom:28}}>
-          <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:20,color:"#1c146d",marginBottom:14}}>🎬 Videos</h3>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:14}}>
-            {colVideos.map(v=>(
-              <div key={v.id} style={{borderRadius:10,overflow:"hidden",background:"black"}}>
-                <video controls style={{width:"100%",display:"block"}} preload="metadata">
-                  <source src={storageUrl(v.url_video)||v.url_video}/>
+      {colVideos.length > 0 && (
+        <div style={{ marginBottom: 28 }}>
+          <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 20, color: "#1c146d", marginBottom: 14 }}>🎬 Videos</h3>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 14 }}>
+            {colVideos.map(v => (
+              <div key={v.id} style={{ borderRadius: 10, overflow: "hidden", background: "black" }}>
+                <video controls style={{ width: "100%", display: "block" }} preload="metadata">
+                  <source src={storageUrl(v.url_video) || v.url_video} />
                 </video>
-                {v.titulo&&<div style={{padding:"8px 12px",background:"white",fontSize:13,color:"#1c146d",fontWeight:600}}>{v.titulo}</div>}
+                {v.titulo && <div style={{ padding: "8px 12px", background: "white", fontSize: 13, color: "#1c146d", fontWeight: 600 }}>{v.titulo}</div>}
               </div>
             ))}
           </div>
         </div>
       )}
-      {loading?<Spinner/>:colFotos.length===0?(
-        <div style={{textAlign:"center",padding:"50px 20px",color:"#7a7590"}}><Icon name="photo" size={40} color="#ebeeff"/><div style={{marginTop:12,fontSize:16,fontFamily:"'Cormorant Garamond',serif",color:"#1c146d"}}>Sin fotografías aún</div></div>
-      ):(
-        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:14}}>
-          {colFotos.map(foto=>{
-            const s=storageUrl(foto.url_web||foto.url_original);
-            return(
-              <div key={foto.id} className="card-hover img-zoom" style={{background:"white",borderRadius:10,overflow:"hidden",border:"1px solid rgba(28,20,109,.06)"}}>
-                <div style={{position:"relative",paddingTop:"70%",cursor:"pointer"}} onClick={()=>onFotoClick(foto)}>
-                  {s?<img src={s} alt={foto.titulo} loading="lazy" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}} onContextMenu={e=>e.preventDefault()}/>
-                    :<div style={{position:"absolute",inset:0,background:"linear-gradient(135deg,#ebeeff,#679cbc)",display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="photo" size={28} color="#1c146d"/></div>}
-                  {!foto.descargable&&<div style={{position:"absolute",top:7,right:7,background:"rgba(193,23,32,.85)",borderRadius:4,padding:"2px 6px",fontSize:10,color:"white",fontWeight:600}}>🔒</div>}
-                  <button className="btn" onClick={e=>{e.stopPropagation();setPosterFoto(foto);}}
-                    style={{position:"absolute",bottom:7,right:7,background:"rgba(28,20,109,.7)",color:"white",padding:"4px 8px",borderRadius:6,fontSize:10,display:"flex",alignItems:"center",gap:3,backdropFilter:"blur(4px)"}}>
-                    <Icon name="expand" size={11}/> Póster
+      {loading ? <Spinner /> : colFotos.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "50px 20px", color: "#7a7590" }}><Icon name="photo" size={40} color="#ebeeff" /><div style={{ marginTop: 12, fontSize: 16, fontFamily: "'Cormorant Garamond',serif", color: "#1c146d" }}>Sin fotografías aún</div></div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 14 }}>
+          {colFotos.map(foto => {
+            const s = storageUrl(foto.url_web || foto.url_original);
+            return (
+              <div key={foto.id} className="card-hover img-zoom" style={{ background: "white", borderRadius: 10, overflow: "hidden", border: "1px solid rgba(28,20,109,.06)" }}>
+                <div style={{ position: "relative", paddingTop: "70%", cursor: "pointer" }} onClick={() => onFotoClick(foto)}>
+                  {s ? <img src={s} alt={foto.titulo} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} onContextMenu={e => e.preventDefault()} />
+                    : <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#ebeeff,#679cbc)", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="photo" size={28} color="#1c146d" /></div>}
+                  {!foto.descargable && <div style={{ position: "absolute", top: 7, right: 7, background: "rgba(193,23,32,.85)", borderRadius: 4, padding: "2px 6px", fontSize: 10, color: "white", fontWeight: 600 }}>🔒</div>}
+                  <button className="btn" onClick={e => { e.stopPropagation(); setPosterFoto(foto); }}
+                    style={{ position: "absolute", bottom: 7, right: 7, background: "rgba(28,20,109,.7)", color: "white", padding: "4px 8px", borderRadius: 6, fontSize: 10, display: "flex", alignItems: "center", gap: 3, backdropFilter: "blur(4px)" }}>
+                    <Icon name="expand" size={11} /> Póster
                   </button>
                 </div>
-                <div style={{padding:"11px 13px 13px"}}>
-                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:15,fontWeight:600,color:"#1c146d",marginBottom:2}}>{foto.titulo}</div>
-                  <div style={{fontSize:11,color:"#7a7590"}}>{foto.autor} · {foto.anio}</div>
-                  {foto.keywords&&<div style={{fontSize:10,color:"#679cbc",marginTop:3,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>🔑 {foto.keywords}</div>}
+                <div style={{ padding: "11px 13px 13px" }}>
+                  <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 15, fontWeight: 600, color: "#1c146d", marginBottom: 2 }}>{foto.titulo}</div>
+                  <div style={{ fontSize: 11, color: "#7a7590" }}>{foto.autor} · {foto.anio}</div>
+                  {foto.keywords && <div style={{ fontSize: 10, color: "#679cbc", marginTop: 3, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>🔑 {foto.keywords}</div>}
                 </div>
               </div>
             );
@@ -374,252 +410,252 @@ function ColView({col,fotos,videos,loading,onFotoClick,onBack}) {
   );
 }
 
-function AdminPanel({onClose,onRefresh}) {
-  const [tab,setTab]=useState("stats");
-  const [saving,setSaving]=useState(false);
-  const [toast,setToast]=useState(null);
-  const [cols,setCols]=useState([]);
-  const [fotos,setFotos]=useState([]);
-  const [stats,setStats]=useState(null);
-  const [editCol,setEditCol]=useState(null);
-  const [editFoto,setEditFoto]=useState(null);
-  const [portadaFile,setPortadaFile]=useState(null);
-  const [imgFile,setImgFile]=useState(null);
-  const [newCol,setNewCol]=useState({titulo:"",descripcion:"",lugar:"",anio:new Date().getFullYear(),autor:"",edificio:"",tipo:"Evento",derechos:"CC BY 4.0"});
-  const [upForm,setUpForm]=useState({coleccion_id:"",titulo:"",autor:"",anio:new Date().getFullYear(),lugar:"",fecha_origen:"",descripcion:"",edificio:"",tipo_archivo:"JPG",derechos:"CC BY 4.0",descargable:true,keywords:""});
-  const ok=msg=>{setToast({msg,type:"ok"});setTimeout(()=>setToast(null),3500);};
-  const err=msg=>{setToast({msg,type:"err"});setTimeout(()=>setToast(null),4500);};
-  const load=useCallback(async()=>{
-    const [{data:c},{data:f},{count:nc},{count:nf},{count:nd}]=await Promise.all([
-      supabase.from("v_colecciones").select("*").order("anio",{ascending:false}),
-      supabase.from("v_fotografias").select("*").order("creado_en",{ascending:false}),
-      supabase.from("colecciones").select("*",{count:"exact",head:true}),
-      supabase.from("fotografias").select("*",{count:"exact",head:true}),
-      supabase.from("log_descargas").select("*",{count:"exact",head:true}),
+function AdminPanel({ onClose, onRefresh }) {
+  const [tab, setTab] = useState("stats");
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [cols, setCols] = useState([]);
+  const [fotos, setFotos] = useState([]);
+  const [stats, setStats] = useState(null);
+  const [editCol, setEditCol] = useState(null);
+  const [editFoto, setEditFoto] = useState(null);
+  const [portadaFile, setPortadaFile] = useState(null);
+  const [imgFile, setImgFile] = useState(null);
+  const [newCol, setNewCol] = useState({ titulo: "", descripcion: "", lugar: "", anio: new Date().getFullYear(), autor: "", edificio: "", tipo: "Evento", derechos: "CC BY 4.0" });
+  const [upForm, setUpForm] = useState({ coleccion_id: "", titulo: "", autor: "", anio: new Date().getFullYear(), lugar: "", fecha_origen: "", descripcion: "", edificio: "", tipo_archivo: "JPG", derechos: "CC BY 4.0", descargable: true, keywords: "" });
+  const ok = msg => { setToast({ msg, type: "ok" }); setTimeout(() => setToast(null), 3500); };
+  const err = msg => { setToast({ msg, type: "err" }); setTimeout(() => setToast(null), 4500); };
+  const load = useCallback(async () => {
+    const [{ data: c }, { data: f }, { count: nc }, { count: nf }, { count: nd }] = await Promise.all([
+      supabase.from("v_colecciones").select("*").order("anio", { ascending: false }),
+      supabase.from("v_fotografias").select("*").order("creado_en", { ascending: false }),
+      supabase.from("colecciones").select("*", { count: "exact", head: true }),
+      supabase.from("fotografias").select("*", { count: "exact", head: true }),
+      supabase.from("log_descargas").select("*", { count: "exact", head: true }),
     ]);
-    setCols(c||[]);setFotos(f||[]);
-    setStats({colecciones:nc||0,fotografias:nf||0,descargas:nd||0});
-  },[]);
-  useEffect(()=>{load();},[load]);
-  const uploadImg=async(file,folder="fotos")=>{
-    if(!file)return null;
-    const ext=file.name.split(".").pop().toLowerCase();
-    const path=`${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const{error}=await supabase.storage.from("imagenes").upload(path,file,{upsert:true});
-    if(error)throw new Error(error.message);
+    setCols(c || []); setFotos(f || []);
+    setStats({ colecciones: nc || 0, fotografias: nf || 0, descargas: nd || 0 });
+  }, []);
+  useEffect(() => { load(); }, [load]);
+  const uploadImg = async (file, folder = "fotos") => {
+    if (!file) return null;
+    const ext = file.name.split(".").pop().toLowerCase();
+    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("imagenes").upload(path, file, { upsert: true });
+    if (error) throw new Error(error.message);
     return path;
   };
-  const doUpload=async()=>{
-    if(!upForm.titulo||!upForm.coleccion_id)return err("Título y colección requeridos");
+  const doUpload = async () => {
+    if (!upForm.titulo || !upForm.coleccion_id) return err("Título y colección requeridos");
     setSaving(true);
-    try{
-      const urlPath=await uploadImg(imgFile);
-      const{data:fd,error:fe}=await supabase.from("fotografias").insert([{
-        coleccion_id:Number(upForm.coleccion_id),titulo:upForm.titulo,autor:upForm.autor,
-        anio:Number(upForm.anio)||null,lugar:upForm.lugar,fecha_origen:upForm.fecha_origen||null,
-        descripcion:upForm.descripcion,edificio:upForm.edificio,tipo_archivo:upForm.tipo_archivo,
-        derechos:upForm.derechos,descargable:upForm.descargable,
-        url_original:urlPath,url_web:urlPath,url_thumbnail:urlPath,
+    try {
+      const urlPath = await uploadImg(imgFile);
+      const { data: fd, error: fe } = await supabase.from("fotografias").insert([{
+        coleccion_id: Number(upForm.coleccion_id), titulo: upForm.titulo, autor: upForm.autor,
+        anio: Number(upForm.anio) || null, lugar: upForm.lugar, fecha_origen: upForm.fecha_origen || null,
+        descripcion: upForm.descripcion, edificio: upForm.edificio, tipo_archivo: upForm.tipo_archivo,
+        derechos: upForm.derechos, descargable: upForm.descargable,
+        url_original: urlPath, url_web: urlPath, url_thumbnail: urlPath,
       }]).select().single();
-      if(fe)throw new Error(fe.message);
-      if(upForm.keywords&&fd){
-        const kws=upForm.keywords.split(",").map(k=>k.trim()).filter(Boolean);
-        if(kws.length)await supabase.from("keywords").insert(kws.map(keyword=>({fotografia_id:fd.id,keyword})));
+      if (fe) throw new Error(fe.message);
+      if (upForm.keywords && fd) {
+        const kws = upForm.keywords.split(",").map(k => k.trim()).filter(Boolean);
+        if (kws.length) await supabase.from("keywords").insert(kws.map(keyword => ({ fotografia_id: fd.id, keyword })));
       }
-      ok("✅ Fotografía guardada");setImgFile(null);
-      setUpForm(f=>({...f,titulo:"",descripcion:"",keywords:"",fecha_origen:""}));
-      load();onRefresh();
-    }catch(e){err(e.message);}
+      ok("✅ Fotografía guardada"); setImgFile(null);
+      setUpForm(f => ({ ...f, titulo: "", descripcion: "", keywords: "", fecha_origen: "" }));
+      load(); onRefresh();
+    } catch (e) { err(e.message); }
     setSaving(false);
   };
-  const doNewCol=async()=>{
-    if(!newCol.titulo)return err("El título es requerido");
+  const doNewCol = async () => {
+    if (!newCol.titulo) return err("El título es requerido");
     setSaving(true);
-    try{
-      const portPath=await uploadImg(portadaFile,"portadas");
-      const{error}=await supabase.from("colecciones").insert([{...newCol,anio:Number(newCol.anio)||null,portada_url:portPath}]);
-      if(error)throw new Error(error.message);
-      ok("✅ Colección creada");setPortadaFile(null);
-      setNewCol({titulo:"",descripcion:"",lugar:"",anio:new Date().getFullYear(),autor:"",edificio:"",tipo:"Evento",derechos:"CC BY 4.0"});
-      load();onRefresh();
-    }catch(e){err(e.message);}
+    try {
+      const portPath = await uploadImg(portadaFile, "portadas");
+      const { error } = await supabase.from("colecciones").insert([{ ...newCol, anio: Number(newCol.anio) || null, portada_url: portPath }]);
+      if (error) throw new Error(error.message);
+      ok("✅ Colección creada"); setPortadaFile(null);
+      setNewCol({ titulo: "", descripcion: "", lugar: "", anio: new Date().getFullYear(), autor: "", edificio: "", tipo: "Evento", derechos: "CC BY 4.0" });
+      load(); onRefresh();
+    } catch (e) { err(e.message); }
     setSaving(false);
   };
-  const doSaveCol=async()=>{
+  const doSaveCol = async () => {
     setSaving(true);
-    try{
-      const portPath=portadaFile?await uploadImg(portadaFile,"portadas"):undefined;
-      const upd={titulo:editCol.titulo,descripcion:editCol.descripcion,lugar:editCol.lugar,anio:Number(editCol.anio)||null,autor:editCol.autor,edificio:editCol.edificio,tipo:editCol.tipo,derechos:editCol.derechos};
-      if(portPath)upd.portada_url=portPath;
-      const{error}=await supabase.from("colecciones").update(upd).eq("id",editCol.id);
-      if(error)throw new Error(error.message);
-      ok("✅ Colección actualizada");setEditCol(null);setPortadaFile(null);load();onRefresh();
-    }catch(e){err(e.message);}
+    try {
+      const portPath = portadaFile ? await uploadImg(portadaFile, "portadas") : undefined;
+      const upd = { titulo: editCol.titulo, descripcion: editCol.descripcion, lugar: editCol.lugar, anio: Number(editCol.anio) || null, autor: editCol.autor, edificio: editCol.edificio, tipo: editCol.tipo, derechos: editCol.derechos };
+      if (portPath) upd.portada_url = portPath;
+      const { error } = await supabase.from("colecciones").update(upd).eq("id", editCol.id);
+      if (error) throw new Error(error.message);
+      ok("✅ Colección actualizada"); setEditCol(null); setPortadaFile(null); load(); onRefresh();
+    } catch (e) { err(e.message); }
     setSaving(false);
   };
-  const doSaveFoto=async()=>{
+  const doSaveFoto = async () => {
     setSaving(true);
-    try{
-      const{error}=await supabase.from("fotografias").update({
-        titulo:editFoto.titulo,autor:editFoto.autor,anio:Number(editFoto.anio)||null,
-        lugar:editFoto.lugar,descripcion:editFoto.descripcion,edificio:editFoto.edificio,
-        tipo_archivo:editFoto.tipo_archivo,derechos:editFoto.derechos,descargable:editFoto.descargable,
-      }).eq("id",editFoto.id);
-      if(error)throw new Error(error.message);
-      if(editFoto.keywords!==undefined){
-        await supabase.from("keywords").delete().eq("fotografia_id",editFoto.id);
-        const kws=String(editFoto.keywords||"").split(",").map(k=>k.trim()).filter(Boolean);
-        if(kws.length)await supabase.from("keywords").insert(kws.map(keyword=>({fotografia_id:editFoto.id,keyword})));
+    try {
+      const { error } = await supabase.from("fotografias").update({
+        titulo: editFoto.titulo, autor: editFoto.autor, anio: Number(editFoto.anio) || null,
+        lugar: editFoto.lugar, descripcion: editFoto.descripcion, edificio: editFoto.edificio,
+        tipo_archivo: editFoto.tipo_archivo, derechos: editFoto.derechos, descargable: editFoto.descargable,
+      }).eq("id", editFoto.id);
+      if (error) throw new Error(error.message);
+      if (editFoto.keywords !== undefined) {
+        await supabase.from("keywords").delete().eq("fotografia_id", editFoto.id);
+        const kws = String(editFoto.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
+        if (kws.length) await supabase.from("keywords").insert(kws.map(keyword => ({ fotografia_id: editFoto.id, keyword })));
       }
-      ok("✅ Foto actualizada");setEditFoto(null);load();onRefresh();
-    }catch(e){err(e.message);}
+      ok("✅ Foto actualizada"); setEditFoto(null); load(); onRefresh();
+    } catch (e) { err(e.message); }
     setSaving(false);
   };
-  const delCol=async id=>{
-    if(!window.confirm("¿Eliminar colección y sus fotos?"))return;
-    const{error}=await supabase.from("colecciones").delete().eq("id",id);
-    if(error){err(error.message);}else{ok("Colección eliminada");load();onRefresh();}
+  const delCol = async id => {
+    if (!window.confirm("¿Eliminar colección y sus fotos?")) return;
+    const { error } = await supabase.from("colecciones").delete().eq("id", id);
+    if (error) { err(error.message); } else { ok("Colección eliminada"); load(); onRefresh(); }
   };
-  const toggleDl=async foto=>{
-    const{error}=await supabase.from("fotografias").update({descargable:!foto.descargable}).eq("id",foto.id);
-    if(error){err(error.message);}else{ok("Permiso actualizado");load();onRefresh();}
+  const toggleDl = async foto => {
+    const { error } = await supabase.from("fotografias").update({ descargable: !foto.descargable }).eq("id", foto.id);
+    if (error) { err(error.message); } else { ok("Permiso actualizado"); load(); onRefresh(); }
   };
-  const delFoto=async foto=>{
-    if(!window.confirm("¿Eliminar esta fotografía?"))return;
-    if(foto.url_original)await supabase.storage.from("imagenes").remove([foto.url_original]).catch(()=>{});
-    const{error}=await supabase.from("fotografias").delete().eq("id",foto.id);
-    if(error){err(error.message);}else{ok("Foto eliminada");load();onRefresh();}
+  const delFoto = async foto => {
+    if (!window.confirm("¿Eliminar esta fotografía?")) return;
+    if (foto.url_original) await supabase.storage.from("imagenes").remove([foto.url_original]).catch(() => { });
+    const { error } = await supabase.from("fotografias").delete().eq("id", foto.id);
+    if (error) { err(error.message); } else { ok("Foto eliminada"); load(); onRefresh(); }
   };
-  const TABS=[{id:"stats",label:"Estadísticas",icon:"stats"},{id:"upload",label:"Subir Imagen",icon:"upload"},{id:"newcol",label:"Nueva Colección",icon:"plus"},{id:"cols",label:"Colecciones",icon:"cols"},{id:"fotos",label:"Fotografías",icon:"photo"}];
-  const TIPOS=["Evento","50 Aniversario","Arquitectura","Graduación","Campus","Laboratorio","Historia","Otro"];
-  const sel={...INP,background:"white"};
-  return(
-    <div style={{position:"fixed",inset:0,zIndex:900,background:"rgba(10,8,35,.8)",backdropFilter:"blur(4px)",display:"flex",alignItems:"center",justifyContent:"center",padding:14}}>
-      <div style={{background:"white",borderRadius:16,width:"100%",maxWidth:920,maxHeight:"93vh",display:"flex",flexDirection:"column",overflow:"hidden",boxShadow:"0 30px 100px rgba(28,20,109,.35)"}}>
-        <div style={{background:"linear-gradient(135deg,#1c146d,#2e2580)",padding:"16px 26px",display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0}}>
-          <div style={{display:"flex",alignItems:"center",gap:14}}>
-            <img src={LOGO_NAV} alt="ITZ" height="46" style={{objectFit:"contain",filter:"brightness(10) saturate(0)",opacity:.9}}/>
+  const TABS = [{ id: "stats", label: "Estadísticas", icon: "stats" }, { id: "upload", label: "Subir Imagen", icon: "upload" }, { id: "newcol", label: "Nueva Colección", icon: "plus" }, { id: "cols", label: "Colecciones", icon: "cols" }, { id: "fotos", label: "Fotografías", icon: "photo" }];
+  const TIPOS = ["Evento", "50 Aniversario", "Arquitectura", "Graduación", "Campus", "Laboratorio", "Historia", "Otro"];
+  const sel = { ...INP, background: "white" };
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(10,8,35,.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 14 }}>
+      <div style={{ background: "white", borderRadius: 16, width: "100%", maxWidth: 920, maxHeight: "93vh", display: "flex", flexDirection: "column", overflow: "hidden", boxShadow: "0 30px 100px rgba(28,20,109,.35)" }}>
+        <div style={{ background: "linear-gradient(135deg,#1c146d,#2e2580)", padding: "16px 26px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <img src={LOGO_NAV} alt="ITZ" height="46" style={{ objectFit: "contain", filter: "brightness(10) saturate(0)", opacity: .9 }} />
             <div>
-              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:21,color:"white",fontWeight:600}}>Panel Administrativo</div>
-              <div style={{fontSize:11,color:"rgba(235,238,255,.55)"}}>Supabase · PostgreSQL · ITZ Fototeca</div>
+              <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 21, color: "white", fontWeight: 600 }}>Panel Administrativo</div>
+              <div style={{ fontSize: 11, color: "rgba(235,238,255,.55)" }}>Supabase · PostgreSQL · ITZ Fototeca</div>
             </div>
           </div>
-          <div style={{display:"flex",gap:7}}>
-            <button className="btn" onClick={()=>{load();onRefresh();}} style={{background:"rgba(255,255,255,.1)",color:"white",padding:"8px",borderRadius:8}}><Icon name="refresh" size={16}/></button>
-            <button className="btn" onClick={onClose} style={{background:"rgba(193,23,32,.3)",color:"white",padding:"8px",borderRadius:8}}><Icon name="close" size={18}/></button>
+          <div style={{ display: "flex", gap: 7 }}>
+            <button className="btn" onClick={() => { load(); onRefresh(); }} style={{ background: "rgba(255,255,255,.1)", color: "white", padding: "8px", borderRadius: 8 }}><Icon name="refresh" size={16} /></button>
+            <button className="btn" onClick={onClose} style={{ background: "rgba(193,23,32,.3)", color: "white", padding: "8px", borderRadius: 8 }}><Icon name="close" size={18} /></button>
           </div>
         </div>
-        <div style={{display:"flex",borderBottom:"2px solid #ebeeff",padding:"0 14px",background:"#f7f8ff",overflowX:"auto",flexShrink:0}}>
-          {TABS.map(t=>(
-            <button key={t.id} className="btn" onClick={()=>setTab(t.id)}
-              style={{padding:"10px 13px",fontSize:12,color:tab===t.id?"#1c146d":"#7a7590",fontWeight:tab===t.id?600:400,background:"transparent",borderBottom:tab===t.id?"2px solid #1c146d":"2px solid transparent",marginBottom:-2,display:"flex",alignItems:"center",gap:5,whiteSpace:"nowrap"}}>
-              <Icon name={t.icon} size={12} color={tab===t.id?"#1c146d":"#7a7590"}/> {t.label}
+        <div style={{ display: "flex", borderBottom: "2px solid #ebeeff", padding: "0 14px", background: "#f7f8ff", overflowX: "auto", flexShrink: 0 }}>
+          {TABS.map(t => (
+            <button key={t.id} className="btn" onClick={() => setTab(t.id)}
+              style={{ padding: "10px 13px", fontSize: 12, color: tab === t.id ? "#1c146d" : "#7a7590", fontWeight: tab === t.id ? 600 : 400, background: "transparent", borderBottom: tab === t.id ? "2px solid #1c146d" : "2px solid transparent", marginBottom: -2, display: "flex", alignItems: "center", gap: 5, whiteSpace: "nowrap" }}>
+              <Icon name={t.icon} size={12} color={tab === t.id ? "#1c146d" : "#7a7590"} /> {t.label}
             </button>
           ))}
         </div>
-        <div style={{flex:1,overflowY:"auto",padding:22}}>
-          {tab==="stats"&&(
+        <div style={{ flex: 1, overflowY: "auto", padding: 22 }}>
+          {tab === "stats" && (
             <div className="fade-in">
-              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d",marginBottom:18}}>Estadísticas en tiempo real</h3>
-              {stats?(
-                <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))",gap:14}}>
-                  {[["Colecciones",stats.colecciones,"cols","#1c146d"],["Fotografías",stats.fotografias,"photo","#679cbc"],["Descargas",stats.descargas,"dl","#916c3f"]].map(([label,val,icon,color])=>(
-                    <div key={label} style={{background:"white",border:"1px solid #ebeeff",borderRadius:12,padding:"18px",textAlign:"center"}}>
-                      <div style={{width:38,height:38,background:color+"20",borderRadius:9,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 9px"}}><Icon name={icon} size={19} color={color}/></div>
-                      <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:32,color:color,fontWeight:600}}>{val}</div>
-                      <div style={{fontSize:10,color:"#7a7590",letterSpacing:".06em",textTransform:"uppercase",marginTop:2}}>{label}</div>
+              <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d", marginBottom: 18 }}>Estadísticas en tiempo real</h3>
+              {stats ? (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(140px,1fr))", gap: 14 }}>
+                  {[["Colecciones", stats.colecciones, "cols", "#1c146d"], ["Fotografías", stats.fotografias, "photo", "#679cbc"], ["Descargas", stats.descargas, "dl", "#916c3f"]].map(([label, val, icon, color]) => (
+                    <div key={label} style={{ background: "white", border: "1px solid #ebeeff", borderRadius: 12, padding: "18px", textAlign: "center" }}>
+                      <div style={{ width: 38, height: 38, background: color + "20", borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 9px" }}><Icon name={icon} size={19} color={color} /></div>
+                      <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 32, color: color, fontWeight: 600 }}>{val}</div>
+                      <div style={{ fontSize: 10, color: "#7a7590", letterSpacing: ".06em", textTransform: "uppercase", marginTop: 2 }}>{label}</div>
                     </div>
                   ))}
                 </div>
-              ):<Spinner/>}
-              <div style={{marginTop:18,padding:14,background:"#ebeeff",borderRadius:12,fontSize:13,color:"#1c146d"}}>
-                💡 También edita en <a href="https://supabase.com/dashboard" target="_blank" rel="noreferrer" style={{color:"#679cbc"}}>Supabase → Table Editor</a>
+              ) : <Spinner />}
+              <div style={{ marginTop: 18, padding: 14, background: "#ebeeff", borderRadius: 12, fontSize: 13, color: "#1c146d" }}>
+                💡 También edita en <a href="https://supabase.com/dashboard" target="_blank" rel="noreferrer" style={{ color: "#679cbc" }}>Supabase → Table Editor</a>
               </div>
             </div>
           )}
-          {tab==="upload"&&(
+          {tab === "upload" && (
             <div className="fade-in">
-              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d",marginBottom:18}}>Subir nueva fotografía</h3>
-              <ZonaCarga archivo={imgFile} onChange={setImgFile} id="img-up"/>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-                <Field label="Colección *"><select value={upForm.coleccion_id} onChange={e=>setUpForm(f=>({...f,coleccion_id:e.target.value}))} style={sel}><option value="">— Selecciona —</option>{cols.map(c=><option key={c.id} value={c.id}>{c.titulo}</option>)}</select></Field>
-                <Field label="Título *"><input value={upForm.titulo} onChange={e=>setUpForm(f=>({...f,titulo:e.target.value}))} style={INP}/></Field>
-                <Field label="Autor"><input value={upForm.autor} onChange={e=>setUpForm(f=>({...f,autor:e.target.value}))} style={INP}/></Field>
-                <Field label="Año"><input type="number" value={upForm.anio} onChange={e=>setUpForm(f=>({...f,anio:e.target.value}))} style={INP}/></Field>
-                <Field label="Lugar"><input value={upForm.lugar} onChange={e=>setUpForm(f=>({...f,lugar:e.target.value}))} style={INP}/></Field>
-                <Field label="Fecha de origen"><input type="date" value={upForm.fecha_origen} onChange={e=>setUpForm(f=>({...f,fecha_origen:e.target.value}))} style={INP}/></Field>
-                <Field label="Edificio"><input value={upForm.edificio} onChange={e=>setUpForm(f=>({...f,edificio:e.target.value}))} style={INP}/></Field>
-                <Field label="Tipo de archivo"><select value={upForm.tipo_archivo} onChange={e=>setUpForm(f=>({...f,tipo_archivo:e.target.value}))} style={sel}>{["TIFF","JPG","PNG","WEBP","GIF","BMP","HEIC"].map(t=><option key={t}>{t}</option>)}</select></Field>
-                <Field label="Derechos de uso"><input value={upForm.derechos} onChange={e=>setUpForm(f=>({...f,derechos:e.target.value}))} style={INP}/></Field>
-                <Field label="Palabras clave (coma)"><input value={upForm.keywords} onChange={e=>setUpForm(f=>({...f,keywords:e.target.value}))} placeholder="campus, graduación, 50 aniversario" style={INP}/></Field>
-                <div style={{gridColumn:"1/-1"}}><Field label="Descripción"><textarea value={upForm.descripcion} onChange={e=>setUpForm(f=>({...f,descripcion:e.target.value}))} rows={3} style={{...INP,resize:"vertical"}}/></Field></div>
-                <div style={{display:"flex",alignItems:"center",gap:9}}>
-                  <input type="checkbox" id="dl-up" checked={upForm.descargable} onChange={e=>setUpForm(f=>({...f,descargable:e.target.checked}))} style={{width:15,height:15}}/>
-                  <label htmlFor="dl-up" style={{fontSize:13,color:"#1a1630",cursor:"pointer"}}>Permitir descarga pública (con marca de agua)</label>
+              <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d", marginBottom: 18 }}>Subir nueva fotografía</h3>
+              <ZonaCarga archivo={imgFile} onChange={setImgFile} id="img-up" />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <Field label="Colección *"><select value={upForm.coleccion_id} onChange={e => setUpForm(f => ({ ...f, coleccion_id: e.target.value }))} style={sel}><option value="">— Selecciona —</option>{cols.map(c => <option key={c.id} value={c.id}>{c.titulo}</option>)}</select></Field>
+                <Field label="Título *"><input value={upForm.titulo} onChange={e => setUpForm(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field>
+                <Field label="Autor"><input value={upForm.autor} onChange={e => setUpForm(f => ({ ...f, autor: e.target.value }))} style={INP} /></Field>
+                <Field label="Año"><input type="number" value={upForm.anio} onChange={e => setUpForm(f => ({ ...f, anio: e.target.value }))} style={INP} /></Field>
+                <Field label="Lugar"><input value={upForm.lugar} onChange={e => setUpForm(f => ({ ...f, lugar: e.target.value }))} style={INP} /></Field>
+                <Field label="Fecha de origen"><input type="date" value={upForm.fecha_origen} onChange={e => setUpForm(f => ({ ...f, fecha_origen: e.target.value }))} style={INP} /></Field>
+                <Field label="Edificio"><input value={upForm.edificio} onChange={e => setUpForm(f => ({ ...f, edificio: e.target.value }))} style={INP} /></Field>
+                <Field label="Tipo de archivo"><select value={upForm.tipo_archivo} onChange={e => setUpForm(f => ({ ...f, tipo_archivo: e.target.value }))} style={sel}>{["TIFF", "JPG", "PNG", "WEBP", "GIF", "BMP", "HEIC"].map(t => <option key={t}>{t}</option>)}</select></Field>
+                <Field label="Derechos de uso"><input value={upForm.derechos} onChange={e => setUpForm(f => ({ ...f, derechos: e.target.value }))} style={INP} /></Field>
+                <Field label="Palabras clave (coma)"><input value={upForm.keywords} onChange={e => setUpForm(f => ({ ...f, keywords: e.target.value }))} placeholder="campus, graduación, 50 aniversario" style={INP} /></Field>
+                <div style={{ gridColumn: "1/-1" }}><Field label="Descripción"><textarea value={upForm.descripcion} onChange={e => setUpForm(f => ({ ...f, descripcion: e.target.value }))} rows={3} style={{ ...INP, resize: "vertical" }} /></Field></div>
+                <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                  <input type="checkbox" id="dl-up" checked={upForm.descargable} onChange={e => setUpForm(f => ({ ...f, descargable: e.target.checked }))} style={{ width: 15, height: 15 }} />
+                  <label htmlFor="dl-up" style={{ fontSize: 13, color: "#1a1630", cursor: "pointer" }}>Permitir descarga pública (con marca de agua)</label>
                 </div>
               </div>
-              <button className="btn" onClick={doUpload} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7,opacity:saving?.6:1}}>
-                {saving?<Spinner small/>:<Icon name="upload" size={14} color="white"/>} {saving?"Guardando…":"Guardar en Supabase"}
+              <button className="btn" onClick={doUpload} disabled={saving} style={{ marginTop: 18, background: "linear-gradient(135deg,#1c146d,#2e2580)", color: "white", padding: "11px 26px", borderRadius: 10, fontSize: 14, display: "flex", alignItems: "center", gap: 7, opacity: saving ? .6 : 1 }}>
+                {saving ? <Spinner small /> : <Icon name="upload" size={14} color="white" />} {saving ? "Guardando…" : "Guardar en Supabase"}
               </button>
             </div>
           )}
-          {tab==="newcol"&&(
+          {tab === "newcol" && (
             <div className="fade-in">
-              <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d",marginBottom:18}}>Crear nueva colección</h3>
-              <ZonaCarga archivo={portadaFile} onChange={setPortadaFile} label="Imagen de portada (opcional)" accept="image/*" id="port-new"/>
-              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-                <div style={{gridColumn:"1/-1"}}><Field label="Título *"><input value={newCol.titulo} onChange={e=>setNewCol(f=>({...f,titulo:e.target.value}))} style={INP}/></Field></div>
-                <Field label="Lugar"><input value={newCol.lugar} onChange={e=>setNewCol(f=>({...f,lugar:e.target.value}))} style={INP}/></Field>
-                <Field label="Año"><input type="number" value={newCol.anio} onChange={e=>setNewCol(f=>({...f,anio:e.target.value}))} style={INP}/></Field>
-                <Field label="Autor"><input value={newCol.autor} onChange={e=>setNewCol(f=>({...f,autor:e.target.value}))} style={INP}/></Field>
-                <Field label="Edificio"><input value={newCol.edificio} onChange={e=>setNewCol(f=>({...f,edificio:e.target.value}))} style={INP}/></Field>
-                <Field label="Tipo"><select value={newCol.tipo} onChange={e=>setNewCol(f=>({...f,tipo:e.target.value}))} style={sel}>{TIPOS.map(t=><option key={t}>{t}</option>)}</select></Field>
-                <Field label="Derechos"><input value={newCol.derechos} onChange={e=>setNewCol(f=>({...f,derechos:e.target.value}))} style={INP}/></Field>
-                <div style={{gridColumn:"1/-1"}}><Field label="Descripción"><textarea value={newCol.descripcion} onChange={e=>setNewCol(f=>({...f,descripcion:e.target.value}))} rows={3} style={{...INP,resize:"vertical"}}/></Field></div>
+              <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d", marginBottom: 18 }}>Crear nueva colección</h3>
+              <ZonaCarga archivo={portadaFile} onChange={setPortadaFile} label="Imagen de portada (opcional)" accept="image/*" id="port-new" />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div style={{ gridColumn: "1/-1" }}><Field label="Título *"><input value={newCol.titulo} onChange={e => setNewCol(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
+                <Field label="Lugar"><input value={newCol.lugar} onChange={e => setNewCol(f => ({ ...f, lugar: e.target.value }))} style={INP} /></Field>
+                <Field label="Año"><input type="number" value={newCol.anio} onChange={e => setNewCol(f => ({ ...f, anio: e.target.value }))} style={INP} /></Field>
+                <Field label="Autor"><input value={newCol.autor} onChange={e => setNewCol(f => ({ ...f, autor: e.target.value }))} style={INP} /></Field>
+                <Field label="Edificio"><input value={newCol.edificio} onChange={e => setNewCol(f => ({ ...f, edificio: e.target.value }))} style={INP} /></Field>
+                <Field label="Tipo"><select value={newCol.tipo} onChange={e => setNewCol(f => ({ ...f, tipo: e.target.value }))} style={sel}>{TIPOS.map(t => <option key={t}>{t}</option>)}</select></Field>
+                <Field label="Derechos"><input value={newCol.derechos} onChange={e => setNewCol(f => ({ ...f, derechos: e.target.value }))} style={INP} /></Field>
+                <div style={{ gridColumn: "1/-1" }}><Field label="Descripción"><textarea value={newCol.descripcion} onChange={e => setNewCol(f => ({ ...f, descripcion: e.target.value }))} rows={3} style={{ ...INP, resize: "vertical" }} /></Field></div>
               </div>
-              <button className="btn" onClick={doNewCol} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7,opacity:saving?.6:1}}>
-                {saving?<Spinner small/>:<Icon name="plus" size={14} color="white"/>} Crear colección
+              <button className="btn" onClick={doNewCol} disabled={saving} style={{ marginTop: 18, background: "linear-gradient(135deg,#1c146d,#2e2580)", color: "white", padding: "11px 26px", borderRadius: 10, fontSize: 14, display: "flex", alignItems: "center", gap: 7, opacity: saving ? .6 : 1 }}>
+                {saving ? <Spinner small /> : <Icon name="plus" size={14} color="white" />} Crear colección
               </button>
             </div>
           )}
-          {tab==="cols"&&(
+          {tab === "cols" && (
             <div className="fade-in">
-              {editCol?(
+              {editCol ? (
                 <>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
-                    <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d"}}>Editar: {editCol.titulo}</h3>
-                    <button className="btn" onClick={()=>setEditCol(null)} style={{color:"#7a7590",background:"transparent",fontSize:12,display:"flex",alignItems:"center",gap:5}}><Icon name="x" size={13}/> Cancelar</button>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+                    <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d" }}>Editar: {editCol.titulo}</h3>
+                    <button className="btn" onClick={() => setEditCol(null)} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
                   </div>
-                  <ZonaCarga archivo={portadaFile} onChange={setPortadaFile} label="Nueva portada (opcional)" accept="image/*" id="port-edit"/>
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-                    <div style={{gridColumn:"1/-1"}}><Field label="Título"><input value={editCol.titulo||""} onChange={e=>setEditCol(f=>({...f,titulo:e.target.value}))} style={INP}/></Field></div>
-                    <Field label="Lugar"><input value={editCol.lugar||""} onChange={e=>setEditCol(f=>({...f,lugar:e.target.value}))} style={INP}/></Field>
-                    <Field label="Año"><input type="number" value={editCol.anio||""} onChange={e=>setEditCol(f=>({...f,anio:e.target.value}))} style={INP}/></Field>
-                    <Field label="Autor"><input value={editCol.autor||""} onChange={e=>setEditCol(f=>({...f,autor:e.target.value}))} style={INP}/></Field>
-                    <Field label="Edificio"><input value={editCol.edificio||""} onChange={e=>setEditCol(f=>({...f,edificio:e.target.value}))} style={INP}/></Field>
-                    <Field label="Tipo"><input value={editCol.tipo||""} onChange={e=>setEditCol(f=>({...f,tipo:e.target.value}))} style={INP}/></Field>
-                    <Field label="Derechos"><input value={editCol.derechos||""} onChange={e=>setEditCol(f=>({...f,derechos:e.target.value}))} style={INP}/></Field>
-                    <div style={{gridColumn:"1/-1"}}><Field label="Descripción"><textarea value={editCol.descripcion||""} onChange={e=>setEditCol(f=>({...f,descripcion:e.target.value}))} rows={3} style={{...INP,resize:"vertical"}}/></Field></div>
+                  <ZonaCarga archivo={portadaFile} onChange={setPortadaFile} label="Nueva portada (opcional)" accept="image/*" id="port-edit" />
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div style={{ gridColumn: "1/-1" }}><Field label="Título"><input value={editCol.titulo || ""} onChange={e => setEditCol(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
+                    <Field label="Lugar"><input value={editCol.lugar || ""} onChange={e => setEditCol(f => ({ ...f, lugar: e.target.value }))} style={INP} /></Field>
+                    <Field label="Año"><input type="number" value={editCol.anio || ""} onChange={e => setEditCol(f => ({ ...f, anio: e.target.value }))} style={INP} /></Field>
+                    <Field label="Autor"><input value={editCol.autor || ""} onChange={e => setEditCol(f => ({ ...f, autor: e.target.value }))} style={INP} /></Field>
+                    <Field label="Edificio"><input value={editCol.edificio || ""} onChange={e => setEditCol(f => ({ ...f, edificio: e.target.value }))} style={INP} /></Field>
+                    <Field label="Tipo"><input value={editCol.tipo || ""} onChange={e => setEditCol(f => ({ ...f, tipo: e.target.value }))} style={INP} /></Field>
+                    <Field label="Derechos"><input value={editCol.derechos || ""} onChange={e => setEditCol(f => ({ ...f, derechos: e.target.value }))} style={INP} /></Field>
+                    <div style={{ gridColumn: "1/-1" }}><Field label="Descripción"><textarea value={editCol.descripcion || ""} onChange={e => setEditCol(f => ({ ...f, descripcion: e.target.value }))} rows={3} style={{ ...INP, resize: "vertical" }} /></Field></div>
                   </div>
-                  <button className="btn" onClick={doSaveCol} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7}}>
-                    {saving?<Spinner small/>:<Icon name="save" size={14} color="white"/>} Guardar cambios
+                  <button className="btn" onClick={doSaveCol} disabled={saving} style={{ marginTop: 18, background: "linear-gradient(135deg,#1c146d,#2e2580)", color: "white", padding: "11px 26px", borderRadius: 10, fontSize: 14, display: "flex", alignItems: "center", gap: 7 }}>
+                    {saving ? <Spinner small /> : <Icon name="save" size={14} color="white" />} Guardar cambios
                   </button>
                 </>
-              ):(
+              ) : (
                 <>
-                  <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d",marginBottom:18}}>Colecciones ({cols.length})</h3>
-                  {cols.map(col=>(
-                    <div key={col.id} style={{display:"flex",gap:12,alignItems:"center",padding:"11px 13px",borderRadius:10,border:"1px solid #ebeeff",marginBottom:9}}>
-                      <div style={{width:54,height:40,borderRadius:6,overflow:"hidden",flexShrink:0,background:"#ebeeff",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                        {storageUrl(col.portada_url)?<img src={storageUrl(col.portada_url)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<Icon name="photo" size={17} color="#7a7590"/>}
+                  <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d", marginBottom: 18 }}>Colecciones ({cols.length})</h3>
+                  {cols.map(col => (
+                    <div key={col.id} style={{ display: "flex", gap: 12, alignItems: "center", padding: "11px 13px", borderRadius: 10, border: "1px solid #ebeeff", marginBottom: 9 }}>
+                      <div style={{ width: 54, height: 40, borderRadius: 6, overflow: "hidden", flexShrink: 0, background: "#ebeeff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {storageUrl(col.portada_url) ? <img src={storageUrl(col.portada_url)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Icon name="photo" size={17} color="#7a7590" />}
                       </div>
-                      <div style={{flex:1}}>
-                        <div style={{fontWeight:600,fontSize:13,color:"#1c146d"}}>{col.titulo}</div>
-                        <div style={{fontSize:11,color:"#7a7590"}}>{col.fotos_reales||col.total_fotos||0} fotos · {col.anio} · {col.edificio||col.lugar}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: "#1c146d" }}>{col.titulo}</div>
+                        <div style={{ fontSize: 11, color: "#7a7590" }}>{col.fotos_reales || col.total_fotos || 0} fotos · {col.anio} · {col.edificio || col.lugar}</div>
                       </div>
-                      <div style={{display:"flex",gap:7}}>
-                        <button className="btn" onClick={()=>setEditCol({...col})} style={{background:"#ebeeff",color:"#1c146d",padding:"5px 11px",borderRadius:6,fontSize:12,display:"flex",alignItems:"center",gap:4}}><Icon name="edit" size={11}/>Editar</button>
-                        <button className="btn" onClick={()=>delCol(col.id)} style={{background:"rgba(193,23,32,.1)",color:"#c11720",padding:"5px 11px",borderRadius:6,fontSize:12,display:"flex",alignItems:"center",gap:4}}><Icon name="trash" size={11}/>Eliminar</button>
+                      <div style={{ display: "flex", gap: 7 }}>
+                        <button className="btn" onClick={() => setEditCol({ ...col })} style={{ background: "#ebeeff", color: "#1c146d", padding: "5px 11px", borderRadius: 6, fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Icon name="edit" size={11} />Editar</button>
+                        <button className="btn" onClick={() => delCol(col.id)} style={{ background: "rgba(193,23,32,.1)", color: "#c11720", padding: "5px 11px", borderRadius: 6, fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Icon name="trash" size={11} />Eliminar</button>
                       </div>
                     </div>
                   ))}
@@ -627,51 +663,51 @@ function AdminPanel({onClose,onRefresh}) {
               )}
             </div>
           )}
-          {tab==="fotos"&&(
+          {tab === "fotos" && (
             <div className="fade-in">
-              {editFoto?(
+              {editFoto ? (
                 <>
-                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
-                    <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d"}}>Editar foto</h3>
-                    <button className="btn" onClick={()=>setEditFoto(null)} style={{color:"#7a7590",background:"transparent",fontSize:12,display:"flex",alignItems:"center",gap:5}}><Icon name="x" size={13}/> Cancelar</button>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
+                    <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d" }}>Editar foto</h3>
+                    <button className="btn" onClick={() => setEditFoto(null)} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
                   </div>
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-                    <div style={{gridColumn:"1/-1"}}><Field label="Título"><input value={editFoto.titulo||""} onChange={e=>setEditFoto(f=>({...f,titulo:e.target.value}))} style={INP}/></Field></div>
-                    <Field label="Autor"><input value={editFoto.autor||""} onChange={e=>setEditFoto(f=>({...f,autor:e.target.value}))} style={INP}/></Field>
-                    <Field label="Año"><input type="number" value={editFoto.anio||""} onChange={e=>setEditFoto(f=>({...f,anio:e.target.value}))} style={INP}/></Field>
-                    <Field label="Lugar"><input value={editFoto.lugar||""} onChange={e=>setEditFoto(f=>({...f,lugar:e.target.value}))} style={INP}/></Field>
-                    <Field label="Edificio"><input value={editFoto.edificio||""} onChange={e=>setEditFoto(f=>({...f,edificio:e.target.value}))} style={INP}/></Field>
-                    <Field label="Tipo de archivo"><select value={editFoto.tipo_archivo||"JPG"} onChange={e=>setEditFoto(f=>({...f,tipo_archivo:e.target.value}))} style={sel}>{["TIFF","JPG","PNG","WEBP","GIF","BMP","HEIC"].map(t=><option key={t}>{t}</option>)}</select></Field>
-                    <Field label="Derechos"><input value={editFoto.derechos||""} onChange={e=>setEditFoto(f=>({...f,derechos:e.target.value}))} style={INP}/></Field>
-                    <Field label="Palabras clave (coma)"><input value={editFoto.keywords||""} onChange={e=>setEditFoto(f=>({...f,keywords:e.target.value}))} style={INP}/></Field>
-                    <div style={{gridColumn:"1/-1"}}><Field label="Descripción"><textarea value={editFoto.descripcion||""} onChange={e=>setEditFoto(f=>({...f,descripcion:e.target.value}))} rows={3} style={{...INP,resize:"vertical"}}/></Field></div>
-                    <div style={{display:"flex",alignItems:"center",gap:9}}>
-                      <input type="checkbox" id="dl-ef" checked={!!editFoto.descargable} onChange={e=>setEditFoto(f=>({...f,descargable:e.target.checked}))} style={{width:15,height:15}}/>
-                      <label htmlFor="dl-ef" style={{fontSize:13,color:"#1a1630",cursor:"pointer"}}>Permitir descarga pública</label>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div style={{ gridColumn: "1/-1" }}><Field label="Título"><input value={editFoto.titulo || ""} onChange={e => setEditFoto(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
+                    <Field label="Autor"><input value={editFoto.autor || ""} onChange={e => setEditFoto(f => ({ ...f, autor: e.target.value }))} style={INP} /></Field>
+                    <Field label="Año"><input type="number" value={editFoto.anio || ""} onChange={e => setEditFoto(f => ({ ...f, anio: e.target.value }))} style={INP} /></Field>
+                    <Field label="Lugar"><input value={editFoto.lugar || ""} onChange={e => setEditFoto(f => ({ ...f, lugar: e.target.value }))} style={INP} /></Field>
+                    <Field label="Edificio"><input value={editFoto.edificio || ""} onChange={e => setEditFoto(f => ({ ...f, edificio: e.target.value }))} style={INP} /></Field>
+                    <Field label="Tipo de archivo"><select value={editFoto.tipo_archivo || "JPG"} onChange={e => setEditFoto(f => ({ ...f, tipo_archivo: e.target.value }))} style={sel}>{["TIFF", "JPG", "PNG", "WEBP", "GIF", "BMP", "HEIC"].map(t => <option key={t}>{t}</option>)}</select></Field>
+                    <Field label="Derechos"><input value={editFoto.derechos || ""} onChange={e => setEditFoto(f => ({ ...f, derechos: e.target.value }))} style={INP} /></Field>
+                    <Field label="Palabras clave (coma)"><input value={editFoto.keywords || ""} onChange={e => setEditFoto(f => ({ ...f, keywords: e.target.value }))} style={INP} /></Field>
+                    <div style={{ gridColumn: "1/-1" }}><Field label="Descripción"><textarea value={editFoto.descripcion || ""} onChange={e => setEditFoto(f => ({ ...f, descripcion: e.target.value }))} rows={3} style={{ ...INP, resize: "vertical" }} /></Field></div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                      <input type="checkbox" id="dl-ef" checked={!!editFoto.descargable} onChange={e => setEditFoto(f => ({ ...f, descargable: e.target.checked }))} style={{ width: 15, height: 15 }} />
+                      <label htmlFor="dl-ef" style={{ fontSize: 13, color: "#1a1630", cursor: "pointer" }}>Permitir descarga pública</label>
                     </div>
                   </div>
-                  <button className="btn" onClick={doSaveFoto} disabled={saving} style={{marginTop:18,background:"linear-gradient(135deg,#1c146d,#2e2580)",color:"white",padding:"11px 26px",borderRadius:10,fontSize:14,display:"flex",alignItems:"center",gap:7}}>
-                    {saving?<Spinner small/>:<Icon name="save" size={14} color="white"/>} Guardar cambios
+                  <button className="btn" onClick={doSaveFoto} disabled={saving} style={{ marginTop: 18, background: "linear-gradient(135deg,#1c146d,#2e2580)", color: "white", padding: "11px 26px", borderRadius: 10, fontSize: 14, display: "flex", alignItems: "center", gap: 7 }}>
+                    {saving ? <Spinner small /> : <Icon name="save" size={14} color="white" />} Guardar cambios
                   </button>
                 </>
-              ):(
+              ) : (
                 <>
-                  <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:22,color:"#1c146d",marginBottom:18}}>Fotografías ({fotos.length})</h3>
-                  {fotos.map(foto=>(
-                    <div key={foto.id} style={{display:"flex",gap:12,alignItems:"center",padding:"10px 12px",borderRadius:10,border:"1px solid #ebeeff",marginBottom:8}}>
-                      <div style={{width:50,height:38,borderRadius:6,overflow:"hidden",flexShrink:0,background:"#ebeeff",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                        {storageUrl(foto.url_web||foto.url_original)?<img src={storageUrl(foto.url_web||foto.url_original)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<Icon name="photo" size={16} color="#7a7590"/>}
+                  <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d", marginBottom: 18 }}>Fotografías ({fotos.length})</h3>
+                  {fotos.map(foto => (
+                    <div key={foto.id} style={{ display: "flex", gap: 12, alignItems: "center", padding: "10px 12px", borderRadius: 10, border: "1px solid #ebeeff", marginBottom: 8 }}>
+                      <div style={{ width: 50, height: 38, borderRadius: 6, overflow: "hidden", flexShrink: 0, background: "#ebeeff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {storageUrl(foto.url_web || foto.url_original) ? <img src={storageUrl(foto.url_web || foto.url_original)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <Icon name="photo" size={16} color="#7a7590" />}
                       </div>
-                      <div style={{flex:1}}>
-                        <div style={{fontWeight:600,fontSize:13,color:"#1c146d"}}>{foto.titulo}</div>
-                        <div style={{fontSize:11,color:"#7a7590"}}>{foto.autor} · {foto.anio} · {foto.coleccion_titulo||""}</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 600, fontSize: 13, color: "#1c146d" }}>{foto.titulo}</div>
+                        <div style={{ fontSize: 11, color: "#7a7590" }}>{foto.autor} · {foto.anio} · {foto.coleccion_titulo || ""}</div>
                       </div>
-                      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-                        <button className="btn" onClick={()=>setEditFoto({...foto,keywords:foto.keywords||""})} style={{background:"#ebeeff",color:"#1c146d",padding:"5px 9px",borderRadius:6,fontSize:11,display:"flex",alignItems:"center",gap:4}}><Icon name="edit" size={11}/>Editar</button>
-                        <button className="btn" onClick={()=>toggleDl(foto)} style={{background:foto.descargable?"rgba(103,156,188,.15)":"rgba(193,23,32,.1)",color:foto.descargable?"#679cbc":"#c11720",padding:"5px 9px",borderRadius:6,fontSize:11,display:"flex",alignItems:"center",gap:4}}>
-                          <Icon name={foto.descargable?"unlock":"lock"} size={11}/>{foto.descargable?"Desc.":"Solo vista"}
+                      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                        <button className="btn" onClick={() => setEditFoto({ ...foto, keywords: foto.keywords || "" })} style={{ background: "#ebeeff", color: "#1c146d", padding: "5px 9px", borderRadius: 6, fontSize: 11, display: "flex", alignItems: "center", gap: 4 }}><Icon name="edit" size={11} />Editar</button>
+                        <button className="btn" onClick={() => toggleDl(foto)} style={{ background: foto.descargable ? "rgba(103,156,188,.15)" : "rgba(193,23,32,.1)", color: foto.descargable ? "#679cbc" : "#c11720", padding: "5px 9px", borderRadius: 6, fontSize: 11, display: "flex", alignItems: "center", gap: 4 }}>
+                          <Icon name={foto.descargable ? "unlock" : "lock"} size={11} />{foto.descargable ? "Desc." : "Solo vista"}
                         </button>
-                        <button className="btn" onClick={()=>delFoto(foto)} style={{background:"rgba(193,23,32,.1)",color:"#c11720",padding:"6px",borderRadius:6,display:"flex"}}><Icon name="trash" size={13}/></button>
+                        <button className="btn" onClick={() => delFoto(foto)} style={{ background: "rgba(193,23,32,.1)", color: "#c11720", padding: "6px", borderRadius: 6, display: "flex" }}><Icon name="trash" size={13} /></button>
                       </div>
                     </div>
                   ))}
@@ -681,322 +717,413 @@ function AdminPanel({onClose,onRefresh}) {
           )}
         </div>
       </div>
-      {toast&&<Toast msg={toast.msg} type={toast.type} onClose={()=>setToast(null)}/>}
+      {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
     </div>
   );
 }
 
 export default function Fototeca() {
-  const [view,setView]=useState("home");
-  const [activeCol,setActiveCol]=useState(null);
-  const [lightbox,setLightbox]=useState(null);
-  const [search,setSearch]=useState("");
-  const [showSug,setShowSug]=useState(false);
-  const [filters,setFilters]=useState({years:[],places:[],authors:[],buildings:[],types:[],rights:[]});
-  const [gridMode,setGridMode]=useState("grid");
-  const [page,setPage]=useState("gallery");
-  const [cols,setCols]=useState([]);
-  const [fotos,setFotos]=useState([]);
-  const [videos,setVideos]=useState([]);
-  const [filterOpts,setFilterOpts]=useState({years:[],places:[],authors:[],buildings:[],types:[],rights:[]});
-  const [loading,setLoading]=useState(true);
-  const [colLoading,setColLoading]=useState(false);
-  const [showAdmin,setShowAdmin]=useState(false);
-  const [adminPass,setAdminPass]=useState("");
-  const [adminOk,setAdminOk]=useState(false);
-  const [passErr,setPassErr]=useState("");
-  const [sugerencias,setSugerencias]=useState([]);
-  const [kwColIds,setKwColIds]=useState(null);
+  const [view, setView] = useState("home");
+  const [activeCol, setActiveCol] = useState(null);
+  const [lightbox, setLightbox] = useState(null);
+  const [search, setSearch] = useState("");
+  const [showSug, setShowSug] = useState(false);
+  const [filters, setFilters] = useState({ years: [], places: [], authors: [], buildings: [], types: [], rights: [] });
+  const [gridMode, setGridMode] = useState("grid");
+  const [page, setPage] = useState("gallery");
+  const [cols, setCols] = useState([]);
+  const [fotos, setFotos] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [filterOpts, setFilterOpts] = useState({ years: [], places: [], authors: [], buildings: [], types: [], rights: [] });
+  const [loading, setLoading] = useState(true);
+  const [colLoading, setColLoading] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [adminPass, setAdminPass] = useState("");
+  const [adminOk, setAdminOk] = useState(false);
+  const [passErr, setPassErr] = useState("");
+  const [sugerencias, setSugerencias] = useState([]);
+  const [kwColIds, setKwColIds] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [filtersDrawerOpen, setFiltersDrawerOpen] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [placeholderVisible, setPlaceholderVisible] = useState(true);
 
-  const fetchAll=useCallback(async()=>{
+  const SEARCH_PLACEHOLDERS = ["Cincuenta aniversario", "Medio siglo", "Trayectoria", "Memoria", "Memoria visual", "Historia", "Hito", "Evolución", "Transformación",
+    "Legado", "Herencia", "Pasado, presente y futuro", "Efeméride", "Cronología", "Línea del tiempo", "Fototeca", "Archivo fotográfico", "Acervo", "Colección", "Registro visual",
+    "Documentación", "Instantánea", "Fotograma", "Captura", "Encuadre", "Negativo", "Diapositiva", "Digitalización", "Restauración", "Conservación", "Testimonio gráfico", "Retrospectiva",
+    "Arquitectura", "Diseño", "Estructura", "Edificio", "Inmueble", "Cimientos", "Fachada", "Volumetría", "Silueta", "Piedra angular", "Espacio", "Patrimonio", "Identidad urbana", "Ícono",
+    "Monumento", "Obra", "Espacio arquitectónico", "Vivencias", "Anécdotas", "Testigos", "Testimonio", "Comunidad", "Identidad", "Pertenencia", "Raíces", "Encuentro", "Habitantes", "Usuarios",
+    "Huella", "Impacto", "50 años en imágenes: Memoria y patrimonio", "Medio siglo a través del lente", "Cincuenta años construyendo historia", "Rostros y formas: 50 años de nuestro edificio",
+    "Miradas a medio siglo de historia", "Somos ITZ: 50 años de innovación y educación", "Cincuenta años de arquitectura y diseño", "50 años de legado y transformación",
+    "Medio siglo de historias que contar", "Cincuenta años de recuerdos y vivencias", "50 años de evolución y progreso", "Cincuenta años de identidad y pertenencia", "Medio siglo de patrimonio y cultura",
+    "50 años de comunidad y colaboración", "Somos TecNM", "Somos Mapaches", "Somos ITZ", "Somos historia", "Somos futuro", "Somos innovación", "Somos educación", "Somos arquitectura", "Somos diseño", "Somos patrimonio",
+  ];
+
+  const fetchAll = useCallback(async () => {
     setLoading(true);
-    const [{data:c},{data:kw}]=await Promise.all([
-      supabase.from("v_colecciones").select("*").order("anio",{ascending:false}),
+    const [{ data: c }, { data: kw }] = await Promise.all([
+      supabase.from("v_colecciones").select("*").order("anio", { ascending: false }),
       supabase.from("keywords").select("keyword").limit(300),
-    ]).catch(()=>[{data:[]},{data:[]}]);
-    const colData=c||[];
+    ]).catch(() => [{ data: [] }, { data: [] }]);
+    const colData = c || [];
     setCols(colData);
     setFilterOpts({
-      years:[...new Set(colData.map(x=>String(x.anio)).filter(Boolean))].sort((a,b)=>b-a),
-      places:[...new Set(colData.map(x=>x.lugar).filter(Boolean))],
-      authors:[...new Set(colData.map(x=>x.autor).filter(Boolean))],
-      buildings:[...new Set(colData.map(x=>x.edificio).filter(Boolean))],
-      types:[...new Set(colData.map(x=>x.tipo).filter(Boolean))],
-      rights:[...new Set(colData.map(x=>x.derechos).filter(Boolean))],
+      years: [...new Set(colData.map(x => String(x.anio)).filter(Boolean))].sort((a, b) => b - a),
+      places: [...new Set(colData.map(x => x.lugar).filter(Boolean))],
+      authors: [...new Set(colData.map(x => x.autor).filter(Boolean))],
+      buildings: [...new Set(colData.map(x => x.edificio).filter(Boolean))],
+      types: [...new Set(colData.map(x => x.tipo).filter(Boolean))],
+      rights: [...new Set(colData.map(x => x.derechos).filter(Boolean))],
     });
-    const kwArr=(kw||[]).map(r=>r.keyword).filter(Boolean);
-    const sug=[
-      ...colData.map(c=>c.titulo).filter(Boolean),
-      ...colData.map(c=>c.autor).filter(Boolean),
-      ...colData.map(c=>c.lugar).filter(Boolean),
-      ...colData.map(c=>c.tipo).filter(Boolean),
-      ...colData.map(c=>c.edificio).filter(Boolean),
-      ...colData.map(c=>String(c.anio||"")).filter(Boolean),
+    const kwArr = (kw || []).map(r => r.keyword).filter(Boolean);
+    const sug = [
+      ...colData.map(c => c.titulo).filter(Boolean),
+      ...colData.map(c => c.autor).filter(Boolean),
+      ...colData.map(c => c.lugar).filter(Boolean),
+      ...colData.map(c => c.tipo).filter(Boolean),
+      ...colData.map(c => c.edificio).filter(Boolean),
+      ...colData.map(c => String(c.anio || "")).filter(Boolean),
       ...kwArr,
     ];
     setSugerencias([...new Set(sug)]);
     setLoading(false);
-  },[]);
+  }, []);
 
-  useEffect(()=>{
-    if(!search.trim()){setKwColIds(null);return;}
-    const q=search.trim();
-    const timer=setTimeout(async()=>{
+  useEffect(() => {
+    if (!search.trim()) { setKwColIds(null); return; }
+    const q = search.trim();
+    const timer = setTimeout(async () => {
       const { data, error } = await supabase
-  .from("keywords")
-  .select("keyword,fotografias(coleccion_id)")
-  .ilike("keyword", `%${q}%`);
+        .from("keywords")
+        .select("keyword,fotografias(coleccion_id)")
+        .ilike("keyword", `%${q}%`);
 
-if (error) {
-  console.log(error);
-  return;
-}
-      if(data&&data.length>0){
-        const ids=[...new Set(data.flatMap(r=>r.fotografias?[r.fotografias.coleccion_id]:[]).filter(Boolean))];
+      if (error) {
+        console.log(error);
+        return;
+      }
+      if (data && data.length > 0) {
+        const ids = [...new Set(data.flatMap(r => r.fotografias ? [r.fotografias.coleccion_id] : []).filter(Boolean))];
         setKwColIds(ids);
-      }else{setKwColIds([]);}
-    },400);
-    return()=>clearTimeout(timer);
-  },[search]);
+      } else { setKwColIds([]); }
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
 
-  const fetchFotos=useCallback(async colId=>{
+  useEffect(() => {
+    if (search) return;
+
+    const interval = setInterval(() => {
+
+      setPlaceholderVisible(false);
+
+      setTimeout(() => {
+        setPlaceholderIndex(prev =>
+          (prev + 1) % SEARCH_PLACEHOLDERS.length
+        );
+
+
+        setPlaceholderVisible(true);
+      }, 500);
+
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [search]);
+
+  const fetchFotos = useCallback(async colId => {
     setColLoading(true);
-    const [{data:f},{data:v}]=await Promise.all([
-      supabase.from("v_fotografias").select("*").eq("coleccion_id",colId).order("creado_en"),
-      supabase.from("videos").select("*").eq("coleccion_id",colId).order("orden"),
+    const [{ data: f }, { data: v }] = await Promise.all([
+      supabase.from("v_fotografias").select("*").eq("coleccion_id", colId).order("creado_en"),
+      supabase.from("videos").select("*").eq("coleccion_id", colId).order("orden"),
     ]);
-    setFotos(prev=>[...prev.filter(p=>p.coleccion_id!==colId),...(f||[])]);
-    setVideos(prev=>[...prev.filter(v=>v.coleccion_id!==colId),...(v||[])]);
+    setFotos(prev => [...prev.filter(p => p.coleccion_id !== colId), ...(f || [])]);
+    setVideos(prev => [...prev.filter(v => v.coleccion_id !== colId), ...(v || [])]);
     setColLoading(false);
-  },[]);
+  }, []);
 
-  useEffect(()=>{fetchAll();},[]);
+  useEffect(() => { fetchAll(); }, []);
 
   // RNF-L-03: deshabilitar clic derecho en imágenes
-  useEffect(()=>{
-    const h=e=>{if(e.target.tagName==="IMG")e.preventDefault();};
-    document.addEventListener("contextmenu",h);
-    return()=>document.removeEventListener("contextmenu",h);
-  },[]);
+  useEffect(() => {
+    const h = e => { if (e.target.tagName === "IMG") e.preventDefault(); };
+    document.addEventListener("contextmenu", h);
+    return () => document.removeEventListener("contextmenu", h);
+  }, []);
 
-  const toggleFilter=(cat,val)=>setFilters(f=>({...f,[cat]:f[cat].includes(val)?f[cat].filter(x=>x!==val):[...f[cat],val]}));
+  const toggleFilter = (cat, val) => setFilters(f => ({ ...f, [cat]: f[cat].includes(val) ? f[cat].filter(x => x !== val) : [...f[cat], val] }));
 
-  const filtered=cols.filter(col=>{
-    const q=search.toLowerCase();
-    const matchText=!q||col.titulo?.toLowerCase().includes(q)||col.lugar?.toLowerCase().includes(q)||col.autor?.toLowerCase().includes(q)||col.descripcion?.toLowerCase().includes(q)||col.edificio?.toLowerCase().includes(q);
-    const matchKw=!q||kwColIds===null||kwColIds.includes(col.id);
-    return(matchText||matchKw)
-      &&(!filters.years.length||filters.years.includes(String(col.anio)))
-      &&(!filters.places.length||filters.places.some(p=>col.lugar?.includes(p)))
-      &&(!filters.authors.length||filters.authors.includes(col.autor))
-      &&(!filters.buildings.length||filters.buildings.includes(col.edificio))
-      &&(!filters.types.length||filters.types.includes(col.tipo))
-      &&(!filters.rights.length||filters.rights.includes(col.derechos));
+  const filtered = cols.filter(col => {
+    const q = search.toLowerCase();
+    const matchText = !q || col.titulo?.toLowerCase().includes(q) || col.lugar?.toLowerCase().includes(q) || col.autor?.toLowerCase().includes(q) || col.descripcion?.toLowerCase().includes(q) || col.edificio?.toLowerCase().includes(q);
+    const matchKw = !q || kwColIds === null || kwColIds.includes(col.id);
+    return (matchText || matchKw)
+      && (!filters.years.length || filters.years.includes(String(col.anio)))
+      && (!filters.places.length || filters.places.some(p => col.lugar?.includes(p)))
+      && (!filters.authors.length || filters.authors.includes(col.autor))
+      && (!filters.buildings.length || filters.buildings.includes(col.edificio))
+      && (!filters.types.length || filters.types.includes(col.tipo))
+      && (!filters.rights.length || filters.rights.includes(col.derechos));
   });
 
   // RF-05: Sugerencias con categoría
-  const getSugs=()=>{
-    const q=search.toLowerCase();
-    const cats=[
-      ...filterOpts.authors.map(v=>({v,cat:"Autor"})),
-      ...filterOpts.places.map(v=>({v,cat:"Lugar"})),
-      ...filterOpts.buildings.map(v=>({v,cat:"Edificio"})),
-      ...filterOpts.types.map(v=>({v,cat:"Tipo"})),
-      ...filterOpts.years.map(v=>({v,cat:"Año"})),
-      ...filterOpts.rights.map(v=>({v,cat:"Derechos"})),
-      ...cols.map(c=>({v:c.titulo,cat:"Colección"})),
-      ...sugerencias.filter(s=>![...filterOpts.authors,...filterOpts.places,...filterOpts.buildings,...filterOpts.types,...filterOpts.rights,...cols.map(c=>c.titulo)].includes(s)).map(v=>({v,cat:"Keyword"})),
+  const getSugs = () => {
+    const q = search.toLowerCase();
+    const cats = [
+      ...filterOpts.authors.map(v => ({ v, cat: "Autor" })),
+      ...filterOpts.places.map(v => ({ v, cat: "Lugar" })),
+      ...filterOpts.buildings.map(v => ({ v, cat: "Edificio" })),
+      ...filterOpts.types.map(v => ({ v, cat: "Tipo" })),
+      ...filterOpts.years.map(v => ({ v, cat: "Año" })),
+      ...filterOpts.rights.map(v => ({ v, cat: "Derechos" })),
+      ...cols.map(c => ({ v: c.titulo, cat: "Colección" })),
+      ...sugerencias.filter(s => ![...filterOpts.authors, ...filterOpts.places, ...filterOpts.buildings, ...filterOpts.types, ...filterOpts.rights, ...cols.map(c => c.titulo)].includes(s)).map(v => ({ v, cat: "Keyword" })),
     ];
-    if(!q)return cats.filter(x=>x.v).slice(0,10);
-    return cats.filter(x=>x.v&&x.v.toLowerCase().includes(q)).slice(0,10);
+    if (!q) return cats.filter(x => x.v).slice(0, 10);
+    return cats.filter(x => x.v && x.v.toLowerCase().includes(q)).slice(0, 10);
   };
-  const sugs=getSugs();
+  const sugs = getSugs();
 
-  const handleColClick=async col=>{setActiveCol(col);setView("collection");await fetchFotos(col.id);};
-  const handleNav=dir=>{
-    if(!lightbox)return;
-    const col=fotos.filter(f=>f.coleccion_id===lightbox.coleccion_id);
-    const idx=col.findIndex(f=>f.id===lightbox.id);
-    setLightbox(col[(idx+dir+col.length)%col.length]);
+  const handleColClick = async col => { setActiveCol(col); setView("collection"); await fetchFotos(col.id); };
+  const handleNav = dir => {
+    if (!lightbox) return;
+    const col = fotos.filter(f => f.coleccion_id === lightbox.coleccion_id);
+    const idx = col.findIndex(f => f.id === lightbox.id);
+    setLightbox(col[(idx + dir + col.length) % col.length]);
   };
-  const activeFilters=Object.values(filters).flat().length;
-  const totalFotos=cols.reduce((a,c)=>a+(c.fotos_reales||c.total_fotos||0),0);
-  const tryLogin=()=>{if(adminPass==="admin123"){setAdminOk(true);setPassErr("");}else setPassErr("Contraseña incorrecta");};
+  const activeFilters = Object.values(filters).flat().length;
+  const totalFotos = cols.reduce((a, c) => a + (c.fotos_reales || c.total_fotos || 0), 0);
+  const tryLogin = () => { if (adminPass === "admin123") { setAdminOk(true); setPassErr(""); } else setPassErr("Contraseña incorrecta"); };
 
-  const FilterGroup=({title,cat,opts=[]})=>(
-    <div style={{marginBottom:16}}>
-      <div style={{fontSize:10,letterSpacing:".1em",textTransform:"uppercase",color:"#7a7590",marginBottom:7,fontWeight:600}}>{title}</div>
-      {opts.length===0?<div style={{fontSize:11,color:"#ebeeff"}}>—</div>:opts.map(o=>(
+  const FilterGroup = ({ title, cat, opts = [] }) => (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: "#7a7590", marginBottom: 7, fontWeight: 600 }}>{title}</div>
+      {opts.length === 0 ? <div style={{ fontSize: 11, color: "#ebeeff" }}>—</div> : opts.map(o => (
         <div key={o} className="cb">
-          <input type="checkbox" id={`${cat}-${o}`} checked={filters[cat].includes(o)} onChange={()=>toggleFilter(cat,o)}/>
+          <input type="checkbox" id={`${cat}-${o}`} checked={filters[cat].includes(o)} onChange={() => toggleFilter(cat, o)} />
           <label htmlFor={`${cat}-${o}`}>{o}</label>
         </div>
       ))}
     </div>
   );
 
-  return(
+  return (
     <>
       <style>{GS}</style>
-      <GobHeader />
-      <nav style={{position:"sticky",top:0,zIndex:100,background:"rgba(28,20,109,.97)",backdropFilter:"blur(16px)",borderBottom:"1px solid rgba(255,255,255,.08)"}}>
-        <div style={{maxWidth:1380,margin:"0 auto",padding:"0 20px",display:"flex",alignItems:"center",gap:14,height:64}}>
-          <div style={{display:"flex",alignItems:"center",gap:11,flexShrink:0}}>
+
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(28,20,109,.97)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
+        <div style={{ maxWidth: 1380, margin: "0 auto", padding: "0 20px", display: "flex", alignItems: "center", gap: 14, height: 64 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 11, flexShrink: 0 }}>
             <img src={LOGO_NAV} alt="Instituto Tecnológico de Zacatecas" height="46"
-              style={{objectFit:"contain",filter:"brightness(10) saturate(0)",opacity:.92}}/>
+              style={{ objectFit: "contain", filter: "brightness(10) saturate(0)", opacity: .92 }} />
             <div>
-              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,fontWeight:600,color:"white",lineHeight:1}}>Fototeca ITZ</div>
-              <div style={{fontSize:9,letterSpacing:".12em",color:"rgba(235,238,255,.45)",textTransform:"uppercase"}}>50 Aniversario · 1976–2026</div>
+              <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 17, fontWeight: 600, color: "white", lineHeight: 1 }}>Fototeca ITZ</div>
+              <div style={{ fontSize: 9, letterSpacing: ".12em", color: "rgba(235,238,255,.45)", textTransform: "uppercase" }}>50 Aniversario · 1976–2026</div>
             </div>
           </div>
-          <div style={{display:"flex",gap:3,marginLeft:10}}>
-            {[["gallery","Colecciones"],["about","Acerca de"]].map(([id,label])=>(
-              <button key={id} className="btn" onClick={()=>{setPage(id);setView("home");}}
-                style={{color:page===id?"white":"#ebeeff",background:page===id?"rgba(255,255,255,.1)":"transparent",padding:"6px 13px",borderRadius:6,fontSize:13,opacity:page===id?1:.7}}>{label}</button>
+          <div className={`nav-links${mobileMenuOpen ? " open" : ""}`}>
+            {[["gallery", "Colecciones"], ["about", "Acerca de"]].map(([id, label]) => (
+              <button key={id} className="btn" onClick={() => { setPage(id); setView("home"); setMobileMenuOpen(false); }}
+                style={{ color: page === id ? "white" : "#ebeeff", background: page === id ? "rgba(255,255,255,.1)" : "transparent", padding: "6px 13px", borderRadius: 6, fontSize: 13, opacity: page === id ? 1 : .7 }}>{label}</button>
             ))}
           </div>
-          <div style={{flex:1}}/>
-          <button className="btn" onClick={()=>setShowAdmin(true)} style={{background:"rgba(145,108,63,.3)",color:"white",padding:"7px 14px",borderRadius:8,fontSize:12,display:"flex",alignItems:"center",gap:6,border:"1px solid rgba(145,108,63,.4)"}}>
-            <Icon name="settings" size={13} color="white"/> Admin
+          <div style={{ flex: 1 }} />
+          <button className="btn nav-burger" onClick={() => setMobileMenuOpen(o => !o)}
+            style={{ background: "transparent", color: "white", padding: 6, alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            {mobileMenuOpen ? <Icon name="x" size={22} color="white" /> : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+            )}
           </button>
         </div>
       </nav>
 
-      {view==="home"&&page==="gallery"&&(
+      {view === "home" && page === "gallery" && (
         <>
-          <div style={{background:"linear-gradient(160deg,#1c146d 0%,#2e2580 60%,#679cbc 100%)",padding:"44px 24px 48px",textAlign:"center",position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:-80,right:-80,width:360,height:360,borderRadius:"50%",background:"rgba(103,156,188,.07)",pointerEvents:"none"}}/>
-            <div style={{position:"absolute",bottom:-60,left:-60,width:280,height:280,borderRadius:"50%",background:"rgba(145,108,63,.07)",pointerEvents:"none"}}/>
-            <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:12,letterSpacing:".25em",color:"#679cbc",textTransform:"uppercase",marginBottom:10}}>Repositorio fotográfico institucional</div>
-            <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(28px,4.5vw,52px)",color:"white",lineHeight:1.1,marginBottom:14}}>Fototeca Digital<br/><em style={{color:"#ebeeff",fontWeight:400}}>del ITZ</em></h1>
-            <p style={{color:"rgba(255,255,255,.6)",fontSize:14,maxWidth:480,margin:"0 auto 28px",lineHeight:1.6}}>Archivo visual institucional con {loading?"…":totalFotos} fotografías del patrimonio del ITZ.</p>
-            <div style={{maxWidth:540,margin:"0 auto",position:"relative"}}>
-              <div style={{display:"flex",alignItems:"center",background:"white",borderRadius:12,padding:"0 15px",boxShadow:"0 8px 40px rgba(0,0,0,.25)"}}>
-                <Icon name="search" size={17} color="#7a7590"/>
-                <input value={search} onChange={e=>{setSearch(e.target.value);setShowSug(true);}}
-                  onFocus={()=>setShowSug(true)} onBlur={()=>setTimeout(()=>setShowSug(false),200)}
-                  placeholder="Buscar por título, autor, lugar, edificio, keyword…"
-                  style={{flex:1,padding:"13px 11px",border:"none",outline:"none",fontSize:14,color:"#1a1630",background:"transparent"}}/>
-                {search&&<button className="btn" onClick={()=>{setSearch("");setKwColIds(null);}} style={{background:"transparent",padding:4,color:"#7a7590"}}><Icon name="x" size={14}/></button>}
+          <div style={{ background: "linear-gradient(160deg,#1c146d 0%,#2e2580 60%,#679cbc 100%)", padding: "44px 24px 48px", textAlign: "center", position: "relative", overflow: "visible" }}>
+            <div style={{ position: "absolute", top: -80, right: -80, width: 360, height: 360, borderRadius: "50%", background: "rgba(103,156,188,.07)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", bottom: -60, left: -60, width: 280, height: 280, borderRadius: "50%", background: "rgba(145,108,63,.07)", pointerEvents: "none" }} />
+            <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 12, letterSpacing: ".25em", color: "#679cbc", textTransform: "uppercase", marginBottom: 10 }}>Repositorio fotográfico institucional</div>
+            <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(28px,4.5vw,52px)", color: "white", lineHeight: 1.1, marginBottom: 14 }}>Fototeca Digital<br /><em style={{ color: "#ebeeff", fontWeight: 400 }}>del ITZ</em></h1>
+            <p style={{ color: "rgba(255,255,255,.6)", fontSize: 14, maxWidth: 480, margin: "0 auto 28px", lineHeight: 1.6 }}>Archivo visual institucional con {loading ? "…" : totalFotos} fotografías del patrimonio del ITZ.</p>
+            <div style={{ maxWidth: 540, margin: "0 auto", position: "relative" }}>
+              <div style={{ display: "flex", alignItems: "center", background: "white", borderRadius: 12, padding: "0 15px", boxShadow: "0 8px 40px rgba(0,0,0,.25)" }}>
+                <Icon name="search" size={17} color="#7a7590" />
+
+                <div
+                  style={{
+                    flex: 1,
+                    position: "relative",
+                  }}
+                >
+                  {!search && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 11,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "#7a7590",
+                        fontSize: 14,
+                        pointerEvents: "none",
+                        opacity: placeholderVisible ? 1 : 0,
+                        transition: "opacity 0.5s ease-in-out",
+                      }}
+                    >
+                      {SEARCH_PLACEHOLDERS[placeholderIndex]}…
+                    </div>
+                  )}
+
+                  <input
+                    value={search}
+                    onChange={e => {
+                      setSearch(e.target.value);
+                      setShowSug(true);
+                    }}
+                    onFocus={() => setShowSug(true)}
+                    onBlur={() => setTimeout(() => setShowSug(false), 200)}
+                    style={{
+                      width: "100%",
+                      boxSizing: "border-box",
+                      padding: "13px 11px",
+                      border: "none",
+                      outline: "none",
+                      fontSize: 14,
+                      color: "#1a1630",
+                      background: "transparent",
+                      position: "relative",
+                      zIndex: 1
+                    }}
+                  />
+                </div>
+
+                {search && <button className="btn" onClick={() => { setSearch(""); setKwColIds(null); }} style={{ background: "transparent", padding: 4, color: "#7a7590" }}><Icon name="x" size={14} /></button>}
               </div>
-              {showSug&&sugs.length>0&&(
-                <div style={{position:"absolute",top:"calc(100% + 5px)",left:0,right:0,background:"white",borderRadius:10,boxShadow:"0 12px 40px rgba(0,0,0,.2)",zIndex:200,overflow:"hidden"}}>
-                  <div style={{padding:"7px 14px 5px",fontSize:10,color:"#7a7590",letterSpacing:".1em",textTransform:"uppercase",borderBottom:"1px solid #ebeeff",fontWeight:600}}>
-                    {search.length>0?`${sugs.length} sugerencia${sugs.length!==1?"s":""}` :"Explorar por categoría"}
+              {showSug && sugs.length > 0 && (
+                <div style={{ position: "absolute", top: "calc(100% + 5px)", left: 0, right: 0, background: "white", borderRadius: 10, boxShadow: "0 12px 40px rgba(0,0,0,.2)", zIndex: 200, overflow: "hidden" }}>
+                  <div style={{ padding: "7px 14px 5px", fontSize: 10, color: "#7a7590", letterSpacing: ".1em", textTransform: "uppercase", borderBottom: "1px solid #ebeeff", fontWeight: 600 }}>
+                    {search.length > 0 ? `${sugs.length} sugerencia${sugs.length !== 1 ? "s" : ""}` : "Explorar por categoría"}
                   </div>
-                  {sugs.map((s,i)=>(
-                    <div key={`${s.v}-${i}`} onClick={()=>{setSearch(s.v);setShowSug(false);}}
-                      style={{padding:"9px 14px",fontSize:13,color:"#1a1630",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid rgba(235,238,255,.5)"}}
-                      onMouseEnter={e=>e.currentTarget.style.background="#ebeeff"}
-                      onMouseLeave={e=>e.currentTarget.style.background="white"}>
-                      <div style={{display:"flex",alignItems:"center",gap:9}}>
-                        <Icon name="search" size={12} color="#679cbc"/>
+                  {sugs.map((s, i) => (
+                    <div key={`${s.v}-${i}`} onClick={() => { setSearch(s.v); setShowSug(false); }}
+                      style={{ padding: "9px 14px", fontSize: 13, color: "#1a1630", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(235,238,255,.5)" }}
+                      onMouseEnter={e => e.currentTarget.style.background = "#ebeeff"}
+                      onMouseLeave={e => e.currentTarget.style.background = "white"}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                        <Icon name="search" size={12} color="#679cbc" />
                         <span>{s.v}</span>
                       </div>
-                      <span style={{fontSize:10,color:"#679cbc",background:"#ebeeff",padding:"2px 7px",borderRadius:8,letterSpacing:".04em"}}>{s.cat}</span>
+                      <span style={{ fontSize: 10, color: "#679cbc", background: "#ebeeff", padding: "2px 7px", borderRadius: 8, letterSpacing: ".04em" }}>{s.cat}</span>
                     </div>
                   ))}
                 </div>
               )}
             </div>
-            <div style={{display:"flex",justifyContent:"center",gap:28,marginTop:26,flexWrap:"wrap"}}>
-              {[[String(cols.length),"Colecciones"],[String(totalFotos),"Fotografías"],[String(new Set(cols.map(c=>c.autor)).size),"Autores"],[String(new Set(cols.map(c=>c.edificio)).size),"Edificios"]].map(([n,l])=>(
-                <div key={l} style={{textAlign:"center"}}>
-                  <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:26,color:"white",fontWeight:600}}>{loading?"…":n}</div>
-                  <div style={{fontSize:10,color:"rgba(235,238,255,.5)",letterSpacing:".1em",textTransform:"uppercase"}}>{l}</div>
+            <div style={{ display: "flex", justifyContent: "center", gap: 28, marginTop: 26, flexWrap: "wrap" }}>
+              {[[String(cols.length), "Colecciones"], [String(totalFotos), "Fotografías"], [String(new Set(cols.map(c => c.autor)).size), "Autores"], [String(new Set(cols.map(c => c.edificio)).size), "Edificios"]].map(([n, l]) => (
+                <div key={l} style={{ textAlign: "center" }}>
+                  <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 26, color: "white", fontWeight: 600 }}>{loading ? "…" : n}</div>
+                  <div style={{ fontSize: 10, color: "rgba(235,238,255,.5)", letterSpacing: ".1em", textTransform: "uppercase" }}>{l}</div>
                 </div>
               ))}
             </div>
           </div>
-          <Carrusel/>
+          <Carrusel />
         </>
       )}
 
-      {page==="about"&&(
-        <div style={{maxWidth:760,margin:"56px auto",padding:"0 22px"}} className="fade-in">
-          <div style={{display:"flex",alignItems:"center",gap:18,marginBottom:22}}>
-            <img src={LOGO_BIG} alt="ITZ" height="80" style={{objectFit:"contain"}}/>
+      {page === "about" && (
+        <div style={{ maxWidth: 760, margin: "56px auto", padding: "0 22px" }} className="fade-in">
+          <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 22 }}>
+            <img src={LOGO_BIG} alt="ITZ" height="80" style={{ objectFit: "contain" }} />
             <div>
-              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:32,color:"#1c146d",lineHeight:1.1}}>Fototeca Digital ITZ</h2>
-              <div style={{color:"#916c3f",fontSize:13,marginTop:4}}>Instituto Tecnológico de Zacatecas · 50 Aniversario 1976–2026</div>
+              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: 32, color: "#1c146d", lineHeight: 1.1 }}>Fototeca Digital ITZ</h2>
+              <div style={{ color: "#916c3f", fontSize: 13, marginTop: 4 }}>Instituto Tecnológico de Zacatecas · 50 Aniversario 1976–2026</div>
             </div>
           </div>
-          <div style={{width:56,height:3,background:"#916c3f",marginBottom:22}}/>
-          <p style={{fontSize:15,lineHeight:1.8,color:"#1a1630",marginBottom:16}}>La <strong>Fototeca Digital del Instituto Tecnológico de Zacatecas</strong> preserva, organiza y difunde el acervo fotográfico institucional: campus, eventos, edificios y comunidad académica.</p>
-          <p style={{fontSize:15,lineHeight:1.8,color:"#1a1630",marginBottom:20}}>Imágenes en <strong>TIFF de alta resolución</strong>, distribuidas en JPG/WEBP. Datos en <strong>Supabase (PostgreSQL)</strong> con Storage CDN global.</p>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(190px,1fr))",gap:14}}>
-            {[["RF-04 Visualización","Zoom, pantalla completa, navegación"],["RF-06 Filtros","Año, lugar, autor, edificio, tipo, derechos"],["RF-07 Metadatos","Título, autor, año, lugar, fecha, keywords"],["RF-08 Descarga","Baja calidad con marca de agua"],["RF-10 Videos","Clips dentro de colecciones"],["RF-12 Póster","Vista expandida de fotos destacadas"],["RNF-P-01 Responsivo","Desktop, laptop, tablet, móvil"],["RNF-L-03 Protección","Clic derecho deshabilitado en imágenes"]].map(([t,d])=>(
-              <div key={t} style={{background:"white",borderRadius:12,padding:18,border:"1px solid rgba(28,20,109,.08)"}}>
-                <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:15,color:"#1c146d",marginBottom:5,fontWeight:600}}>{t}</div>
-                <div style={{fontSize:12,color:"#7a7590",lineHeight:1.5}}>{d}</div>
+          <div style={{ width: 56, height: 3, background: "#916c3f", marginBottom: 22 }} />
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "#1a1630", marginBottom: 16 }}>La <strong>Fototeca Digital del Instituto Tecnológico de Zacatecas</strong> preserva, organiza y difunde el acervo fotográfico institucional: campus, eventos, edificios y comunidad académica.</p>
+          <p style={{ fontSize: 15, lineHeight: 1.8, color: "#1a1630", marginBottom: 20 }}>Imágenes en <strong>TIFF de alta resolución</strong>, distribuidas en JPG/WEBP. Datos en <strong>Supabase (PostgreSQL)</strong> con Storage CDN global.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(190px,1fr))", gap: 14 }}>
+            {[["RF-04 Visualización", "Zoom, pantalla completa, navegación"], ["RF-06 Filtros", "Año, lugar, autor, edificio, tipo, derechos"], ["RF-07 Metadatos", "Título, autor, año, lugar, fecha, keywords"], ["RF-08 Descarga", "Baja calidad con marca de agua"], ["RF-10 Videos", "Clips dentro de colecciones"], ["RF-12 Póster", "Vista expandida de fotos destacadas"], ["RNF-P-01 Responsivo", "Desktop, laptop, tablet, móvil"], ["RNF-L-03 Protección", "Clic derecho deshabilitado en imágenes"]].map(([t, d]) => (
+              <div key={t} style={{ background: "white", borderRadius: 12, padding: 18, border: "1px solid rgba(28,20,109,.08)" }}>
+                <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 15, color: "#1c146d", marginBottom: 5, fontWeight: 600 }}>{t}</div>
+                <div style={{ fontSize: 12, color: "#7a7590", lineHeight: 1.5 }}>{d}</div>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {page==="gallery"&&(
-        <div style={{maxWidth:1380,margin:"0 auto",padding:"22px 14px",display:"flex",gap:20}}>
-          <aside style={{width:215,flexShrink:0,position:"sticky",top:82,alignSelf:"flex-start",maxHeight:"calc(100vh - 100px)",overflowY:"auto"}}>
-            <div style={{background:"white",borderRadius:12,padding:18,border:"1px solid rgba(28,20,109,.08)"}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-                <span style={{fontSize:13,fontWeight:600,color:"#1c146d",display:"flex",alignItems:"center",gap:6}}>
-                  <Icon name="filter" size={12} color="#1c146d"/> Filtros
-                  {activeFilters>0&&<span style={{background:"#1c146d",color:"white",borderRadius:"50%",width:17,height:17,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9}}>{activeFilters}</span>}
+      {page === "gallery" && (
+        <div className="gallery-layout" style={{ maxWidth: 1380, margin: "0 auto", padding: "22px 14px", display: "flex", gap: 20 }}>
+          <div className={`filters-drawer-overlay${filtersDrawerOpen ? " open" : ""}`} onClick={() => setFiltersDrawerOpen(false)} />
+          <aside className={`filters-aside${filtersDrawerOpen ? " drawer-open" : ""}`} style={{ width: 215, flexShrink: 0, position: "sticky", top: 82, alignSelf: "flex-start", maxHeight: "calc(100vh - 100px)", overflowY: "auto" }}>
+            <div style={{ background: "white", borderRadius: 12, padding: 18, border: "1px solid rgba(28,20,109,.08)", minHeight: "100%" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#1c146d", display: "flex", alignItems: "center", gap: 6 }}>
+                  <Icon name="filter" size={12} color="#1c146d" /> Filtros
+                  {activeFilters > 0 && <span style={{ background: "#1c146d", color: "white", borderRadius: "50%", width: 17, height: 17, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9 }}>{activeFilters}</span>}
                 </span>
-                {activeFilters>0&&<button className="btn" onClick={()=>setFilters({years:[],places:[],authors:[],buildings:[],types:[],rights:[]})} style={{fontSize:11,color:"#c11720",background:"transparent"}}>Limpiar</button>}
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  {activeFilters > 0 && <button className="btn" onClick={() => setFilters({ years: [], places: [], authors: [], buildings: [], types: [], rights: [] })} style={{ fontSize: 11, color: "#c11720", background: "transparent" }}>Limpiar</button>}
+                  <button className="btn filters-btn-mobile" onClick={() => setFiltersDrawerOpen(false)} style={{ background: "transparent", padding: 2 }}><Icon name="x" size={16} color="#1c146d" /></button>
+                </div>
               </div>
-              <FilterGroup title="Año" cat="years" opts={filterOpts.years}/>
-              <FilterGroup title="Lugar" cat="places" opts={filterOpts.places}/>
-              <FilterGroup title="Autor" cat="authors" opts={filterOpts.authors}/>
-              <FilterGroup title="Edificio" cat="buildings" opts={filterOpts.buildings}/>
-              <FilterGroup title="Tipo" cat="types" opts={filterOpts.types}/>
-              <FilterGroup title="Derechos" cat="rights" opts={filterOpts.rights}/>
+              <FilterGroup title="Año" cat="years" opts={filterOpts.years} />
+              <FilterGroup title="Lugar" cat="places" opts={filterOpts.places} />
+              <FilterGroup title="Autor" cat="authors" opts={filterOpts.authors} />
+              <FilterGroup title="Edificio" cat="buildings" opts={filterOpts.buildings} />
+              <FilterGroup title="Tipo" cat="types" opts={filterOpts.types} />
+              <FilterGroup title="Derechos" cat="rights" opts={filterOpts.rights} />
             </div>
           </aside>
-          <main style={{flex:1,minWidth:0}}>
-            {view==="home"&&(
+          <main style={{ flex: 1, minWidth: 0 }}>
+            {view === "home" && (
               <>
-                <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18,flexWrap:"wrap",gap:8}}>
-                  <span style={{fontSize:13,color:"#7a7590"}}>
-                    {loading?"Cargando desde Supabase…":`${filtered.length} colección${filtered.length!==1?"es":""} encontrada${filtered.length!==1?"s":""}`}
-                    {activeFilters>0&&<span style={{marginLeft:8,color:"#916c3f",fontSize:12}}>({activeFilters} filtro{activeFilters!==1?"s":""} activo{activeFilters!==1?"s":""})</span>}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, flexWrap: "wrap", gap: 8 }}>
+                  <span style={{ fontSize: 13, color: "#7a7590" }}>
+                    {loading ? "Cargando desde Supabase…" : `${filtered.length} colección${filtered.length !== 1 ? "es" : ""} encontrada${filtered.length !== 1 ? "s" : ""}`}
+                    {activeFilters > 0 && <span style={{ marginLeft: 8, color: "#916c3f", fontSize: 12 }}>({activeFilters} filtro{activeFilters !== 1 ? "s" : ""} activo{activeFilters !== 1 ? "s" : ""})</span>}
                   </span>
-                  <div style={{display:"flex",gap:5}}>
-                    <button className="btn" onClick={fetchAll} style={{background:"#ebeeff",color:"#1c146d",padding:"7px",borderRadius:7}}><Icon name="refresh" size={14} color="#1c146d"/></button>
-                    <button className="btn" onClick={()=>setGridMode("grid")} style={{background:gridMode==="grid"?"#1c146d":"#ebeeff",color:gridMode==="grid"?"white":"#1c146d",padding:"7px",borderRadius:7}}><Icon name="grid" size={14} color={gridMode==="grid"?"white":"#1c146d"}/></button>
-                    <button className="btn" onClick={()=>setGridMode("list")} style={{background:gridMode==="list"?"#1c146d":"#ebeeff",color:gridMode==="list"?"white":"#1c146d",padding:"7px",borderRadius:7}}><Icon name="list" size={14} color={gridMode==="list"?"white":"#1c146d"}/></button>
+                  <div style={{ display: "flex", gap: 5 }}>
+                    <button className="btn filters-btn-mobile" onClick={() => setFiltersDrawerOpen(true)}
+                      style={{ background: activeFilters > 0 ? "#1c146d" : "#ebeeff", color: activeFilters > 0 ? "white" : "#1c146d", padding: "7px 11px", borderRadius: 7, alignItems: "center", gap: 6, fontSize: 12 }}>
+                      <Icon name="filter" size={13} color={activeFilters > 0 ? "white" : "#1c146d"} /> Filtros{activeFilters > 0 ? ` (${activeFilters})` : ""}
+                    </button>
+                    <button className="btn" onClick={fetchAll} style={{ background: "#ebeeff", color: "#1c146d", padding: "7px", borderRadius: 7 }}><Icon name="refresh" size={14} color="#1c146d" /></button>
+                    <button className="btn" onClick={() => setGridMode("grid")} style={{ background: gridMode === "grid" ? "#1c146d" : "#ebeeff", color: gridMode === "grid" ? "white" : "#1c146d", padding: "7px", borderRadius: 7 }}><Icon name="grid" size={14} color={gridMode === "grid" ? "white" : "#1c146d"} /></button>
+                    <button className="btn" onClick={() => setGridMode("list")} style={{ background: gridMode === "list" ? "#1c146d" : "#ebeeff", color: gridMode === "list" ? "white" : "#1c146d", padding: "7px", borderRadius: 7 }}><Icon name="list" size={14} color={gridMode === "list" ? "white" : "#1c146d"} /></button>
                   </div>
                 </div>
-                {loading?<Spinner/>:filtered.length===0?(
-                  <div style={{textAlign:"center",padding:"70px 20px",color:"#7a7590"}}>
-                    <Icon name="photo" size={44} color="#ebeeff"/>
-                    <div style={{fontSize:19,fontFamily:"'Cormorant Garamond',serif",color:"#1c146d",marginTop:14}}>Sin resultados</div>
-                    <div style={{fontSize:13,marginTop:5}}>Modifica los filtros o el término de búsqueda</div>
-                    <button className="btn" onClick={fetchAll} style={{marginTop:14,background:"#1c146d",color:"white",padding:"9px 22px",borderRadius:8,fontSize:13,display:"inline-flex",alignItems:"center",gap:7}}><Icon name="refresh" size={13} color="white"/> Recargar</button>
+                {loading ? <Spinner /> : filtered.length === 0 ? (
+                  <div style={{ textAlign: "center", padding: "70px 20px", color: "#7a7590" }}>
+                    <Icon name="photo" size={44} color="#ebeeff" />
+                    <div style={{ fontSize: 19, fontFamily: "'Cormorant Garamond',serif", color: "#1c146d", marginTop: 14 }}>Sin resultados</div>
+                    <div style={{ fontSize: 13, marginTop: 5 }}>Modifica los filtros o el término de búsqueda</div>
+                    <button className="btn" onClick={fetchAll} style={{ marginTop: 14, background: "#1c146d", color: "white", padding: "9px 22px", borderRadius: 8, fontSize: 13, display: "inline-flex", alignItems: "center", gap: 7 }}><Icon name="refresh" size={13} color="white" /> Recargar</button>
                   </div>
-                ):gridMode==="grid"?(
-                  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(270px,1fr))",gap:18}} className="fade-in">
-                    {filtered.map(col=><ColCard key={col.id} col={col} onClick={handleColClick}/>)}
+                ) : gridMode === "grid" ? (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(270px,1fr))", gap: 18 }} className="fade-in">
+                    {filtered.map(col => <ColCard key={col.id} col={col} onClick={handleColClick} />)}
                   </div>
-                ):(
-                  <div style={{display:"flex",flexDirection:"column",gap:10}} className="fade-in">
-                    {filtered.map(col=>(
-                      <div key={col.id} className="card-hover" onClick={()=>handleColClick(col)} style={{background:"white",borderRadius:12,overflow:"hidden",cursor:"pointer",display:"flex",border:"1px solid rgba(28,20,109,.08)"}}>
-                        <div className="img-zoom" style={{width:135,height:100,flexShrink:0,background:"#ebeeff",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                          {storageUrl(col.portada_url)?<img src={storageUrl(col.portada_url)} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}} onContextMenu={e=>e.preventDefault()}/>:<Icon name="photo" size={26} color="#7a7590"/>}
+                ) : (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }} className="fade-in">
+                    {filtered.map(col => (
+                      <div key={col.id} className="card-hover" onClick={() => handleColClick(col)} style={{ background: "white", borderRadius: 12, overflow: "hidden", cursor: "pointer", display: "flex", border: "1px solid rgba(28,20,109,.08)" }}>
+                        <div className="img-zoom" style={{ width: 135, height: 100, flexShrink: 0, background: "#ebeeff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          {storageUrl(col.portada_url) ? <img src={storageUrl(col.portada_url)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onContextMenu={e => e.preventDefault()} /> : <Icon name="photo" size={26} color="#7a7590" />}
                         </div>
-                        <div style={{padding:"13px 17px",flex:1}}>
-                          <div style={{display:"flex",gap:7,alignItems:"flex-start",justifyContent:"space-between",flexWrap:"wrap"}}>
-                            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:17,color:"#1c146d",fontWeight:600}}>{col.titulo}</h3>
-                            {col.tipo&&<span className="poster-badge">{col.tipo}</span>}
+                        <div style={{ padding: "13px 17px", flex: 1 }}>
+                          <div style={{ display: "flex", gap: 7, alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap" }}>
+                            <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 17, color: "#1c146d", fontWeight: 600 }}>{col.titulo}</h3>
+                            {col.tipo && <span className="poster-badge">{col.tipo}</span>}
                           </div>
-                          <div style={{fontSize:11,color:"#7a7590",margin:"3px 0 7px",display:"flex",gap:8,flexWrap:"wrap"}}>
-                            {col.lugar&&<span>{col.lugar}</span>}{col.anio&&<><span>·</span><span>{col.anio}</span></>}{col.autor&&<><span>·</span><span style={{color:"#916c3f"}}>{col.autor}</span></>}
-                            <span>·</span><span>{col.fotos_reales||col.total_fotos||0} fotos</span>
-                            {col.edificio&&<><span>·</span><span>🏛 {col.edificio}</span></>}
+                          <div style={{ fontSize: 11, color: "#7a7590", margin: "3px 0 7px", display: "flex", gap: 8, flexWrap: "wrap" }}>
+                            {col.lugar && <span>{col.lugar}</span>}{col.anio && <><span>·</span><span>{col.anio}</span></>}{col.autor && <><span>·</span><span style={{ color: "#916c3f" }}>{col.autor}</span></>}
+                            <span>·</span><span>{col.fotos_reales || col.total_fotos || 0} fotos</span>
+                            {col.edificio && <><span>·</span><span>🏛 {col.edificio}</span></>}
                           </div>
-                          <p style={{fontSize:12,color:"#7a7590",lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{col.descripcion}</p>
+                          <p style={{ fontSize: 12, color: "#7a7590", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{col.descripcion}</p>
                         </div>
                       </div>
                     ))}
@@ -1004,43 +1131,48 @@ if (error) {
                 )}
               </>
             )}
-            {view==="collection"&&activeCol&&(
-              <ColView col={activeCol} fotos={fotos} videos={videos} loading={colLoading} onFotoClick={setLightbox} onBack={()=>{setView("home");setActiveCol(null);}}/>
+            {view === "collection" && activeCol && (
+              <ColView col={activeCol} fotos={fotos} videos={videos} loading={colLoading} onFotoClick={setLightbox} onBack={() => { setView("home"); setActiveCol(null); }} />
             )}
           </main>
         </div>
       )}
 
-      <footer style={{background:"#1c146d",color:"rgba(255,255,255,.5)",padding:"26px 22px",marginTop:44,textAlign:"center"}}>
-        <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:12,marginBottom:7}}>
-          <img src={LOGO_NAV} alt="ITZ" height="30" style={{objectFit:"contain",filter:"brightness(10) saturate(0)",opacity:.6}}/>
-          <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:15,color:"white"}}>Fototeca Digital · Instituto Tecnológico de Zacatecas</span>
+      <footer style={{ background: "#1c146d", color: "rgba(255,255,255,.5)", padding: "26px 22px", marginTop: 44, textAlign: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, marginBottom: 7 }}>
+          <img src={LOGO_NAV} alt="ITZ" height="30" style={{ objectFit: "contain", filter: "brightness(10) saturate(0)", opacity: .6 }} />
+          <span style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 15, color: "white" }}>Fototeca Digital · Instituto Tecnológico de Zacatecas</span>
         </div>
-        <div style={{fontSize:11}}>© {new Date().getFullYear()} · 50 Aniversario 1976–2026 · Las imágenes están protegidas por derechos de autor</div>
-        <div style={{marginTop:5,fontSize:10,color:"rgba(103,156,188,.35)"}}>Supabase · PostgreSQL · Storage CDN</div>
+        <div style={{ fontSize: 11 }}>© {new Date().getFullYear()} · 50 Aniversario 1976–2026 · Las imágenes están protegidas por derechos de autor</div>
+        <div style={{ marginTop: 5, fontSize: 10, color: "rgba(103,156,188,.35)" }}>Supabase · PostgreSQL · Storage CDN</div>
+        <button className="btn" onClick={() => setShowAdmin(true)}
+          onMouseEnter={e => { e.currentTarget.style.opacity = 1; e.currentTarget.style.background = "rgba(255,255,255,.08)"; e.currentTarget.style.borderColor = "rgba(255,255,255,.4)"; }}
+          onMouseLeave={e => { e.currentTarget.style.opacity = 0.12; e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "#1c146d"; }}
+          style={{ marginTop: 16, background: "transparent", color: "white", border: "1px solid #1c146d", padding: "6px 14px", borderRadius: 8, fontSize: 11, opacity: .12, transition: "opacity .35s ease, background .35s ease, border-color .35s ease", display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer" }}>
+          <Icon name="settings" size={12} color="white" /> Admin
+        </button>
       </footer>
-      <GobFooter />
 
-      {lightbox&&<Lightbox foto={lightbox} fotos={fotos} onClose={()=>setLightbox(null)} onNav={handleNav}/>}
+      {lightbox && <Lightbox foto={lightbox} fotos={fotos} onClose={() => setLightbox(null)} onNav={handleNav} />}
 
-      {showAdmin&&!adminOk&&(
-        <div style={{position:"fixed",inset:0,zIndex:900,background:"rgba(10,8,35,.8)",backdropFilter:"blur(4px)",display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <div style={{background:"white",borderRadius:16,padding:34,width:350,boxShadow:"0 30px 80px rgba(28,20,109,.3)",textAlign:"center"}}>
-            <img src={LOGO_BIG} alt="ITZ" height="70" style={{margin:"0 auto 14px",display:"block",objectFit:"contain"}}/>
-            <h3 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:21,color:"#1c146d",marginBottom:4}}>Acceso administrativo</h3>
-            <p style={{fontSize:12,color:"#7a7590",marginBottom:18}}>Fototeca ITZ · Supabase</p>
-            {passErr&&<div style={{background:"rgba(193,23,32,.08)",color:"#c11720",border:"1px solid rgba(193,23,32,.2)",borderRadius:8,padding:"7px 11px",fontSize:12,marginBottom:13}}>{passErr}</div>}
-            <input type="password" value={adminPass} onChange={e=>setAdminPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&tryLogin()}
-              placeholder="Contraseña de administrador" style={{...INP,textAlign:"center",marginBottom:14}}/>
-            <div style={{display:"flex",gap:7}}>
-              <button className="btn" onClick={()=>{setShowAdmin(false);setAdminPass("");setPassErr("");}} style={{flex:1,padding:"9px",border:"1.5px solid #ebeeff",borderRadius:8,fontSize:13,color:"#7a7590",background:"white"}}>Cancelar</button>
-              <button className="btn" onClick={tryLogin} style={{flex:1,padding:"9px",background:"#1c146d",color:"white",borderRadius:8,fontSize:13}}>Entrar</button>
+      {showAdmin && !adminOk && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(10,8,35,.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ background: "white", borderRadius: 16, padding: 34, width: 350, boxShadow: "0 30px 80px rgba(28,20,109,.3)", textAlign: "center" }}>
+            <img src={LOGO_BIG} alt="ITZ" height="70" style={{ margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
+            <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 21, color: "#1c146d", marginBottom: 4 }}>Acceso administrativo</h3>
+            <p style={{ fontSize: 12, color: "#7a7590", marginBottom: 18 }}>Fototeca ITZ · Supabase</p>
+            {passErr && <div style={{ background: "rgba(193,23,32,.08)", color: "#c11720", border: "1px solid rgba(193,23,32,.2)", borderRadius: 8, padding: "7px 11px", fontSize: 12, marginBottom: 13 }}>{passErr}</div>}
+            <input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
+              placeholder="Contraseña de administrador" style={{ ...INP, textAlign: "center", marginBottom: 14 }} />
+            <div style={{ display: "flex", gap: 7 }}>
+              <button className="btn" onClick={() => { setShowAdmin(false); setAdminPass(""); setPassErr(""); }} style={{ flex: 1, padding: "9px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, color: "#7a7590", background: "white" }}>Cancelar</button>
+              <button className="btn" onClick={tryLogin} style={{ flex: 1, padding: "9px", background: "#1c146d", color: "white", borderRadius: 8, fontSize: 13 }}>Entrar</button>
             </div>
           </div>
         </div>
       )}
-      {showAdmin&&adminOk&&(
-        <AdminPanel onClose={()=>{setShowAdmin(false);setAdminOk(false);setAdminPass("");}} onRefresh={fetchAll}/>
+      {showAdmin && adminOk && (
+        <AdminPanel onClose={() => { setShowAdmin(false); setAdminOk(false); setAdminPass(""); }} onRefresh={fetchAll} />
       )}
     </>
 
