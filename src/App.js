@@ -2,12 +2,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import GobFooter from "./components/GobFooter";
-import GobHeader from "./components/GobHeader";
 
 
-const SUPABASE_URL = "https://iqyytvzlsquwkeimtein.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxeXl0dnpsc3F1d2tlaW10ZWluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NDYyODEsImV4cCI6MjA5MDEyMjI4MX0.l-VPzdyKsYKVHrGxYG8_JwE97-ieAdIBLyh4jcBWj30";
+const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
+const SUPABASE_KEY = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Logos PNG transparentes — funcionan sobre cualquier fondo
@@ -737,10 +735,15 @@ export default function Fototeca() {
   const [filterOpts, setFilterOpts] = useState({ years: [], places: [], authors: [], buildings: [], types: [], rights: [] });
   const [loading, setLoading] = useState(true);
   const [colLoading, setColLoading] = useState(false);
+
+  /*CONFIGURACIÓN DE SEGURIDAD*/
   const [showAdmin, setShowAdmin] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
   const [adminPass, setAdminPass] = useState("");
-  const [adminOk, setAdminOk] = useState(false);
+  const [session, setSession] = useState(null);
   const [passErr, setPassErr] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
   const [sugerencias, setSugerencias] = useState([]);
   const [kwColIds, setKwColIds] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -788,7 +791,6 @@ export default function Fototeca() {
     setSugerencias([...new Set(sug)]);
     setLoading(false);
   }, []);
-
   useEffect(() => {
     if (!search.trim()) { setKwColIds(null); return; }
     const q = search.trim();
@@ -841,8 +843,13 @@ export default function Fototeca() {
     setVideos(prev => [...prev.filter(v => v.coleccion_id !== colId), ...(v || [])]);
     setColLoading(false);
   }, []);
-
+/*useEffect para escuchar la sesión */
   useEffect(() => { fetchAll(); }, []);
+  useEffect(() => {
+  supabase.auth.getSession().then(({ data }) => setSession(data.session));
+  const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+  return () => listener.subscription.unsubscribe();
+}, []);
 
   // RNF-L-03: deshabilitar clic derecho en imágenes
   useEffect(() => {
@@ -893,7 +900,14 @@ export default function Fototeca() {
   };
   const activeFilters = Object.values(filters).flat().length;
   const totalFotos = cols.reduce((a, c) => a + (c.fotos_reales || c.total_fotos || 0), 0);
-  const tryLogin = () => { if (adminPass === "admin123") { setAdminOk(true); setPassErr(""); } else setPassErr("Contraseña incorrecta"); };
+  /*ACCESO ADMIN */
+  const tryLogin = async () => {
+  setPassErr("");
+  setLoginLoading(true);
+  const { error } = await supabase.auth.signInWithPassword({ email: adminEmail, password: adminPass });
+  setLoginLoading(false);
+  if (error) setPassErr("Correo o contraseña incorrectos");
+};
 
   const FilterGroup = ({ title, cat, opts = [] }) => (
     <div style={{ marginBottom: 16 }}>
@@ -1155,25 +1169,27 @@ export default function Fototeca() {
 
       {lightbox && <Lightbox foto={lightbox} fotos={fotos} onClose={() => setLightbox(null)} onNav={handleNav} />}
 
-      {showAdmin && !adminOk && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(10,8,35,.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ background: "white", borderRadius: 16, padding: 34, width: 350, boxShadow: "0 30px 80px rgba(28,20,109,.3)", textAlign: "center" }}>
-            <img src={LOGO_BIG} alt="ITZ" height="70" style={{ margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
-            <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 21, color: "#1c146d", marginBottom: 4 }}>Acceso administrativo</h3>
-            <p style={{ fontSize: 12, color: "#7a7590", marginBottom: 18 }}>Fototeca ITZ · Supabase</p>
-            {passErr && <div style={{ background: "rgba(193,23,32,.08)", color: "#c11720", border: "1px solid rgba(193,23,32,.2)", borderRadius: 8, padding: "7px 11px", fontSize: 12, marginBottom: 13 }}>{passErr}</div>}
-            <input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
-              placeholder="Contraseña de administrador" style={{ ...INP, textAlign: "center", marginBottom: 14 }} />
-            <div style={{ display: "flex", gap: 7 }}>
-              <button className="btn" onClick={() => { setShowAdmin(false); setAdminPass(""); setPassErr(""); }} style={{ flex: 1, padding: "9px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, color: "#7a7590", background: "white" }}>Cancelar</button>
-              <button className="btn" onClick={tryLogin} style={{ flex: 1, padding: "9px", background: "#1c146d", color: "white", borderRadius: 8, fontSize: 13 }}>Entrar</button>
-            </div>
-          </div>
-        </div>
-      )}
-      {showAdmin && adminOk && (
-        <AdminPanel onClose={() => { setShowAdmin(false); setAdminOk(false); setAdminPass(""); }} onRefresh={fetchAll} />
-      )}
+      {showAdmin && !session && (
+  <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(10,8,35,.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ background: "white", borderRadius: 16, padding: 34, width: 350, boxShadow: "0 30px 80px rgba(28,20,109,.3)", textAlign: "center" }}>
+      <img src={LOGO_BIG} alt="ITZ" height="70" style={{ margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
+      <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 21, color: "#1c146d", marginBottom: 4 }}>Acceso administrativo</h3>
+      <p style={{ fontSize: 12, color: "#7a7590", marginBottom: 18 }}>Fototeca ITZ · Supabase</p>
+      {passErr && <div style={{ background: "rgba(193,23,32,.08)", color: "#c11720", border: "1px solid rgba(193,23,32,.2)", borderRadius: 8, padding: "7px 11px", fontSize: 12, marginBottom: 13 }}>{passErr}</div>}
+      <input type="email" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
+        placeholder="Correo de administrador" style={{ ...INP, textAlign: "center", marginBottom: 10 }} />
+      <input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
+        placeholder="Contraseña de administrador" style={{ ...INP, textAlign: "center", marginBottom: 14 }} />
+      <div style={{ display: "flex", gap: 7 }}>
+        <button className="btn" onClick={() => { setShowAdmin(false); setAdminEmail(""); setAdminPass(""); setPassErr(""); }} style={{ flex: 1, padding: "9px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, color: "#7a7590", background: "white" }}>Cancelar</button>
+        <button className="btn" onClick={tryLogin} disabled={loginLoading} style={{ flex: 1, padding: "9px", background: "#1c146d", color: "white", borderRadius: 8, fontSize: 13, opacity: loginLoading ? .6 : 1 }}>{loginLoading ? "Entrando…" : "Entrar"}</button>
+      </div>
+    </div>
+  </div>
+)}
+{showAdmin && session && (
+  <AdminPanel onClose={async () => { await supabase.auth.signOut(); setShowAdmin(false); setAdminEmail(""); setAdminPass(""); }} onRefresh={fetchAll} />
+)}
     </>
 
   );
