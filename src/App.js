@@ -337,8 +337,8 @@ function ColView({ col, fotos, videos, loading, onFotoClick, onBack }) {
         {cover ? <img src={cover} alt={col.titulo} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", background: "linear-gradient(135deg,#1c146d,#679cbc)" }} />}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,rgba(28,20,109,.85),rgba(28,20,109,.4))" }} />
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "28px 32px" }}>
-          <button className="btn" onClick={onBack} style={{ color: "#679cbc", background: "transparent", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 6, marginBottom: 14, width: "fit-content" }}>
-            <Icon name="chevL" size={13} color="#679cbc" /> Volver
+          <button className="btn" onClick={onBack} style={{ color: "white", background: "rgba(255,255,255,.15)", backdropFilter: "blur(8px)", fontSize: 12, letterSpacing: ".08em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 7, marginBottom: 14, width: "fit-content", padding: "8px 16px", borderRadius: 8, border: "1px solid rgba(255,255,255,.25)" }}>
+            <Icon name="chevL" size={14} color="white" /> Volver
           </button>
           {col.tipo && <span className="poster-badge" style={{ marginBottom: 10, width: "fit-content" }}>{col.tipo}</span>}
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(22px,4vw,36px)", color: "white", lineHeight: 1.1, marginBottom: 8 }}>{col.titulo}</h2>
