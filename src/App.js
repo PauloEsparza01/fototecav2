@@ -27,6 +27,7 @@ const CARRUSEL = [
 const GS = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
+  html{overflow-x:hidden}
   body{font-family:'DM Sans',sans-serif;background:#f2ebe3;color:#1a1630;overflow-x:hidden}
   ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#ebeeff}::-webkit-scrollbar-thumb{background:#1c146d;border-radius:3px}
   .fade-in{animation:fadeIn .5s ease forwards}
