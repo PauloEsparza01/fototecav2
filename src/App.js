@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 
-
+const UPLOAD_API_URL = process.env.REACT_APP_UPLOAD_API_URL;
 const SUPABASE_URL = process.env.REACT_APP_SUPABASE_URL;
 const SUPABASE_KEY = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -445,13 +445,17 @@ function AdminPanel({ onClose, onRefresh }) {
   }, []);
   useEffect(() => { load(); }, [load]);
   const uploadImg = async (file, folder = "fotos") => {
-    if (!file) return null;
-    const ext = file.name.split(".").pop().toLowerCase();
-    const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from("imagenes").upload(path, file, { upsert: true });
-    if (error) throw new Error(error.message);
-    return path;
-  };
+  if (!file) return null;
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch(`${UPLOAD_API_URL}?folder=${folder}`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) throw new Error("Error al subir la imagen al servidor");
+  const data = await res.json();
+  return data.url;
+};
   const doUpload = async () => {
     if (!upForm.titulo || !upForm.coleccion_id) return err("Título y colección requeridos");
     setSaving(true);
@@ -529,7 +533,11 @@ function AdminPanel({ onClose, onRefresh }) {
   };
   const delFoto = async foto => {
     if (!window.confirm("¿Eliminar esta fotografía?")) return;
-    if (foto.url_original) await supabase.storage.from("imagenes").remove([foto.url_original]).catch(() => { });
+    if (foto.url_original?.startsWith("http") && foto.url_original.includes("/uploads/")) {
+  await fetch(UPLOAD_API_URL, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: foto.url_original }) }).catch(() => {});
+} else if (foto.url_original) {
+  await supabase.storage.from("imagenes").remove([foto.url_original]).catch(() => {});
+}
     const { error } = await supabase.from("fotografias").delete().eq("id", foto.id);
     if (error) { err(error.message); } else { ok("Foto eliminada"); load(); onRefresh(); }
   };
