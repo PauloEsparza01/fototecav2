@@ -315,8 +315,16 @@ function ColCard({ col, onClick }) {
   );
 }
 
-function ColView({ col, fotos, videos, loading, onFotoClick, onBack }) {
-  const colFotos = fotos.filter(f => f.coleccion_id === col.id);
+function ColView({ col, fotos, videos, loading, onFotoClick, onBack, filters }) {
+  const colFotosAll = fotos.filter(f => f.coleccion_id === col.id);
+  const colFotos = colFotosAll.filter(f => (
+    (!filters.years.length || filters.years.includes(String(f.anio)))
+    && (!filters.places.length || filters.places.some(p => f.lugar?.includes(p)))
+    && (!filters.authors.length || filters.authors.includes(f.autor))
+    && (!filters.buildings.length || filters.buildings.includes(f.edificio))
+    && (!filters.types.length || filters.types.includes(col.tipo))
+    && (!filters.rights.length || filters.rights.includes(f.derechos || col.derechos))
+  ));
   const colVideos = (videos || []).filter(v => v.coleccion_id === col.id);
   const cover = storageUrl(col.portada_url);
   const [posterFoto, setPosterFoto] = useState(null);
@@ -344,7 +352,7 @@ function ColView({ col, fotos, videos, loading, onFotoClick, onBack }) {
           {col.tipo && <span className="poster-badge" style={{ marginBottom: 10, width: "fit-content" }}>{col.tipo}</span>}
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(22px,4vw,36px)", color: "white", lineHeight: 1.1, marginBottom: 8 }}>{col.titulo}</h2>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-            {[["Lugar", col.lugar], ["Año", col.anio], ["Autor", col.autor], ["Edificio", col.edificio], ["Fotos", col.fotos_reales || colFotos.length]].map(([k, v]) => v && (
+            {[["Lugar", col.lugar], ["Año", col.anio], ["Autor", col.autor], ["Edificio", col.edificio], ["Fotos", col.fotos_reales || colFotosAll.length]].map(([k, v]) => v && (
               <span key={k} style={{ fontSize: 12, color: "rgba(255,255,255,.75)" }}><span style={{ color: "#679cbc" }}>{k}:</span> {v}</span>
             ))}
           </div>
@@ -379,7 +387,7 @@ function ColView({ col, fotos, videos, loading, onFotoClick, onBack }) {
         </div>
       )}
       {loading ? <Spinner /> : colFotos.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "50px 20px", color: "#7a7590" }}><Icon name="photo" size={40} color="#ebeeff" /><div style={{ marginTop: 12, fontSize: 16, fontFamily: "'Cormorant Garamond',serif", color: "#1c146d" }}>Sin fotografías aún</div></div>
+        <div style={{ textAlign: "center", padding: "50px 20px", color: "#7a7590" }}><Icon name="photo" size={40} color="#ebeeff" /><div style={{ marginTop: 12, fontSize: 16, fontFamily: "'Cormorant Garamond',serif", color: "#1c146d" }}>{colFotosAll.length === 0 ? "Sin fotografías aún" : "Ninguna foto coincide con los filtros activos"}</div></div>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 14 }}>
           {colFotos.map(foto => {
@@ -1147,7 +1155,7 @@ export default function Fototeca() {
               </>
             )}
             {view === "collection" && activeCol && (
-              <ColView col={activeCol} fotos={fotos} videos={videos} loading={colLoading} onFotoClick={setLightbox} onBack={() => { setView("home"); setActiveCol(null); }} />
+              <ColView col={activeCol} fotos={fotos} videos={videos} loading={colLoading} onFotoClick={setLightbox} onBack={() => { setView("home"); setActiveCol(null); }} filters={filters} />
             )}
           </main>
         </div>
