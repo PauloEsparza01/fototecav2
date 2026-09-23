@@ -256,56 +256,56 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
     }
   }, [descargaAbierta]);
   const prepararPreviewMarco = async (marco) => {
-    if (!src) return;
+  if (!src || !marco?.src) {
+    setPreviewMarco(null);
+    return;
+  }
 
-    try {
-      const [fotoRes, marcoRes] = await Promise.all([
-        fetch(src),
-        fetch(marco.src),
-      ]);
+  try {
+    // Limpiar vista previa anterior
+    setPreviewMarco(null);
 
-      const fotoBlob = await fotoRes.blob();
-      const marcoBlob = await marcoRes.blob();
+    const fotoImg = new Image();
+    const marcoImg = new Image();
 
-      const fotoUrl = URL.createObjectURL(fotoBlob);
-      const marcoUrl = URL.createObjectURL(marcoBlob);
+    fotoImg.crossOrigin = "anonymous";
+    marcoImg.crossOrigin = "anonymous";
 
-      const fotoImg = new Image();
-      const marcoImg = new Image();
-
-      fotoImg.onload = () => {
-        marcoImg.onload = () => {
-          setPreviewMarco({
-            fotoUrl,
-            marcoUrl,
-            fotoWidth: fotoImg.width,
-            fotoHeight: fotoImg.height,
-            marcoWidth: marcoImg.width,
-            marcoHeight: marcoImg.height,
-          });
-        };
-
-        marcoImg.onerror = () => {
-          URL.revokeObjectURL(fotoUrl);
-          URL.revokeObjectURL(marcoUrl);
-          alert("No se pudo cargar el marco seleccionado.");
-        };
-
-        marcoImg.src = marcoUrl;
+    fotoImg.onload = () => {
+      marcoImg.onload = () => {
+        setPreviewMarco({
+          fotoUrl: src,
+          marcoUrl: marco.src,
+          fotoWidth: fotoImg.naturalWidth,
+          fotoHeight: fotoImg.naturalHeight,
+          marcoWidth: marcoImg.naturalWidth,
+          marcoHeight: marcoImg.naturalHeight,
+        });
       };
 
-      fotoImg.onerror = () => {
-        URL.revokeObjectURL(fotoUrl);
-        URL.revokeObjectURL(marcoUrl);
-        alert("No se pudo cargar la fotografía.");
+      marcoImg.onerror = () => {
+        console.error("No se pudo cargar el marco:", marco.src);
+        setPreviewMarco(null);
+        alert("No se pudo cargar el marco seleccionado.");
       };
 
-      fotoImg.src = fotoUrl;
-    } catch (e) {
-      alert("Error al preparar la vista previa: " + e.message);
-    }
-  };
+      marcoImg.src = marco.src;
+    };
 
+    fotoImg.onerror = () => {
+      console.error("No se pudo cargar la fotografía:", src);
+      setPreviewMarco(null);
+      alert("No se pudo cargar esta fotografía para la vista previa.");
+    };
+
+    fotoImg.src = src;
+
+  } catch (e) {
+    console.error("Error al preparar vista previa:", e);
+    setPreviewMarco(null);
+    alert("Error al preparar la vista previa.");
+  }
+};
   const descargarConMarca = async () => {
   if (!src || !marcoSeleccionado) return;
 
