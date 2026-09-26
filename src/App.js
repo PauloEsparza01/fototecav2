@@ -99,7 +99,11 @@ const GS = `
 `;
 
 const INP = { width: "100%", padding: "9px 12px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, outline: "none", color: "#1a1630", background: "white" };
-const storageUrl = p => !p ? null : p.startsWith("http") ? p : `${SUPABASE_URL}/storage/v1/object/public/imagenes/${p}`;
+const storageUrl = p => {
+  if (!p) return null;
+  const url = p.startsWith("http") ? p : `${SUPABASE_URL}/storage/v1/object/public/imagenes/${p}`;
+  return url.replace(/^http:\/\//i, "https://");
+};
 const fmtDate = d => d ? new Date(d).toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" }) : "—";
 
 const Icon = ({ name, size = 18, color = "currentColor" }) => {
@@ -311,11 +315,14 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
 
   setDescargando(true);
 
-  try {
-    const [fotoRes, marcoRes] = await Promise.all([
-      fetch(src),
-      fetch(marcoSeleccionado.src),
-    ]);
+const srcHttps = src?.replace(/^http:\/\//i, "https://");
+const marcoHttps = marcoSeleccionado?.src?.replace(/^http:\/\//i, "https://");
+
+try {
+  const [fotoRes, marcoRes] = await Promise.all([
+    fetch(srcHttps),
+    fetch(marcoHttps),
+  ]);
 
     if (!fotoRes.ok) {
       throw new Error("No se pudo descargar la fotografía.");
