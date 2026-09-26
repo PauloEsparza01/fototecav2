@@ -68,6 +68,24 @@ const GS = `
   .filters-drawer-overlay{display:none}
   .filters-btn-mobile{display:none}
 
+    .lightbox-close-mobile{display:none}
+  @media (max-width:860px){
+    .lightbox-close-mobile{
+      display:flex !important;
+      position:fixed;
+      top:14px;
+      right:14px;
+      z-index:2000;
+      background:rgba(193,23,32,.95);
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 6px 20px rgba(0,0,0,.5);
+    }
+  }
+
   @media (max-width:860px){
     .nav-links{position:fixed;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:rgba(28,20,109,.98);backdrop-filter:blur(16px);max-height:0;overflow:hidden;transition:max-height .3s ease;z-index:99}
     .nav-links.open{max-height:300px;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -219,7 +237,29 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
   const [drag, setDrag] = useState(false);
   const [ds, setDs] = useState({ x: 0, y: 0 });
   const [descargando, setDescargando] = useState(false);
+    const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null);
 
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      setTouchStartX(e.touches[0].clientX);
+      setTouchStartY(e.touches[0].clientY);
+    }
+  };
+  const handleTouchEnd = (e) => {
+    if (touchStartX === null || zoom > 1) { setTouchStartX(null); setTouchStartY(null); return; }
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const dx = touchStartX - endX;
+    const dy = touchStartY - endY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+      onNav(dx > 0 ? 1 : -1);
+      setZoom(1);
+      setPos({ x: 0, y: 0 });
+    }
+    setTouchStartX(null);
+    setTouchStartY(null);
+  };
   const [descargaAbierta, setDescargaAbierta] = useState(false);
   const [marcoSeleccionado, setMarcoSeleccionado] = useState(MARCOS_DESCARGA[0]);
   const [previewMarco, setPreviewMarco] = useState(null);
@@ -451,6 +491,9 @@ try {
 };
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(10,8,35,.97)", display: "flex", flexDirection: "column" }} onContextMenu={e => e.preventDefault()}>
+      <button className="btn lightbox-close-mobile" onClick={onClose} aria-label="Cerrar">
+        <Icon name="close" size={22} color="white" />
+      </button>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 20px", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ color: "#679cbc", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase" }}>{idx + 1}/{colFotos.length}</span>
@@ -761,11 +804,13 @@ try {
           <button className="btn" onClick={onClose} style={{ background: "rgba(193,23,32,.3)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name="close" size={18} /></button>
         </div>
       </div>
-      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}
         onWheel={e => { e.preventDefault(); setZoom(z => Math.min(4, Math.max(1, z - e.deltaY * .002))); }}
         onMouseDown={e => { if (zoom > 1) { setDrag(true); setDs({ x: e.clientX - pos.x, y: e.clientY - pos.y }); } }}
         onMouseMove={e => { if (drag) setPos({ x: e.clientX - ds.x, y: e.clientY - ds.y }); }}
-        onMouseUp={() => setDrag(false)}>
+        onMouseUp={() => setDrag(false)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}>
         <button className="btn" onClick={() => { onNav(-1); setZoom(1); setPos({ x: 0, y: 0 }); }} style={{ position: "absolute", left: 14, zIndex: 10, background: "rgba(255,255,255,.1)", color: "white", padding: "11px", borderRadius: "50%", display: "flex" }}><Icon name="chevL" size={22} /></button>
         {src
           ? <img src={src} alt={foto.titulo} draggable={false} style={{ maxWidth: "90%", maxHeight: "80vh", objectFit: "contain", transform: `scale(${zoom}) translate(${pos.x / zoom}px,${pos.y / zoom}px)`, transition: drag ? "none" : ".2s", cursor: zoom > 1 ? "grab" : "zoom-in", userSelect: "none" }} onContextMenu={e => e.preventDefault()} />
@@ -1056,14 +1101,18 @@ function AdminPanel({ onClose, onRefresh }) {
     } catch (e) { err(e.message); }
     setSaving(false);
   };
-  const doSaveFoto = async () => {
+  
+    const doSaveFoto = async () => {
+    if (!editFoto.titulo?.trim() || !editFoto.coleccion_id) return err("Título y colección son obligatorios");
     setSaving(true);
     try {
       const { error } = await supabase.from("fotografias").update({
         titulo: editFoto.titulo, autor: editFoto.autor, anio: Number(editFoto.anio) || null,
         lugar: editFoto.lugar, descripcion: editFoto.descripcion, edificio: editFoto.edificio,
         tipo_archivo: editFoto.tipo_archivo, derechos: editFoto.derechos, descargable: editFoto.descargable,
+        coleccion_id: Number(editFoto.coleccion_id),
       }).eq("id", editFoto.id);
+
       if (error) throw new Error(error.message);
       if (editFoto.keywords !== undefined) {
         await supabase.from("keywords").delete().eq("fotografia_id", editFoto.id);
@@ -1238,8 +1287,9 @@ function AdminPanel({ onClose, onRefresh }) {
                     <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d" }}>Editar foto</h3>
                     <button className="btn" onClick={() => setEditFoto(null)} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                    <div style={{ gridColumn: "1/-1" }}><Field label="Título"><input value={editFoto.titulo || ""} onChange={e => setEditFoto(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                    <div style={{ gridColumn: "1/-1" }}><Field label="Título *"><input value={editFoto.titulo || ""} onChange={e => setEditFoto(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
+                    <div style={{ gridColumn: "1/-1" }}><Field label="Colección *"><select value={editFoto.coleccion_id || ""} onChange={e => setEditFoto(f => ({ ...f, coleccion_id: e.target.value }))} style={sel}><option value="">— Selecciona —</option>{cols.map(c => <option key={c.id} value={c.id}>{c.titulo}</option>)}</select></Field></div>
                     <Field label="Autor"><input value={editFoto.autor || ""} onChange={e => setEditFoto(f => ({ ...f, autor: e.target.value }))} style={INP} /></Field>
                     <Field label="Año"><input type="number" value={editFoto.anio || ""} onChange={e => setEditFoto(f => ({ ...f, anio: e.target.value }))} style={INP} /></Field>
                     <Field label="Lugar"><input value={editFoto.lugar || ""} onChange={e => setEditFoto(f => ({ ...f, lugar: e.target.value }))} style={INP} /></Field>
