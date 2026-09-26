@@ -68,23 +68,33 @@ const GS = `
   .filters-drawer-overlay{display:none}
   .filters-btn-mobile{display:none}
 
-    .lightbox-close-mobile{display:none}
-  @media (max-width:860px){
-    .lightbox-close-mobile{
-      display:flex !important;
-      position:fixed;
-      top:14px;
-      right:14px;
-      z-index:2000;
-      background:rgba(193,23,32,.95);
-      width:46px;
-      height:46px;
-      border-radius:50%;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 6px 20px rgba(0,0,0,.5);
-    }
+    /* Panel de descarga */
+.download-menu {
+  width: 360px;
+}
+
+/* CELULAR */
+@media (max-width: 600px) {
+  .download-menu {
+    position: fixed !important;
+
+    left: 10px !important;
+    right: 10px !important;
+
+    top: 70px !important;
+
+    width: auto !important;
+    max-width: none !important;
+
+    max-height: calc(100dvh - 90px);
+
+    overflow-y: auto;
+
+    box-sizing: border-box;
+
+    border-radius: 14px;
   }
+}
 
   @media (max-width:860px){
     .nav-links{position:fixed;top:64px;left:0;right:0;flex-direction:column;gap:0;margin:0;background:rgba(28,20,109,.98);backdrop-filter:blur(16px);max-height:0;overflow:hidden;transition:max-height .3s ease;z-index:99}
@@ -491,15 +501,38 @@ try {
 };
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(10,8,35,.97)", display: "flex", flexDirection: "column" }} onContextMenu={e => e.preventDefault()}>
-      <button className="btn lightbox-close-mobile" onClick={onClose} aria-label="Cerrar">
-        <Icon name="close" size={22} color="white" />
-      </button>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 20px", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    minWidth: 0,
+    flex: 1
+  }}
+>
           <span style={{ color: "#679cbc", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase" }}>{idx + 1}/{colFotos.length}</span>
-          <span style={{ color: "white", fontFamily: "'Cormorant Garamond',serif", fontSize: 17 }}>{foto.titulo}</span>
+      <span
+  style={{
+    color: "white",
+    fontFamily: "'Cormorant Garamond',serif",
+    fontSize: 17,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap"
+  }}
+>
+  {foto.titulo}
+</span>
         </div>
-        <div style={{ display: "flex", gap: 7 }}>
+        <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 7,
+    flexShrink: 0
+  }}
+>
           {[["zoomIn", () => setZoom(z => Math.min(4, z + .5))], ["zoomOut", () => setZoom(z => Math.max(1, z - .5))], ["info", () => setMeta(v => !v)]].map(([n, fn]) => (
             <button key={n} className="btn" onClick={fn} style={{ background: n === "info" && meta ? "rgba(103,156,188,.3)" : "rgba(255,255,255,.08)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name={n} size={15} /></button>
           ))}
@@ -547,21 +580,23 @@ try {
 
     {descargaAbierta && (
       <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: "absolute",
-          top: "calc(100% + 10px)",
-          right: 0,
-          width: 360,
-          maxWidth: "calc(100vw - 30px)",
-          background: "white",
-          borderRadius: 14,
-          padding: 15,
-          boxShadow: "0 18px 60px rgba(0,0,0,.35)",
-          border: "1px solid rgba(28,20,109,.12)",
-          zIndex: 10000,
-        }}
-      >
+  onClick={e => e.stopPropagation()}
+  className="download-menu"
+  style={{
+    position: "absolute",
+    top: "calc(100% + 10px)",
+    right: 0,
+    width: 360,
+    maxWidth: "calc(100vw - 30px)",
+    background: "white",
+    borderRadius: 14,
+    padding: 15,
+    boxShadow: "0 18px 60px rgba(0,0,0,.35)",
+    border: "1px solid rgba(28,20,109,.12)",
+    zIndex: 10000,
+    boxSizing: "border-box",
+  }}
+>
 
         {/* TÍTULO */}
         <div style={{ marginBottom: 12 }}>
