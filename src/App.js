@@ -247,7 +247,7 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
   const [drag, setDrag] = useState(false);
   const [ds, setDs] = useState({ x: 0, y: 0 });
   const [descargando, setDescargando] = useState(false);
-    const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartX, setTouchStartX] = useState(null);
   const [touchStartY, setTouchStartY] = useState(null);
 
   const handleTouchStart = (e) => {
@@ -277,7 +277,7 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
   const colFotos = fotos.filter(f => f.coleccion_id === foto.coleccion_id);
   const idx = colFotos.findIndex(f => f.id === foto.id);
   const src = storageUrl(foto.url_web || foto.url_original);
-     useEffect(() => {
+  useEffect(() => {
     const h = e => {
       if (e.key === "Escape") onClose();
 
@@ -310,536 +310,536 @@ function Lightbox({ foto, fotos, onClose, onNav }) {
     }
   }, [descargaAbierta]);
   const prepararPreviewMarco = async (marco) => {
-  if (!src || !marco?.src) {
-    setPreviewMarco(null);
-    return;
-  }
-
-  try {
-    // Limpiar vista previa anterior
-    setPreviewMarco(null);
-
-    const fotoImg = new Image();
-    const marcoImg = new Image();
-
-    fotoImg.crossOrigin = "anonymous";
-    marcoImg.crossOrigin = "anonymous";
-
-    fotoImg.onload = () => {
-      marcoImg.onload = () => {
-        setPreviewMarco({
-          fotoUrl: src,
-          marcoUrl: marco.src,
-          fotoWidth: fotoImg.naturalWidth,
-          fotoHeight: fotoImg.naturalHeight,
-          marcoWidth: marcoImg.naturalWidth,
-          marcoHeight: marcoImg.naturalHeight,
-        });
-      };
-
-      marcoImg.onerror = () => {
-        console.error("No se pudo cargar el marco:", marco.src);
-        setPreviewMarco(null);
-        alert("No se pudo cargar el marco seleccionado.");
-      };
-
-      marcoImg.src = marco.src;
-    };
-
-    fotoImg.onerror = () => {
-      console.error("No se pudo cargar la fotografía:", src);
+    if (!src || !marco?.src) {
       setPreviewMarco(null);
-      alert("No se pudo cargar esta fotografía para la vista previa.");
-    };
-
-    fotoImg.src = src;
-
-  } catch (e) {
-    console.error("Error al preparar vista previa:", e);
-    setPreviewMarco(null);
-    alert("Error al preparar la vista previa.");
-  }
-};
-  const descargarConMarca = async () => {
-  if (!src || !marcoSeleccionado) return;
-
-  setDescargando(true);
-
-const srcHttps = src?.replace(/^http:\/\//i, "https://");
-const marcoHttps = marcoSeleccionado?.src?.replace(/^http:\/\//i, "https://");
-
-try {
-  const [fotoRes, marcoRes] = await Promise.all([
-    fetch(srcHttps),
-    fetch(marcoHttps),
-  ]);
-
-    if (!fotoRes.ok) {
-      throw new Error("No se pudo descargar la fotografía.");
+      return;
     }
 
-    if (!marcoRes.ok) {
-      throw new Error("No se pudo cargar el marco seleccionado.");
-    }
+    try {
+      // Limpiar vista previa anterior
+      setPreviewMarco(null);
 
-    const fotoBlob = await fotoRes.blob();
-    const marcoBlob = await marcoRes.blob();
+      const fotoImg = new Image();
+      const marcoImg = new Image();
 
-    const fotoUrl = URL.createObjectURL(fotoBlob);
-    const marcoUrl = URL.createObjectURL(marcoBlob);
+      fotoImg.crossOrigin = "anonymous";
+      marcoImg.crossOrigin = "anonymous";
 
-    const img = new Image();
-    const marco = new Image();
+      fotoImg.onload = () => {
+        marcoImg.onload = () => {
+          setPreviewMarco({
+            fotoUrl: src,
+            marcoUrl: marco.src,
+            fotoWidth: fotoImg.naturalWidth,
+            fotoHeight: fotoImg.naturalHeight,
+            marcoWidth: marcoImg.naturalWidth,
+            marcoHeight: marcoImg.naturalHeight,
+          });
+        };
 
-    img.onload = () => {
-      marco.onload = () => {
-        const canvas = document.createElement("canvas");
+        marcoImg.onerror = () => {
+          console.error("No se pudo cargar el marco:", marco.src);
+          setPreviewMarco(null);
+          alert("No se pudo cargar el marco seleccionado.");
+        };
 
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-
-        const ctx = canvas.getContext("2d");
-
-        if (!ctx) {
-          throw new Error("No se pudo crear el canvas.");
-        }
-
-        // Fotografía
-        ctx.drawImage(
-          img,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
-
-        // Marco institucional
-        ctx.drawImage(
-          marco,
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
-
-        canvas.toBlob(
-          (blobFinal) => {
-            if (!blobFinal) {
-              throw new Error(
-                "No se pudo generar la imagen final."
-              );
-            }
-
-            const urlFinal =
-              URL.createObjectURL(blobFinal);
-
-            const a =
-              document.createElement("a");
-
-            a.href = urlFinal;
-
-            a.download =
-              (foto.titulo || "imagen") +
-              "_" +
-              marcoSeleccionado.id +
-              "_ITZ.jpg";
-
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-
-            // Limpiar memoria
-            URL.revokeObjectURL(urlFinal);
-            URL.revokeObjectURL(fotoUrl);
-            URL.revokeObjectURL(marcoUrl);
-
-            setDescargando(false);
-            setDescargaAbierta(false);
-          },
-          "image/jpeg",
-          0.92
-        );
+        marcoImg.src = marco.src;
       };
 
-      marco.onerror = () => {
+      fotoImg.onerror = () => {
+        console.error("No se pudo cargar la fotografía:", src);
+        setPreviewMarco(null);
+        alert("No se pudo cargar esta fotografía para la vista previa.");
+      };
+
+      fotoImg.src = src;
+
+    } catch (e) {
+      console.error("Error al preparar vista previa:", e);
+      setPreviewMarco(null);
+      alert("Error al preparar la vista previa.");
+    }
+  };
+  const descargarConMarca = async () => {
+    if (!src || !marcoSeleccionado) return;
+
+    setDescargando(true);
+
+    const srcHttps = src?.replace(/^http:\/\//i, "https://");
+    const marcoHttps = marcoSeleccionado?.src?.replace(/^http:\/\//i, "https://");
+
+    try {
+      const [fotoRes, marcoRes] = await Promise.all([
+        fetch(srcHttps),
+        fetch(marcoHttps),
+      ]);
+
+      if (!fotoRes.ok) {
+        throw new Error("No se pudo descargar la fotografía.");
+      }
+
+      if (!marcoRes.ok) {
+        throw new Error("No se pudo cargar el marco seleccionado.");
+      }
+
+      const fotoBlob = await fotoRes.blob();
+      const marcoBlob = await marcoRes.blob();
+
+      const fotoUrl = URL.createObjectURL(fotoBlob);
+      const marcoUrl = URL.createObjectURL(marcoBlob);
+
+      const img = new Image();
+      const marco = new Image();
+
+      img.onload = () => {
+        marco.onload = () => {
+          const canvas = document.createElement("canvas");
+
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+
+          const ctx = canvas.getContext("2d");
+
+          if (!ctx) {
+            throw new Error("No se pudo crear el canvas.");
+          }
+
+          // Fotografía
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          // Marco institucional
+          ctx.drawImage(
+            marco,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          canvas.toBlob(
+            (blobFinal) => {
+              if (!blobFinal) {
+                throw new Error(
+                  "No se pudo generar la imagen final."
+                );
+              }
+
+              const urlFinal =
+                URL.createObjectURL(blobFinal);
+
+              const a =
+                document.createElement("a");
+
+              a.href = urlFinal;
+
+              a.download =
+                (foto.titulo || "imagen") +
+                "_" +
+                marcoSeleccionado.id +
+                "_ITZ.jpg";
+
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+
+              // Limpiar memoria
+              URL.revokeObjectURL(urlFinal);
+              URL.revokeObjectURL(fotoUrl);
+              URL.revokeObjectURL(marcoUrl);
+
+              setDescargando(false);
+              setDescargaAbierta(false);
+            },
+            "image/jpeg",
+            0.92
+          );
+        };
+
+        marco.onerror = () => {
+          URL.revokeObjectURL(fotoUrl);
+          URL.revokeObjectURL(marcoUrl);
+
+          setDescargando(false);
+
+          alert(
+            "No se pudo cargar el marco seleccionado."
+          );
+        };
+
+        marco.src = marcoUrl;
+      };
+
+      img.onerror = () => {
         URL.revokeObjectURL(fotoUrl);
         URL.revokeObjectURL(marcoUrl);
 
         setDescargando(false);
 
         alert(
-          "No se pudo cargar el marco seleccionado."
+          "No se pudo cargar la fotografía."
         );
       };
 
-      marco.src = marcoUrl;
-    };
+      img.src = fotoUrl;
 
-    img.onerror = () => {
-      URL.revokeObjectURL(fotoUrl);
-      URL.revokeObjectURL(marcoUrl);
+    } catch (e) {
+      console.error(e);
 
       setDescargando(false);
 
       alert(
-        "No se pudo cargar la fotografía."
+        "Error al preparar la descarga: " +
+        e.message
       );
-    };
-
-    img.src = fotoUrl;
-
-  } catch (e) {
-    console.error(e);
-
-    setDescargando(false);
-
-    alert(
-      "Error al preparar la descarga: " +
-      e.message
-    );
-  }
-};
+    }
+  };
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, background: "rgba(10,8,35,.97)", display: "flex", flexDirection: "column" }} onContextMenu={e => e.preventDefault()}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 20px", borderBottom: "1px solid rgba(255,255,255,.08)" }}>
         <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-    minWidth: 0,
-    flex: 1
-  }}
->
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            minWidth: 0,
+            flex: 1
+          }}
+        >
           <span style={{ color: "#679cbc", fontSize: 11, letterSpacing: ".1em", textTransform: "uppercase" }}>{idx + 1}/{colFotos.length}</span>
-      <span
-  style={{
-    color: "white",
-    fontFamily: "'Cormorant Garamond',serif",
-    fontSize: 17,
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
-  }}
->
-  {foto.titulo}
-</span>
-        </div>
-        <div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: 7,
-    flexShrink: 0
-  }}
->
-          {[["zoomIn", () => setZoom(z => Math.min(4, z + .5))], ["zoomOut", () => setZoom(z => Math.max(1, z - .5))], ["info", () => setMeta(v => !v)]].map(([n, fn]) => (
-            <button key={n} className="btn" onClick={fn} style={{ background: n === "info" && meta ? "rgba(103,156,188,.3)" : "rgba(255,255,255,.08)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name={n} size={15} /></button>
-          ))}
-          {foto.descargable && (
-  <div style={{ position: "relative" }}>
-
-    {/* BOTÓN PRINCIPAL */}
-    <button
-      className="btn"
-      onClick={() => setDescargaAbierta(v => !v)}
-      disabled={descargando}
-      style={{
-        background: "rgba(145,108,63,.4)",
-        color: "white",
-        padding: "7px 12px",
-        borderRadius: 8,
-        fontSize: 12,
-        display: "flex",
-        alignItems: "center",
-        gap: 7,
-        fontWeight: 500,
-        opacity: descargando ? .6 : 1,
-      }}
-    >
-      {descargando ? (
-        <Spinner small />
-      ) : (
-        <Icon name="dl" size={14} />
-      )}
-
-      {descargando ? "Generando…" : "Descargar"}
-
-      {!descargando && (
-        <span
-          style={{
-            fontSize: 9,
-            opacity: .7,
-            marginLeft: 2,
-          }}
-        >
-          ▾
-        </span>
-      )}
-    </button>
-
-    {descargaAbierta && (
-      <div
-  onClick={e => e.stopPropagation()}
-  className="download-menu"
-  style={{
-    position: "absolute",
-    top: "calc(100% + 10px)",
-    right: 0,
-    width: 360,
-    maxWidth: "calc(100vw - 30px)",
-    background: "white",
-    borderRadius: 14,
-    padding: 15,
-    boxShadow: "0 18px 60px rgba(0,0,0,.35)",
-    border: "1px solid rgba(28,20,109,.12)",
-    zIndex: 10000,
-    boxSizing: "border-box",
-  }}
->
-
-        {/* TÍTULO */}
-        <div style={{ marginBottom: 12 }}>
-          <div
+          <span
             style={{
+              color: "white",
               fontFamily: "'Cormorant Garamond',serif",
-              color: "#1c146d",
-              fontSize: 18,
-              fontWeight: 600,
+              fontSize: 17,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap"
             }}
           >
-            Elige un marco
-          </div>
-
-          <div
-            style={{
-              fontSize: 11,
-              color: "#7a7590",
-              marginTop: 3,
-            }}
-          >
-            Selecciona el diseño que llevará la fotografía descargada.
-          </div>
-        </div>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 8,
-            marginBottom: 14,
-          }}
-        >
-          {MARCOS_DESCARGA.map(marco => (
-            <button
-              key={marco.id}
-              className="btn"
-              onClick={() => {
-                setMarcoSeleccionado(marco);
-                prepararPreviewMarco(marco);
-              }}
-              style={{
-                background:
-                  marcoSeleccionado.id === marco.id
-                    ? "#ebeeff"
-                    : "#f7f7fa",
-
-                border:
-                  marcoSeleccionado.id === marco.id
-                    ? "2px solid #1c146d"
-                    : "1px solid rgba(28,20,109,.08)",
-
-                borderRadius: 9,
-                padding: 7,
-                cursor: "pointer",
-                textAlign: "left",
-              }}
-            >
-
-              <div
-                style={{
-                  width: "100%",
-                  aspectRatio: "16 / 10",
-                  background: "#e8e8ee",
-                  borderRadius: 6,
-                  overflow: "hidden",
-                  marginBottom: 6,
-                  position: "relative",
-                }}
-              >
-                <img
-                  src={marco.src}
-                  alt={marco.nombre}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "fill",
-                    display: "block",
-                  }}
-                />
-              </div>
-
-              <div
-                style={{
-                  fontSize: 10,
-                  color:
-                    marcoSeleccionado.id === marco.id
-                      ? "#1c146d"
-                      : "#7a7590",
-                  textAlign: "center",
-                  fontWeight:
-                    marcoSeleccionado.id === marco.id
-                      ? 600
-                      : 400,
-                }}
-              >
-                {marco.nombre}
-              </div>
-
-            </button>
-          ))}
-        </div>
-
-        <div
-          style={{
-            fontSize: 10,
-            color: "#7a7590",
-            textTransform: "uppercase",
-            letterSpacing: ".08em",
-            marginBottom: 7,
-            fontWeight: 600,
-          }}
-        >
-          Vista previa
-        </div>
-
-
-        <div
-          style={{
-            width: "100%",
-            aspectRatio: previewMarco
-              ? `${previewMarco.fotoWidth} / ${previewMarco.fotoHeight}`
-              : "16 / 10",
-            background: "#151515",
-            borderRadius: 9,
-            overflow: "hidden",
-            position: "relative",
-            marginBottom: 12,
-          }}
-        >
-
-          {previewMarco ? (
-            <>
-              <img
-                src={previewMarco.fotoUrl}
-                alt=""
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "fill",
-                  display: "block",
-                }}
-              />
-              <img
-                src={previewMarco.marcoUrl}
-                alt=""
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "fill",
-                  display: "block",
-                  pointerEvents: "none",
-                }}
-              />
-            </>
-          ) : (
-            <div
-              style={{
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "rgba(255,255,255,.45)",
-                fontSize: 11,
-              }}
-            >
-              Selecciona un marco para ver la vista previa
-            </div>
-          )}
-
+            {foto.titulo}
+          </span>
         </div>
         <div
           style={{
             display: "flex",
-            gap: 8,
+            alignItems: "center",
+            gap: 7,
+            flexShrink: 0
           }}
         >
+          {[["zoomIn", () => setZoom(z => Math.min(4, z + .5))], ["zoomOut", () => setZoom(z => Math.max(1, z - .5))], ["info", () => setMeta(v => !v)]].map(([n, fn]) => (
+            <button key={n} className="btn" onClick={fn} style={{ background: n === "info" && meta ? "rgba(103,156,188,.3)" : "rgba(255,255,255,.08)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name={n} size={15} /></button>
+          ))}
+          {foto.descargable && (
+            <div style={{ position: "relative" }}>
 
-          <button
-            className="btn"
-            onClick={() => {
-              setDescargaAbierta(false);
-              setPreviewMarco(null);
-            }}
-            style={{
-              flex: 1,
-              background: "#f3f3f7",
-              color: "#7a7590",
-              padding: "9px 12px",
-              borderRadius: 8,
-              fontSize: 11,
-            }}
-          >
-            Cancelar
-          </button>
+              {/* BOTÓN PRINCIPAL */}
+              <button
+                className="btn"
+                onClick={() => setDescargaAbierta(v => !v)}
+                disabled={descargando}
+                style={{
+                  background: "rgba(145,108,63,.4)",
+                  color: "white",
+                  padding: "7px 12px",
+                  borderRadius: 8,
+                  fontSize: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 7,
+                  fontWeight: 500,
+                  opacity: descargando ? .6 : 1,
+                }}
+              >
+                {descargando ? (
+                  <Spinner small />
+                ) : (
+                  <Icon name="dl" size={14} />
+                )}
+
+                {descargando ? "Generando…" : "Descargar"}
+
+                {!descargando && (
+                  <span
+                    style={{
+                      fontSize: 9,
+                      opacity: .7,
+                      marginLeft: 2,
+                    }}
+                  >
+                    ▾
+                  </span>
+                )}
+              </button>
+
+              {descargaAbierta && (
+                <div
+                  onClick={e => e.stopPropagation()}
+                  className="download-menu"
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 10px)",
+                    right: 0,
+                    width: 360,
+                    maxWidth: "calc(100vw - 30px)",
+                    background: "white",
+                    borderRadius: 14,
+                    padding: 15,
+                    boxShadow: "0 18px 60px rgba(0,0,0,.35)",
+                    border: "1px solid rgba(28,20,109,.12)",
+                    zIndex: 10000,
+                    boxSizing: "border-box",
+                  }}
+                >
+
+                  {/* TÍTULO */}
+                  <div style={{ marginBottom: 12 }}>
+                    <div
+                      style={{
+                        fontFamily: "'Cormorant Garamond',serif",
+                        color: "#1c146d",
+                        fontSize: 18,
+                        fontWeight: 600,
+                      }}
+                    >
+                      Elige un marco
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#7a7590",
+                        marginTop: 3,
+                      }}
+                    >
+                      Selecciona el diseño que llevará la fotografía descargada.
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(3, 1fr)",
+                      gap: 8,
+                      marginBottom: 14,
+                    }}
+                  >
+                    {MARCOS_DESCARGA.map(marco => (
+                      <button
+                        key={marco.id}
+                        className="btn"
+                        onClick={() => {
+                          setMarcoSeleccionado(marco);
+                          prepararPreviewMarco(marco);
+                        }}
+                        style={{
+                          background:
+                            marcoSeleccionado.id === marco.id
+                              ? "#ebeeff"
+                              : "#f7f7fa",
+
+                          border:
+                            marcoSeleccionado.id === marco.id
+                              ? "2px solid #1c146d"
+                              : "1px solid rgba(28,20,109,.08)",
+
+                          borderRadius: 9,
+                          padding: 7,
+                          cursor: "pointer",
+                          textAlign: "left",
+                        }}
+                      >
+
+                        <div
+                          style={{
+                            width: "100%",
+                            aspectRatio: "16 / 10",
+                            background: "#e8e8ee",
+                            borderRadius: 6,
+                            overflow: "hidden",
+                            marginBottom: 6,
+                            position: "relative",
+                          }}
+                        >
+                          <img
+                            src={marco.src}
+                            alt={marco.nombre}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "fill",
+                              display: "block",
+                            }}
+                          />
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: 10,
+                            color:
+                              marcoSeleccionado.id === marco.id
+                                ? "#1c146d"
+                                : "#7a7590",
+                            textAlign: "center",
+                            fontWeight:
+                              marcoSeleccionado.id === marco.id
+                                ? 600
+                                : 400,
+                          }}
+                        >
+                          {marco.nombre}
+                        </div>
+
+                      </button>
+                    ))}
+                  </div>
+
+                  <div
+                    style={{
+                      fontSize: 10,
+                      color: "#7a7590",
+                      textTransform: "uppercase",
+                      letterSpacing: ".08em",
+                      marginBottom: 7,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Vista previa
+                  </div>
 
 
-          <button
-            className="btn"
-            onClick={descargarConMarca}
-            disabled={descargando || !previewMarco}
-            style={{
-              flex: 1.4,
-              background:
-                "linear-gradient(135deg,#1c146d,#2e2580)",
-              color: "white",
-              padding: "9px 12px",
-              borderRadius: 8,
-              fontSize: 11,
-              fontWeight: 600,
-              opacity:
-                descargando || !previewMarco
-                  ? .55
-                  : 1,
-            }}
-          >
-            {descargando ? (
-              <>
-                <Spinner small />
-                Generando…
-              </>
-            ) : (
-              <>
-                <Icon name="dl" size={13} color="white" />
-                Descargar con este marco
-              </>
-            )}
-          </button>
+                  <div
+                    style={{
+                      width: "100%",
+                      aspectRatio: previewMarco
+                        ? `${previewMarco.fotoWidth} / ${previewMarco.fotoHeight}`
+                        : "16 / 10",
+                      background: "#151515",
+                      borderRadius: 9,
+                      overflow: "hidden",
+                      position: "relative",
+                      marginBottom: 12,
+                    }}
+                  >
 
-        </div>
+                    {previewMarco ? (
+                      <>
+                        <img
+                          src={previewMarco.fotoUrl}
+                          alt=""
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "fill",
+                            display: "block",
+                          }}
+                        />
+                        <img
+                          src={previewMarco.marcoUrl}
+                          alt=""
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "fill",
+                            display: "block",
+                            pointerEvents: "none",
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <div
+                        style={{
+                          height: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "rgba(255,255,255,.45)",
+                          fontSize: 11,
+                        }}
+                      >
+                        Selecciona un marco para ver la vista previa
+                      </div>
+                    )}
 
-      </div>
-    )}
-  </div>
-)}
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                    }}
+                  >
+
+                    <button
+                      className="btn"
+                      onClick={() => {
+                        setDescargaAbierta(false);
+                        setPreviewMarco(null);
+                      }}
+                      style={{
+                        flex: 1,
+                        background: "#f3f3f7",
+                        color: "#7a7590",
+                        padding: "9px 12px",
+                        borderRadius: 8,
+                        fontSize: 11,
+                      }}
+                    >
+                      Cancelar
+                    </button>
+
+
+                    <button
+                      className="btn"
+                      onClick={descargarConMarca}
+                      disabled={descargando || !previewMarco}
+                      style={{
+                        flex: 1.4,
+                        background:
+                          "linear-gradient(135deg,#1c146d,#2e2580)",
+                        color: "white",
+                        padding: "9px 12px",
+                        borderRadius: 8,
+                        fontSize: 11,
+                        fontWeight: 600,
+                        opacity:
+                          descargando || !previewMarco
+                            ? .55
+                            : 1,
+                      }}
+                    >
+                      {descargando ? (
+                        <>
+                          <Spinner small />
+                          Generando…
+                        </>
+                      ) : (
+                        <>
+                          <Icon name="dl" size={13} color="white" />
+                          Descargar con este marco
+                        </>
+                      )}
+                    </button>
+
+                  </div>
+
+                </div>
+              )}
+            </div>
+          )}
           <button className="btn" onClick={onClose} style={{ background: "rgba(193,23,32,.3)", color: "white", padding: "7px", borderRadius: 8 }}><Icon name="close" size={18} /></button>
         </div>
       </div>
-        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}
         onWheel={e => { e.preventDefault(); setZoom(z => Math.min(4, Math.max(1, z - e.deltaY * .002))); }}
         onMouseDown={e => { if (zoom > 1) { setDrag(true); setDs({ x: e.clientX - pos.x, y: e.clientY - pos.y }); } }}
         onMouseMove={e => { if (drag) setPos({ x: e.clientX - ds.x, y: e.clientY - ds.y }); }}
@@ -1018,76 +1018,76 @@ function AdminPanel({ onClose, onRefresh }) {
   const ok = msg => { setToast({ msg, type: "ok" }); setTimeout(() => setToast(null), 3500); };
   const err = msg => { setToast({ msg, type: "err" }); setTimeout(() => setToast(null), 4500); };
   const load = useCallback(async () => {
-  const [
-    { data: c },
-    { data: f },
-    { count: nc },
-    { count: nf }
-  ] = await Promise.all([
-    supabase
-      .from("v_colecciones")
-      .select("*")
-      .order("anio", { ascending: false }),
+    const [
+      { data: c },
+      { data: f },
+      { count: nc },
+      { count: nf }
+    ] = await Promise.all([
+      supabase
+        .from("v_colecciones")
+        .select("*")
+        .order("anio", { ascending: false }),
 
-    supabase
-      .from("v_fotografias")
-      .select("*")
-      .order("creado_en", { ascending: false }),
+      supabase
+        .from("v_fotografias")
+        .select("*")
+        .order("creado_en", { ascending: false }),
 
-    supabase
-      .from("colecciones")
-      .select("*", {
-        count: "exact",
-        head: true
-      }),
+      supabase
+        .from("colecciones")
+        .select("*", {
+          count: "exact",
+          head: true
+        }),
 
-    supabase
-      .from("fotografias")
-      .select("*", {
-        count: "exact",
-        head: true
-      })
-  ]);
+      supabase
+        .from("fotografias")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+    ]);
 
-  setCols(c || []);
-  setFotos(f || []);
+    setCols(c || []);
+    setFotos(f || []);
 
-  setStats({
-    colecciones: nc || 0,
-    fotografias: nf || 0
-  });
-}, []);
+    setStats({
+      colecciones: nc || 0,
+      fotografias: nf || 0
+    });
+  }, []);
   useEffect(() => { load(); }, [load]);
-  
+
   useEffect(() => {
-  const actualizarDescargas = () => {
-    load();
-  };
+    const actualizarDescargas = () => {
+      load();
+    };
 
-  window.addEventListener(
-    "descarga-realizada",
-    actualizarDescargas
-  );
-
-  return () => {
-    window.removeEventListener(
+    window.addEventListener(
       "descarga-realizada",
       actualizarDescargas
     );
-  };
-}, [load]);
+
+    return () => {
+      window.removeEventListener(
+        "descarga-realizada",
+        actualizarDescargas
+      );
+    };
+  }, [load]);
   const uploadImg = async (file, folder = "fotos") => {
-  if (!file) return null;
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await fetch(`${UPLOAD_API_URL}?folder=${folder}`, {
-    method: "POST",
-    body: formData,
-  });
-  if (!res.ok) throw new Error("Error al subir la imagen al servidor");
-  const data = await res.json();
-  return data.url;
-};
+    if (!file) return null;
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch(`${UPLOAD_API_URL}?folder=${folder}`, {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) throw new Error("Error al subir la imagen al servidor");
+    const data = await res.json();
+    return data.url;
+  };
   const doUpload = async () => {
     if (!upForm.titulo || !upForm.coleccion_id) return err("Título y colección requeridos");
     setSaving(true);
@@ -1136,8 +1136,8 @@ function AdminPanel({ onClose, onRefresh }) {
     } catch (e) { err(e.message); }
     setSaving(false);
   };
-  
-    const doSaveFoto = async () => {
+
+  const doSaveFoto = async () => {
     if (!editFoto.titulo?.trim() || !editFoto.coleccion_id) return err("Título y colección son obligatorios");
     setSaving(true);
     try {
@@ -1170,10 +1170,10 @@ function AdminPanel({ onClose, onRefresh }) {
   const delFoto = async foto => {
     if (!window.confirm("¿Eliminar esta fotografía?")) return;
     if (foto.url_original?.startsWith("http") && foto.url_original.includes("/uploads/")) {
-  await fetch(UPLOAD_API_URL, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: foto.url_original }) }).catch(() => {});
-} else if (foto.url_original) {
-  await supabase.storage.from("imagenes").remove([foto.url_original]).catch(() => {});
-}
+      await fetch(UPLOAD_API_URL, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ url: foto.url_original }) }).catch(() => { });
+    } else if (foto.url_original) {
+      await supabase.storage.from("imagenes").remove([foto.url_original]).catch(() => { });
+    }
     const { error } = await supabase.from("fotografias").delete().eq("id", foto.id);
     if (error) { err(error.message); } else { ok("Foto eliminada"); load(); onRefresh(); }
   };
@@ -1322,7 +1322,7 @@ function AdminPanel({ onClose, onRefresh }) {
                     <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d" }}>Editar foto</h3>
                     <button className="btn" onClick={() => setEditFoto(null)} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
                   </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     <div style={{ gridColumn: "1/-1" }}><Field label="Título *"><input value={editFoto.titulo || ""} onChange={e => setEditFoto(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
                     <div style={{ gridColumn: "1/-1" }}><Field label="Colección *"><select value={editFoto.coleccion_id || ""} onChange={e => setEditFoto(f => ({ ...f, coleccion_id: e.target.value }))} style={sel}><option value="">— Selecciona —</option>{cols.map(c => <option key={c.id} value={c.id}>{c.titulo}</option>)}</select></Field></div>
                     <Field label="Autor"><input value={editFoto.autor || ""} onChange={e => setEditFoto(f => ({ ...f, autor: e.target.value }))} style={INP} /></Field>
@@ -1402,6 +1402,8 @@ export default function Fototeca() {
   const [kwColIds, setKwColIds] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [filtersDrawerOpen, setFiltersDrawerOpen] = useState(false);
+  const [openGroups, setOpenGroups] = useState({});
+  const toggleGroup = cat => setOpenGroups(g => ({ ...g, [cat]: !g[cat] }));
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [placeholderVisible, setPlaceholderVisible] = useState(true);
 
@@ -1497,13 +1499,13 @@ export default function Fototeca() {
     setVideos(prev => [...prev.filter(v => v.coleccion_id !== colId), ...(v || [])]);
     setColLoading(false);
   }, []);
-/*useEffect para escuchar la sesión */
+  /*useEffect para escuchar la sesión */
   useEffect(() => { fetchAll(); }, []);
   useEffect(() => {
-  supabase.auth.getSession().then(({ data }) => setSession(data.session));
-  const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
-  return () => listener.subscription.unsubscribe();
-}, []);
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, s) => setSession(s));
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   // RNF-L-03: deshabilitar clic derecho en imágenes
   useEffect(() => {
@@ -1556,24 +1558,111 @@ export default function Fototeca() {
   const totalFotos = cols.reduce((a, c) => a + (c.fotos_reales || c.total_fotos || 0), 0);
   /*ACCESO ADMIN */
   const tryLogin = async () => {
-  setPassErr("");
-  setLoginLoading(true);
-  const { error } = await supabase.auth.signInWithPassword({ email: adminEmail, password: adminPass });
-  setLoginLoading(false);
-  if (error) setPassErr("Correo o contraseña incorrectos");
-};
+    setPassErr("");
+    setLoginLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email: adminEmail, password: adminPass });
+    setLoginLoading(false);
+    if (error) setPassErr("Correo o contraseña incorrectos");
+  };
 
-  const FilterGroup = ({ title, cat, opts = [] }) => (
-    <div style={{ marginBottom: 16 }}>
-      <div style={{ fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: "#7a7590", marginBottom: 7, fontWeight: 600 }}>{title}</div>
-      {opts.length === 0 ? <div style={{ fontSize: 11, color: "#ebeeff" }}>—</div> : opts.map(o => (
-        <div key={o} className="cb">
-          <input type="checkbox" id={`${cat}-${o}`} checked={filters[cat].includes(o)} onChange={() => toggleFilter(cat, o)} />
-          <label htmlFor={`${cat}-${o}`}>{o}</label>
-        </div>
-      ))}
-    </div>
-  );
+  const FilterGroup = ({ title, cat, opts = [] }) => {
+    const abierto = !!openGroups[cat];
+    const activos = filters[cat].length;
+
+    return (
+      <div style={{ borderBottom: "1px solid #ebeeff" }}>
+        <button
+          className="btn"
+          onClick={() => toggleGroup(cat)}
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            background: "transparent",
+            padding: "11px 0",
+            textAlign: "left",
+          }}
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#1c146d"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              flexShrink: 0,
+              transition: "transform .2s ease",
+              transform: abierto ? "rotate(180deg)" : "rotate(0deg)",
+            }}
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+
+          <span
+            style={{
+              flex: 1,
+              fontSize: 11,
+              letterSpacing: ".1em",
+              textTransform: "uppercase",
+              color: abierto ? "#1c146d" : "#7a7590",
+              fontWeight: 600,
+            }}
+          >
+            {title}
+          </span>
+
+          {activos > 0 && (
+            <span
+              style={{
+                background: "#1c146d",
+                color: "white",
+                borderRadius: "50%",
+                width: 17,
+                height: 17,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 9,
+              }}
+            >
+              {activos}
+            </span>
+          )}
+        </button>
+
+        {abierto && (
+          <div
+            className="fade-in"
+            style={{
+              padding: "2px 0 12px 17px",
+              maxHeight: 220,
+              overflowY: "auto",
+            }}
+          >
+            {opts.length === 0 ? (
+              <div style={{ fontSize: 11, color: "#7a7590" }}>—</div>
+            ) : (
+              opts.map(o => (
+                <div key={o} className="cb">
+                  <input
+                    type="checkbox"
+                    id={`${cat}-${o}`}
+                    checked={filters[cat].includes(o)}
+                    onChange={() => toggleFilter(cat, o)}
+                  />
+                  <label htmlFor={`${cat}-${o}`}>{o}</label>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -1722,356 +1811,356 @@ export default function Fototeca() {
           {/* ============================================
     EQUIPOS DEL PROYECTO
 ============================================ */}
-<div
-  style={{
-    marginTop: 34,
-    paddingTop: 26,
-    borderTop: "1px solid rgba(28,20,109,.10)",
-  }}
->
-  <div
-    style={{
-      textAlign: "center",
-      marginBottom: 28,
-    }}
-  >
-    <div
-      style={{
-        fontSize: 10,
-        color: "#916c3f",
-        letterSpacing: ".18em",
-        textTransform: "uppercase",
-        fontWeight: 600,
-        marginBottom: 6,
-      }}
-    >
-      Desarrollo y documentación del proyecto
-    </div>
+          <div
+            style={{
+              marginTop: 34,
+              paddingTop: 26,
+              borderTop: "1px solid rgba(28,20,109,.10)",
+            }}
+          >
+            <div
+              style={{
+                textAlign: "center",
+                marginBottom: 28,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 10,
+                  color: "#916c3f",
+                  letterSpacing: ".18em",
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                  marginBottom: 6,
+                }}
+              >
+                Desarrollo y documentación del proyecto
+              </div>
 
-    <h3
-      style={{
-        fontFamily: "'Cormorant Garamond',serif",
-        fontSize: 27,
-        color: "#1c146d",
-        margin: 0,
-      }}
-    >
-      Equipos del proyecto
-    </h3>
+              <h3
+                style={{
+                  fontFamily: "'Cormorant Garamond',serif",
+                  fontSize: 27,
+                  color: "#1c146d",
+                  margin: 0,
+                }}
+              >
+                Equipos del proyecto
+              </h3>
 
-    <p
-      style={{
-        fontSize: 13,
-        color: "#7a7590",
-        marginTop: 8,
-        marginBottom: 0,
-      }}
-    >
-      Dos equipos colaboraron en la creación y conformación de la Fototeca Digital.
-    </p>
-  </div>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: "#7a7590",
+                  marginTop: 8,
+                  marginBottom: 0,
+                }}
+              >
+                Dos equipos colaboraron en la creación y conformación de la Fototeca Digital.
+              </p>
+            </div>
 
-  {/* ============================================
+            {/* ============================================
       EQUIPO DE DESARROLLO
   ============================================ */}
-  <div style={{ marginBottom: 32 }}>
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        marginBottom: 16,
-      }}
-    >
-      <div
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 9,
-          background: "#1c146d",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          fontSize: 16,
-        }}
-      >
-        💻
-      </div>
+            <div style={{ marginBottom: 32 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 16,
+                }}
+              >
+                <div
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 9,
+                    background: "#1c146d",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: 16,
+                  }}
+                >
+                  💻
+                </div>
 
-      <div>
-        <div
-          style={{
-            fontFamily: "'Cormorant Garamond',serif",
-            fontSize: 22,
-            color: "#1c146d",
-            fontWeight: 600,
-          }}
-        >
-          Equipo de Desarrollo
-        </div>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: "'Cormorant Garamond',serif",
+                      fontSize: 22,
+                      color: "#1c146d",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Equipo de Desarrollo
+                  </div>
 
-        <div
-          style={{
-            fontSize: 11,
-            color: "#916c3f",
-          }}
-        >
-          5 integrantes · Diseño, desarrollo e implementación
-        </div>
-      </div>
-    </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "#916c3f",
+                    }}
+                  >
+                    5 integrantes · Diseño, desarrollo e implementación
+                  </div>
+                </div>
+              </div>
 
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))",
-        gap: 14,
-      }}
-    >
-      {[
-        {
-          iniciales: "AV",
-          nombre: "Ana Verónica Galván Santos",
-          rol: "Documentación y desarrollo",
-          descripcion:
-            "Responsable de la documentación del proyecto y colaboradora en las actividades de desarrollo de la Fototeca Digital del Instituto Tecnológico de Zacatecas.",
-        },
-        {
-          iniciales: "DS",
-          nombre: "Dorian Salomón Fuentes Domínguez",
-          rol: "Diseño",
-          descripcion:
-            "Diseño de la interfaz, identidad visual y experiencia de usuario de la Fototeca Digital del Instituto Tecnológico de Zacatecas",
-        },
-        {
-          iniciales: "PI",
-          nombre: "Paulo Isaí Esparza Baltazar",
-          rol: "Desarrollo e implementación",
-          descripcion:
-            "Desarrollo, implementación y puesta en funcionamiento de la Fototeca Digital del Instituto Tecnológico de Zacatecas.",
-        },
-        {
-          iniciales: "MA",
-          nombre: "Marco Antonio Hernández Ruiz",
-          rol: "Desarrollo y testeo",
-          descripcion:
-            "Desarrollo, implementación y pruebas funcionales de la Fototeca Digital del Instituto Tecnológico de Zacatecas.",
-        },
-        {
-          iniciales: "CM",
-          nombre: "Cristian Martin Ceballos Trejo",
-          rol: "Implementación",
-          descripcion:
-            "Participación en el desarrollo e implementación del sistema.",
-        },
-      ].map((persona) => (
-        <div
-          key={persona.nombre}
-          style={{
-            background: "white",
-            borderRadius: 12,
-            padding: 20,
-            textAlign: "center",
-            border: "1px solid rgba(28,20,109,.08)",
-            boxShadow: "0 4px 18px rgba(28,20,109,.04)",
-          }}
-        >
-          <div
-            style={{
-              width: 58,
-              height: 58,
-              margin: "0 auto 12px",
-              borderRadius: "50%",
-              background: "#ebeeff",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#1c146d",
-              fontFamily: "'Playfair Display',serif",
-              fontSize: 18,
-              fontWeight: 600,
-            }}
-          >
-            {persona.iniciales}
-          </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))",
+                  gap: 14,
+                }}
+              >
+                {[
+                  {
+                    iniciales: "AV",
+                    nombre: "Ana Verónica Galván Santos",
+                    rol: "Documentación y desarrollo",
+                    descripcion:
+                      "Responsable de la documentación del proyecto y colaboradora en las actividades de desarrollo de la Fototeca Digital del Instituto Tecnológico de Zacatecas.",
+                  },
+                  {
+                    iniciales: "DS",
+                    nombre: "Dorian Salomón Fuentes Domínguez",
+                    rol: "Diseño",
+                    descripcion:
+                      "Diseño de la interfaz, identidad visual y experiencia de usuario de la Fototeca Digital del Instituto Tecnológico de Zacatecas",
+                  },
+                  {
+                    iniciales: "PI",
+                    nombre: "Paulo Isaí Esparza Baltazar",
+                    rol: "Desarrollo e implementación",
+                    descripcion:
+                      "Desarrollo, implementación y puesta en funcionamiento de la Fototeca Digital del Instituto Tecnológico de Zacatecas.",
+                  },
+                  {
+                    iniciales: "MA",
+                    nombre: "Marco Antonio Hernández Ruiz",
+                    rol: "Desarrollo y testeo",
+                    descripcion:
+                      "Desarrollo, implementación y pruebas funcionales de la Fototeca Digital del Instituto Tecnológico de Zacatecas.",
+                  },
+                  {
+                    iniciales: "CM",
+                    nombre: "Cristian Martin Ceballos Trejo",
+                    rol: "Implementación",
+                    descripcion:
+                      "Participación en el desarrollo e implementación del sistema.",
+                  },
+                ].map((persona) => (
+                  <div
+                    key={persona.nombre}
+                    style={{
+                      background: "white",
+                      borderRadius: 12,
+                      padding: 20,
+                      textAlign: "center",
+                      border: "1px solid rgba(28,20,109,.08)",
+                      boxShadow: "0 4px 18px rgba(28,20,109,.04)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 58,
+                        height: 58,
+                        margin: "0 auto 12px",
+                        borderRadius: "50%",
+                        background: "#ebeeff",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#1c146d",
+                        fontFamily: "'Playfair Display',serif",
+                        fontSize: 18,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {persona.iniciales}
+                    </div>
 
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond',serif",
-              fontSize: 18,
-              color: "#1c146d",
-              fontWeight: 600,
-            }}
-          >
-            {persona.nombre}
-          </div>
+                    <div
+                      style={{
+                        fontFamily: "'Cormorant Garamond',serif",
+                        fontSize: 18,
+                        color: "#1c146d",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {persona.nombre}
+                    </div>
 
-          <div
-            style={{
-              fontSize: 11,
-              color: "#916c3f",
-              marginTop: 5,
-            }}
-          >
-            {persona.rol}
-          </div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#916c3f",
+                        marginTop: 5,
+                      }}
+                    >
+                      {persona.rol}
+                    </div>
 
-          <div
-            style={{
-              fontSize: 12,
-              color: "#7a7590",
-              lineHeight: 1.6,
-              marginTop: 9,
-            }}
-          >
-            {persona.descripcion}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        color: "#7a7590",
+                        lineHeight: 1.6,
+                        marginTop: 9,
+                      }}
+                    >
+                      {persona.descripcion}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-  {/* ============================================
+            {/* ============================================
       EQUIPO DE RECOLECCIÓN
   ============================================ */}
-  <div>
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        marginBottom: 16,
-      }}
-    >
-      <div
-        style={{
-          width: 36,
-          height: 36,
-          borderRadius: 9,
-          background: "#916c3f",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          fontSize: 16,
-        }}
-      >
-        📷
-      </div>
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 16,
+                }}
+              >
+                <div
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 9,
+                    background: "#916c3f",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    fontSize: 16,
+                  }}
+                >
+                  📷
+                </div>
 
-      <div>
-        <div
-          style={{
-            fontFamily: "'Cormorant Garamond',serif",
-            fontSize: 22,
-            color: "#1c146d",
-            fontWeight: 600,
-          }}
-        >
-          Equipo de Recolección de Fotografías
-        </div>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: "'Cormorant Garamond',serif",
+                      fontSize: 22,
+                      color: "#1c146d",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Equipo de Recolección de Fotografías
+                  </div>
 
-        <div
-          style={{
-            fontSize: 11,
-            color: "#916c3f",
-          }}
-        >
-          2 integrantes · Recopilación y organización del acervo fotográfico
-        </div>
-      </div>
-    </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "#916c3f",
+                    }}
+                  >
+                    2 integrantes · Recopilación y organización del acervo fotográfico
+                  </div>
+                </div>
+              </div>
 
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
-        gap: 14,
-      }}
-    >
-      {[
-        {
-          iniciales: "FB",
-          nombre: "Frida Batres Juarez ",
-          rol: "Recolección de fotografías",
-          descripcion:
-            "Recopilación, identificación y organización de material fotográfico institucional.",
-        },
-        {
-          iniciales: "SA",
-          nombre: "Salvador Alejandro Bañuelos Mojarro ",
-          rol: "Recolección de fotografías",
-          descripcion:
-            "Recopilación, identificación y organización de material fotográfico institucional.",
-        },
-      ].map((persona) => (
-        <div
-          key={persona.nombre}
-          style={{
-            background: "white",
-            borderRadius: 12,
-            padding: 20,
-            textAlign: "center",
-            border: "1px solid rgba(145,108,63,.15)",
-            boxShadow: "0 4px 18px rgba(145,108,63,.05)",
-          }}
-        >
-          <div
-            style={{
-              width: 58,
-              height: 58,
-              margin: "0 auto 12px",
-              borderRadius: "50%",
-              background: "#f4eadf",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#916c3f",
-              fontFamily: "'Playfair Display',serif",
-              fontSize: 18,
-              fontWeight: 600,
-            }}
-          >
-            {persona.iniciales}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+                  gap: 14,
+                }}
+              >
+                {[
+                  {
+                    iniciales: "FB",
+                    nombre: "Frida Batres Juarez ",
+                    rol: "Recolección de fotografías",
+                    descripcion:
+                      "Recopilación, identificación y organización de material fotográfico institucional.",
+                  },
+                  {
+                    iniciales: "SA",
+                    nombre: "Salvador Alejandro Bañuelos Mojarro ",
+                    rol: "Recolección de fotografías",
+                    descripcion:
+                      "Recopilación, identificación y organización de material fotográfico institucional.",
+                  },
+                ].map((persona) => (
+                  <div
+                    key={persona.nombre}
+                    style={{
+                      background: "white",
+                      borderRadius: 12,
+                      padding: 20,
+                      textAlign: "center",
+                      border: "1px solid rgba(145,108,63,.15)",
+                      boxShadow: "0 4px 18px rgba(145,108,63,.05)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 58,
+                        height: 58,
+                        margin: "0 auto 12px",
+                        borderRadius: "50%",
+                        background: "#f4eadf",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#916c3f",
+                        fontFamily: "'Playfair Display',serif",
+                        fontSize: 18,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {persona.iniciales}
+                    </div>
+
+                    <div
+                      style={{
+                        fontFamily: "'Cormorant Garamond',serif",
+                        fontSize: 18,
+                        color: "#1c146d",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {persona.nombre}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#916c3f",
+                        marginTop: 5,
+                      }}
+                    >
+                      {persona.rol}
+                    </div>
+
+                    <div
+                      style={{
+                        fontSize: 12,
+                        color: "#7a7590",
+                        lineHeight: 1.6,
+                        marginTop: 9,
+                      }}
+                    >
+                      {persona.descripcion}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond',serif",
-              fontSize: 18,
-              color: "#1c146d",
-              fontWeight: 600,
-            }}
-          >
-            {persona.nombre}
-          </div>
-
-          <div
-            style={{
-              fontSize: 11,
-              color: "#916c3f",
-              marginTop: 5,
-            }}
-          >
-            {persona.rol}
-          </div>
-
-          <div
-            style={{
-              fontSize: 12,
-              color: "#7a7590",
-              lineHeight: 1.6,
-              marginTop: 9,
-            }}
-          >
-            {persona.descripcion}
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-</div>
         </div>
       )}
 
@@ -2177,26 +2266,26 @@ export default function Fototeca() {
       {lightbox && <Lightbox foto={lightbox} fotos={fotos} onClose={() => setLightbox(null)} onNav={handleNav} />}
 
       {showAdmin && !session && (
-  <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(10,8,35,.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-    <div style={{ background: "white", borderRadius: 16, padding: 34, width: 350, boxShadow: "0 30px 80px rgba(28,20,109,.3)", textAlign: "center" }}>
-      <img src={LOGO_BIG} alt="ITZ" height="70" style={{ margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
-      <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 21, color: "#1c146d", marginBottom: 4 }}>Acceso administrativo</h3>
-      <p style={{ fontSize: 12, color: "#7a7590", marginBottom: 18 }}>Fototeca ITZ · Supabase</p>
-      {passErr && <div style={{ background: "rgba(193,23,32,.08)", color: "#c11720", border: "1px solid rgba(193,23,32,.2)", borderRadius: 8, padding: "7px 11px", fontSize: 12, marginBottom: 13 }}>{passErr}</div>}
-      <input type="email" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
-        placeholder="Correo de administrador" style={{ ...INP, textAlign: "center", marginBottom: 10 }} />
-      <input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
-        placeholder="Contraseña de administrador" style={{ ...INP, textAlign: "center", marginBottom: 14 }} />
-      <div style={{ display: "flex", gap: 7 }}>
-        <button className="btn" onClick={() => { setShowAdmin(false); setAdminEmail(""); setAdminPass(""); setPassErr(""); }} style={{ flex: 1, padding: "9px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, color: "#7a7590", background: "white" }}>Cancelar</button>
-        <button className="btn" onClick={tryLogin} disabled={loginLoading} style={{ flex: 1, padding: "9px", background: "#1c146d", color: "white", borderRadius: 8, fontSize: 13, opacity: loginLoading ? .6 : 1 }}>{loginLoading ? "Entrando…" : "Entrar"}</button>
-      </div>
-    </div>
-  </div>
-)}
-{showAdmin && session && (
-  <AdminPanel onClose={async () => { await supabase.auth.signOut(); setShowAdmin(false); setAdminEmail(""); setAdminPass(""); }} onRefresh={fetchAll} />
-)}
+        <div style={{ position: "fixed", inset: 0, zIndex: 900, background: "rgba(10,8,35,.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ background: "white", borderRadius: 16, padding: 34, width: 350, boxShadow: "0 30px 80px rgba(28,20,109,.3)", textAlign: "center" }}>
+            <img src={LOGO_BIG} alt="ITZ" height="70" style={{ margin: "0 auto 14px", display: "block", objectFit: "contain" }} />
+            <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 21, color: "#1c146d", marginBottom: 4 }}>Acceso administrativo</h3>
+            <p style={{ fontSize: 12, color: "#7a7590", marginBottom: 18 }}>Fototeca ITZ · Supabase</p>
+            {passErr && <div style={{ background: "rgba(193,23,32,.08)", color: "#c11720", border: "1px solid rgba(193,23,32,.2)", borderRadius: 8, padding: "7px 11px", fontSize: 12, marginBottom: 13 }}>{passErr}</div>}
+            <input type="email" value={adminEmail} onChange={e => setAdminEmail(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
+              placeholder="Correo de administrador" style={{ ...INP, textAlign: "center", marginBottom: 10 }} />
+            <input type="password" value={adminPass} onChange={e => setAdminPass(e.target.value)} onKeyDown={e => e.key === "Enter" && tryLogin()}
+              placeholder="Contraseña de administrador" style={{ ...INP, textAlign: "center", marginBottom: 14 }} />
+            <div style={{ display: "flex", gap: 7 }}>
+              <button className="btn" onClick={() => { setShowAdmin(false); setAdminEmail(""); setAdminPass(""); setPassErr(""); }} style={{ flex: 1, padding: "9px", border: "1.5px solid #ebeeff", borderRadius: 8, fontSize: 13, color: "#7a7590", background: "white" }}>Cancelar</button>
+              <button className="btn" onClick={tryLogin} disabled={loginLoading} style={{ flex: 1, padding: "9px", background: "#1c146d", color: "white", borderRadius: 8, fontSize: 13, opacity: loginLoading ? .6 : 1 }}>{loginLoading ? "Entrando…" : "Entrar"}</button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showAdmin && session && (
+        <AdminPanel onClose={async () => { await supabase.auth.signOut(); setShowAdmin(false); setAdminEmail(""); setAdminPass(""); }} onRefresh={fetchAll} />
+      )}
     </>
 
   );
