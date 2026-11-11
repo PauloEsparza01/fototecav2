@@ -187,20 +187,68 @@ const Field = ({ label, children }) => (
   </div>
 );
 
-function ZonaCarga({ archivo, onChange, label = "Arrastra imagen aquí", accept = "image/*,.tif,.tiff,.heic,.heif", id = "fz" }) {
+function ZonaCarga({ archivo, onChange, label = "Arrastra imagen aquí", accept = "image/*,.tif,.tiff,.heic,.heif", id = "fz", actual = null, actualLabel = "Imagen actual" }) {
   const [over, setOver] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [previewErr, setPreviewErr] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (!archivo) { setPreview(null); setPreviewErr(false); return; }
+    const url = URL.createObjectURL(archivo);
+    setPreview(url);
+    setPreviewErr(false);
+    return () => URL.revokeObjectURL(url);
+  }, [archivo]);
+
+  useEffect(() => { setPreviewErr(false); }, [actual]);
+
+  const quitar = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (inputRef.current) inputRef.current.value = "";
+    onChange(null);
+  };
+
+  const mostrando = preview || actual;
+  const esNueva = !!preview;
+  const activo = over || !!archivo;
+
   return (
-    <label htmlFor={id} style={{ display: "block", cursor: "pointer", marginBottom: 18 }}
-      onDragOver={e => { e.preventDefault(); setOver(true); }}
-      onDragLeave={() => setOver(false)}
-      onDrop={e => { e.preventDefault(); setOver(false); const f = e.dataTransfer.files[0]; if (f) onChange(f); }}>
-      <div style={{ border: `2px dashed ${over || archivo ? "#1c146d" : "#679cbc"}`, borderRadius: 12, padding: "22px 16px", textAlign: "center", background: archivo ? "rgba(28,20,109,.06)" : "#ebeeff", transition: "all .2s", transform: over ? "scale(1.01)" : "none" }}>
-        <Icon name="upload" size={26} color={over || archivo ? "#1c146d" : "#679cbc"} />
-        <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 15, color: "#1c146d", marginTop: 7, marginBottom: 2 }}>{archivo ? `✅ ${archivo.name}` : label}</div>
-        {!archivo && <div style={{ fontSize: 11, color: "#7a7590" }}>o haz clic · TIFF JPG PNG WEBP HEIC BMP SVG</div>}
-      </div>
-      <input id={id} type="file" accept={accept} style={{ display: "none" }} onChange={e => onChange(e.target.files[0] || null)} />
-    </label>
+    <div style={{ display: "flex", gap: 14, alignItems: "stretch", flexWrap: "wrap", marginBottom: 18 }}>
+      <label htmlFor={id} style={{ flex: "1 1 240px", minWidth: 0, display: "block", cursor: "pointer" }}
+        onDragOver={e => { e.preventDefault(); setOver(true); }}
+        onDragLeave={() => setOver(false)}
+        onDrop={e => { e.preventDefault(); setOver(false); const f = e.dataTransfer.files[0]; if (f) onChange(f); }}>
+        <div style={{ height: "100%", minHeight: 150, border: "2px dashed " + (activo ? "#1c146d" : "#679cbc"), borderRadius: 12, padding: "22px 16px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", background: archivo ? "rgba(28,20,109,.06)" : "#ebeeff", transition: "all .2s", transform: over ? "scale(1.01)" : "none" }}>
+          <Icon name="upload" size={26} color={activo ? "#1c146d" : "#679cbc"} />
+          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 15, color: "#1c146d", marginTop: 7, marginBottom: 2, wordBreak: "break-word" }}>{archivo ? "✅ " + archivo.name : label}</div>
+          <div style={{ fontSize: 11, color: "#7a7590" }}>{archivo ? "Haz clic o arrastra otra imagen para reemplazarla" : "o haz clic · TIFF JPG PNG WEBP HEIC BMP SVG"}</div>
+        </div>
+        <input id={id} ref={inputRef} type="file" accept={accept} style={{ display: "none" }} onChange={e => onChange(e.target.files[0] || null)} />
+      </label>
+
+      {mostrando && (
+        <div style={{ flex: "0 1 230px", minWidth: 160, position: "relative", minHeight: 150, borderRadius: 12, overflow: "hidden", background: "#f7f8ff", border: "1px solid #ebeeff" }}>
+          {!previewErr ? (
+            <img src={mostrando} alt="Vista previa" onError={() => setPreviewErr(true)}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain" }} />
+          ) : (
+            <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, padding: 12, textAlign: "center", color: "#7a7590", fontSize: 11 }}>
+              <Icon name="photo" size={28} color="#679cbc" />
+              Vista previa no disponible para este formato
+            </div>
+          )}
+          <span style={{ position: "absolute", left: 8, bottom: 8, background: esNueva ? "#1c146d" : "rgba(28,20,109,.7)", color: "white", fontSize: 10, padding: "3px 9px", borderRadius: 10, letterSpacing: ".05em" }}>{esNueva ? "Nueva" : actualLabel}</span>
+          {esNueva && (
+            <button type="button" className="btn" onClick={quitar} title="Quitar imagen" aria-label="Quitar imagen"
+              style={{ position: "absolute", top: 7, right: 7, width: 26, height: 26, borderRadius: "50%", background: "rgba(193,23,32,.92)", color: "white", display: "flex", alignItems: "center", justifyContent: "center", padding: 0, boxShadow: "0 2px 8px rgba(0,0,0,.3)" }}>
+              <Icon name="close" size={14} color="white" />
+            </button>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -1013,6 +1061,8 @@ function AdminPanel({ onClose, onRefresh }) {
   const [editFoto, setEditFoto] = useState(null);
   const [portadaFile, setPortadaFile] = useState(null);
   const [imgFile, setImgFile] = useState(null);
+  const [editPortadaFile, setEditPortadaFile] = useState(null);
+  const [editFotoFile, setEditFotoFile] = useState(null);
   const [newCol, setNewCol] = useState({ titulo: "", descripcion: "", lugar: "", anio: new Date().getFullYear(), autor: "", edificio: "", tipo: "Evento", derechos: "CC BY 4.0" });
   const [upForm, setUpForm] = useState({ coleccion_id: "", titulo: "", autor: "", anio: new Date().getFullYear(), lugar: "", fecha_origen: "", descripcion: "", edificio: "", tipo_archivo: "JPG", derechos: "CC BY 4.0", descargable: true, keywords: "" });
   const ok = msg => { setToast({ msg, type: "ok" }); setTimeout(() => setToast(null), 3500); };
@@ -1127,12 +1177,12 @@ function AdminPanel({ onClose, onRefresh }) {
   const doSaveCol = async () => {
     setSaving(true);
     try {
-      const portPath = portadaFile ? await uploadImg(portadaFile, "portadas") : undefined;
+      const portPath = editPortadaFile ? await uploadImg(editPortadaFile, "portadas") : undefined;
       const upd = { titulo: editCol.titulo, descripcion: editCol.descripcion, lugar: editCol.lugar, anio: Number(editCol.anio) || null, autor: editCol.autor, edificio: editCol.edificio, tipo: editCol.tipo, derechos: editCol.derechos };
       if (portPath) upd.portada_url = portPath;
       const { error } = await supabase.from("colecciones").update(upd).eq("id", editCol.id);
       if (error) throw new Error(error.message);
-      ok("✅ Colección actualizada"); setEditCol(null); setPortadaFile(null); load(); onRefresh();
+      ok("✅ Colección actualizada"); setEditCol(null); setEditPortadaFile(null); load(); onRefresh();
     } catch (e) { err(e.message); }
     setSaving(false);
   };
@@ -1141,7 +1191,9 @@ function AdminPanel({ onClose, onRefresh }) {
     if (!editFoto.titulo?.trim() || !editFoto.coleccion_id) return err("Título y colección son obligatorios");
     setSaving(true);
     try {
+      const nuevaUrl = editFotoFile ? await uploadImg(editFotoFile) : null;
       const { error } = await supabase.from("fotografias").update({
+        ...(nuevaUrl ? { url_original: nuevaUrl, url_web: nuevaUrl, url_thumbnail: nuevaUrl } : {}),
         titulo: editFoto.titulo, autor: editFoto.autor, anio: Number(editFoto.anio) || null,
         lugar: editFoto.lugar, descripcion: editFoto.descripcion, edificio: editFoto.edificio,
         tipo_archivo: editFoto.tipo_archivo, derechos: editFoto.derechos, descargable: editFoto.descargable,
@@ -1154,7 +1206,7 @@ function AdminPanel({ onClose, onRefresh }) {
         const kws = String(editFoto.keywords || "").split(",").map(k => k.trim()).filter(Boolean);
         if (kws.length) await supabase.from("keywords").insert(kws.map(keyword => ({ fotografia_id: editFoto.id, keyword })));
       }
-      ok("✅ Foto actualizada"); setEditFoto(null); load(); onRefresh();
+      ok("✅ Foto actualizada"); setEditFoto(null); setEditFotoFile(null); load(); onRefresh();
     } catch (e) { err(e.message); }
     setSaving(false);
   };
@@ -1275,9 +1327,9 @@ function AdminPanel({ onClose, onRefresh }) {
                 <>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
                     <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d" }}>Editar: {editCol.titulo}</h3>
-                    <button className="btn" onClick={() => setEditCol(null)} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
+                    <button className="btn" onClick={() => { setEditCol(null); setEditPortadaFile(null); }} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
                   </div>
-                  <ZonaCarga archivo={portadaFile} onChange={setPortadaFile} label="Nueva portada (opcional)" accept="image/*" id="port-edit" />
+                  <ZonaCarga archivo={editPortadaFile} onChange={setEditPortadaFile} label="Nueva portada (opcional)" accept="image/*" id="port-edit" actual={storageUrl(editCol.portada_url)} actualLabel="Portada actual" />
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     <div style={{ gridColumn: "1/-1" }}><Field label="Título"><input value={editCol.titulo || ""} onChange={e => setEditCol(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
                     <Field label="Lugar"><input value={editCol.lugar || ""} onChange={e => setEditCol(f => ({ ...f, lugar: e.target.value }))} style={INP} /></Field>
@@ -1305,7 +1357,7 @@ function AdminPanel({ onClose, onRefresh }) {
                         <div style={{ fontSize: 11, color: "#7a7590" }}>{col.fotos_reales || col.total_fotos || 0} fotos · {col.anio} · {col.edificio || col.lugar}</div>
                       </div>
                       <div style={{ display: "flex", gap: 7 }}>
-                        <button className="btn" onClick={() => setEditCol({ ...col })} style={{ background: "#ebeeff", color: "#1c146d", padding: "5px 11px", borderRadius: 6, fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Icon name="edit" size={11} />Editar</button>
+                        <button className="btn" onClick={() => { setEditPortadaFile(null); setEditCol({ ...col }); }} style={{ background: "#ebeeff", color: "#1c146d", padding: "5px 11px", borderRadius: 6, fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Icon name="edit" size={11} />Editar</button>
                         <button className="btn" onClick={() => delCol(col.id)} style={{ background: "rgba(193,23,32,.1)", color: "#c11720", padding: "5px 11px", borderRadius: 6, fontSize: 12, display: "flex", alignItems: "center", gap: 4 }}><Icon name="trash" size={11} />Eliminar</button>
                       </div>
                     </div>
@@ -1320,8 +1372,9 @@ function AdminPanel({ onClose, onRefresh }) {
                 <>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
                     <h3 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 22, color: "#1c146d" }}>Editar foto</h3>
-                    <button className="btn" onClick={() => setEditFoto(null)} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
+                    <button className="btn" onClick={() => { setEditFoto(null); setEditFotoFile(null); }} style={{ color: "#7a7590", background: "transparent", fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Icon name="x" size={13} /> Cancelar</button>
                   </div>
+                  <ZonaCarga archivo={editFotoFile} onChange={setEditFotoFile} label="Reemplazar fotografía (opcional)" id="foto-edit" actual={storageUrl(editFoto.url_web || editFoto.url_original)} actualLabel="Fotografía actual" />
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                     <div style={{ gridColumn: "1/-1" }}><Field label="Título *"><input value={editFoto.titulo || ""} onChange={e => setEditFoto(f => ({ ...f, titulo: e.target.value }))} style={INP} /></Field></div>
                     <div style={{ gridColumn: "1/-1" }}><Field label="Colección *"><select value={editFoto.coleccion_id || ""} onChange={e => setEditFoto(f => ({ ...f, coleccion_id: e.target.value }))} style={sel}><option value="">— Selecciona —</option>{cols.map(c => <option key={c.id} value={c.id}>{c.titulo}</option>)}</select></Field></div>
@@ -1355,7 +1408,7 @@ function AdminPanel({ onClose, onRefresh }) {
                         <div style={{ fontSize: 11, color: "#7a7590" }}>{foto.autor} · {foto.anio} · {foto.coleccion_titulo || ""}</div>
                       </div>
                       <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                        <button className="btn" onClick={() => setEditFoto({ ...foto, keywords: foto.keywords || "" })} style={{ background: "#ebeeff", color: "#1c146d", padding: "5px 9px", borderRadius: 6, fontSize: 11, display: "flex", alignItems: "center", gap: 4 }}><Icon name="edit" size={11} />Editar</button>
+                        <button className="btn" onClick={() => { setEditFotoFile(null); setEditFoto({ ...foto, keywords: foto.keywords || "" }); }} style={{ background: "#ebeeff", color: "#1c146d", padding: "5px 9px", borderRadius: 6, fontSize: 11, display: "flex", alignItems: "center", gap: 4 }}><Icon name="edit" size={11} />Editar</button>
                         <button className="btn" onClick={() => toggleDl(foto)} style={{ background: foto.descargable ? "rgba(103,156,188,.15)" : "rgba(193,23,32,.1)", color: foto.descargable ? "#679cbc" : "#c11720", padding: "5px 9px", borderRadius: 6, fontSize: 11, display: "flex", alignItems: "center", gap: 4 }}>
                           <Icon name={foto.descargable ? "unlock" : "lock"} size={11} />{foto.descargable ? "Desc." : "Solo vista"}
                         </button>
