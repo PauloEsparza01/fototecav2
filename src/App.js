@@ -2232,12 +2232,12 @@ export default function Fototeca() {
                   <button className="btn filters-btn-mobile" onClick={() => setFiltersDrawerOpen(false)} style={{ background: "transparent", padding: 2 }}><Icon name="x" size={16} color="#1c146d" /></button>
                 </div>
               </div>
-              <FilterGroup title="Año" cat="years" opts={filterOpts.years} />
-              <FilterGroup title="Lugar" cat="places" opts={filterOpts.places} />
-              <FilterGroup title="Autor" cat="authors" opts={filterOpts.authors} />
-              <FilterGroup title="Edificio" cat="buildings" opts={filterOpts.buildings} />
-              <FilterGroup title="Tipo" cat="types" opts={filterOpts.types} />
-              <FilterGroup title="Derechos" cat="rights" opts={filterOpts.rights} />
+              {FilterGroup({ title: "Año", cat: "years", opts: filterOpts.years })}
+              {FilterGroup({ title: "Lugar", cat: "places", opts: filterOpts.places })}
+              {FilterGroup({ title: "Autor", cat: "authors", opts: filterOpts.authors })}
+              {FilterGroup({ title: "Edificio", cat: "buildings", opts: filterOpts.buildings })}
+              {FilterGroup({ title: "Tipo", cat: "types", opts: filterOpts.types })}
+              {FilterGroup({ title: "Derechos", cat: "rights", opts: filterOpts.rights })}
             </div>
           </aside>
           <main style={{ flex: 1, minWidth: 0 }}>
